@@ -1,0 +1,285 @@
+<apex:page showHeader="false" sidebar="false" controller="BLN_Email_CampaignCon" action="{!displayPermissions}" standardStylesheets="false">
+  <!-- --------------------------- Basic Style sheets ---------------------------------- -->
+     <apex:stylesheet value="{!URLFOR($Resource.MyTickets, 'css/style.css')}"/>
+     <apex:stylesheet value="{!URLFOR($Resource.MyTickets, 'style-button.css')}"/>
+      <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/jquery.min.js')}"></script>
+       <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/zebra_accordion.src -att.js')}"></script>
+      <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/jquery-ui-1.8.16.custom.min.js')}"></script>
+    <!---- <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/functions.js')}"></script> -->
+      
+      <!-- --------------------------- SPRY MENU TABS ---------------------------------- -->
+      <script type="text/javascript" src="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabssss.js')}"></script>
+      <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabsss.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/tables.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/style-button.css')}"/>
+      <!-- --------------------------- SPRY MENU TABS ---------------------------------- -->
+    <style>
+#campaign-box {
+    width: 100%;
+    height: auto;
+    padding: 5px 5px;
+    border: 1px solid #D6D3D3;
+    background: url(email/bg.png);
+    margin-bottom:10px;
+
+}
+#campaign-box table {
+    border-collapse: collapse;
+}
+#campaign-box table tr td {
+    padding: 3px;
+}
+
+
+
+
+#campaigntitle {
+    color: #59b15d;
+    font-family: cuprum;
+    font-weight: 200;
+    font-size: 22px;
+    text-shadow: 0 1px 1px rgba(0,0,0,.25);
+}
+#eventlocation {
+    font-family: cuprum;
+    font-size: 22px;
+    color: #807f7f;
+}
+#status {
+    vertical-align: top;
+    border-bottom: 1px solid #fff;
+    color: #247dba;
+    font-family: cuprum;
+    font-weight: 300;
+    line-height:25px;
+    padding-left: 10px;
+    font-size: 20px;
+}
+
+#status-op {
+    font-weight: normal;
+    color: #807f7f;
+    font-size: 18px;
+}
+#editicons {
+    text-align: right;
+    border-bottom: 1px solid #fff;
+    padding-right: 5px;
+    vertical-align: top;
+    color: #247dba;
+    font-family: cuprum;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#ordertype {
+    color: #807f7f;
+    margin-left: 1%;
+}
+
+
+
+
+#tabsbuttons {
+    margin-left: 4%;
+    float: left;
+    font-family: cuprum;
+    font-size: 16px;
+background: -webkit-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #D0D0D0;
+    cursor: pointer;
+    padding: 5px;
+    /*padding-left: 15px;
+    padding-right: 17px;*/
+    width:87%;
+}
+</style>
+<style>
+
+  
+ .popupBackground{
+    opacity:.8;
+    position:fixed;
+    top:0px; 
+    left:0px;
+    background-color: #484848;
+    width:100%; 
+    z-index:50;
+    height:100%;    
+
+  } 
+
+   
+    
+    .custPopup{color:#000000;position: fixed;top:10px;left:0px;right:0px;z-index:75;height:570px;overflow:auto;
+          padding:5px; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
+          -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
+          font: 12px/24px "Lucida Grande",Arial,sans-serif;
+         -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
+         -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px;
+        
+    }
+        
+.popupBackground1{
+    opacity:.8;
+    position:fixed;
+    top:0px;
+    left:0px;
+    background-color: #fff;
+    width:100%; 
+    z-index:50;
+   height:100%;
+
+  } 
+
+    
+    .custPopup1{position: fixed;top:250px;left:0px;right:0px;z-index:75;overflow:auto; width:36%;background-color: #a6ca8a ; 
+          padding:1px; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
+          -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
+          font: 12px/24px "Lucida Grande",Arial,sans-serif;
+         -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
+         -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px; margin-left:32.5%;
+        
+    }        
+
+
+   
+ #close{font-size: 25px;
+font-weight: bold;
+color: #fff;
+text-decoration: none;
+float: right;
+margin-right: .2%;
+margin-top:-9px;}
+
+ 
+
+#close:hover{font-size: 25px;
+text-decoration: underline;
+font-weight: bold;
+color: #fff;
+float: right;
+margin-right: .2%;
+margin-top:-9px;} 
+#addpc-heading{width:98%; margin:0px auto; margin-bottom:5px; padding:5px; color:#fff; font-size:17px; font-family:cuprum; background-color:#9D9D9D;} 
+#setup1-form{ width:40%;margin:0px auto; margin-bottom:10px;}
+#setup1-form table{ border-collapse:collapse;}
+#setup1-form table td{ padding:7px;font-size:14px;}
+#recipient1-form{ width:100%;margin:0px auto; margin-bottom:10px;}
+#recipient1-form table{ border-collapse:collapse;}
+#recipient1-form table td{ padding:7px;font-size:14px;}
+#template1-form{ width:97%;margin:0px auto; margin-bottom:10px;}
+/*#template1-form table{ border-collapse:collapse;}
+#template1-form table td{ padding:7px;font-size:14px;}*/
+#confirm1-form{ width:40%;margin:0px auto; margin-bottom:10px;}
+#confirm1-form table{ border-collapse:collapse;}
+#confirm1-form table tr{ border-bottom:1px dotted solid #000;}
+#confirm1-form table td{ padding:7px;font-size:14px;}
+#bottom-nav{ width:98%; text-align:center; margin:0px auto; padding:10px 0px;background-color:#9D9D9D;border-radius: 3px;
+    -moz-border-radius: 3px;
+    /*box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);*/
+    -webkit-border-radius:3px;
+    /*-webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);}*/}
+    # bottom-nav ul{list-style-type:none;}
+    #bottom-nav ul li{ display:inline; margin-right:1%; color:#ffffff; font-size:22px; font-family:Arial, Helvetica, sans-serif;}
+  
+</style>
+
+    <c:myComponent BLN_UtillDisplayLinks="{!myemaildashboards}" id="comid">
+    <body id="body1">
+    <apex:form id="displayformid" >
+
+    <apex:outputPanel rendered="{!displaybool}" id="displayboolid">
+       <div id="TabbedPanels4" class="TabbedPanels" style=" width:97.7%; margin-left:1%; margin-top:10px;" >
+                <ul class="TabbedPanelsTabGroup">
+                  <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555; font-weight:300;">Booth Leads Campaigns</li>
+                  <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555;font-weight:300;">Sent Campaigns</li>
+                </ul>
+                 <div class="TabbedPanelsContentGroup">
+                
+                  <!--Start of content of Normal Campaigns tab-->
+                  <div class="TabbedPanelsContent">
+                  
+                   <div class="grid-1" style="margin-top:15px;">
+            <div class="title-grid-selectevent" style=" padding-top:0px;"></div>
+                <div class="content-gird-selectevents" style=" padding-top:0px;"> 
+                <!-----------------create template Button----------->
+                  <div id="" style="width:100%; text-align:right;margin-top:0px; margin-bottom:0px; text-align:">
+                    <apex:commandButton value="Create Campaign" styleClass="button-a blue" action="{!CreateCampaign}"/>
+
+</div>
+
+<!--close  of create template button-------------------------->
+          
+            </div>
+            <!--close of content-grid--> 
+          </div>
+          <!--title-grid--> 
+          <!--------------------------------------------------------------------------------->
+        <div class="clear"></div>
+           
+           <!-----------First Campaign-------------------------->
+           <div class="grid-1" style=" width:97%; margin-top:0px; margin-left:.8%"  >
+           <apex:repeat value="{!emailcamplist}" var="emaC">
+           <div id="campaign-box">
+               <div id="inside-left" style="width:99.8%; float:left; background-color:#f7f7f7; border-top:1px solid #FFF; border-bottom:1px solid #D0D0D0;border-left:1px solid #ffffff; border-right:1px solid #ffffff">
+                   
+                   <table width="100%" border="0" height="100%">
+                <tr>
+                       <td rowspan="3"  width="14%" valign="top"    style="border-right:1px solid #FFF; text-align:center; vertical-align:middle;border-bottom:1px solid #FFF;">
+             
+                      <img src="email/announce1.png" width="" height="" style=""/>
+                      </td>
+                       <td colspan="4" style="padding-left:10px; height:40px;border:1px solid #FFF; text-align:center;"><p style="margin-top:4px;"> <span id="campaigntitle" style="">{!emaC.name}</span></p></td>
+                     </tr>
+                <tr>
+                      <td id="status" style="padding-left:10px; vertical-align:middle;" > Template: <span id="status-op" >{!emaC.Template_Type__c}</span><br/>
+                        <span id="" style="padding-left:0px;"> Status:</span>
+                        <span id="status-op"> Draft (Edited on June 29, 2014)</span></td>
+                      
+                       <td id="editicons" style="border-right:1px solid #FFF; vertical-align:bottom; padding-right:10px;"  ><img src="email/edit.png" onclick="Alert.render()"  width="28" title="Edit" style="cursor:pointer;" height="28"/>
+                    <span><img src="email/preview.png" title="Preview" onclick="Alert2.render()"  style="cursor:pointer;" width="28" height="28"/></span></td>
+                       <td width="17%" style="border-bottom: 1px solid #fff">
+                           <table width="100%" border="0">
+                           <!--table for quickaction buttons with two rows-->
+                          <tr>
+                           <td style="padding:0px;">
+                           <div id="tabsbuttons" style=" text-align:center;" onclick="Alert4.render()"   >Send Now</div></td>
+                         </tr>
+                           <tr>
+                           <td style="padding:0px;">
+                           <div id="tabsbuttons" style=" text-align:center;" onclick="Alert5.render()">Auto Schedule</div></td>
+                         </tr>
+                         </table>
+                    <!--close of table of quickaction buttons--></td>
+                     </tr>
+              </table>
+                 
+                 </div>
+            <!--inside-left-->
+            
+            <div id="clear" style="clear:both;"></div>
+        
+         
+         
+        </div><!---------Close of TabbedPanels4-->
+         </apex:repeat>
+         </div>  </div></div>  </div>
+     </apex:outputPanel>
+     
+    </apex:form>
+    <apex:form >
+    
+    <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!Createbool}" id="Popup2"/>
+    <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!Createbool}"  id="guestForm2" >
+
+    
+    
+    </apex:outputPanel>
+   
+    </apex:form>
+    </body>
+    </c:myComponent>
+</apex:page>

@@ -1,0 +1,8 @@
+<apex:page controller="sample2">
+  
+  <apex:form >
+  <apex:inputText rendered="{!se.Attendee_Update__c}"/>
+  
+  </apex:form>
+  
+</apex:page>

@@ -1,0 +1,330 @@
+<apex:page controller="BLN_ReUse_EventsEditCon" showHeader="false" standardStylesheets="false" id="thePage">
+<script>
+    var eventmand={};
+          
+       eventmand.EventID="{!selectedEvent}";
+     
+               function eventload() {
+
+        //load the pay options
+        
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getnewEvents}',
+            eventmand.EventID,
+           function(result, event){
+          
+         document.getElementById('refundcontent').checked=result.ble.Accept_Refund_Policy__c;
+            document.getElementById('message').value=result.ble.Refund_Policy__c==undefined?'':result.ble.Refund_Policy__c;
+            document.getElementById('refundpolicycontent').style.display= ( document.getElementById('refundcontent').checked ) ? 'block' : 'none';
+         
+            
+            document.getElementById('termcontent').checked=result.ble.Accept_Terms_Conditions__c;
+            document.getElementById('message1').value=result.ble.Terms_Conditions__c==undefined?'':result.ble.Terms_Conditions__c;
+             document.getElementById('termscondcontent').style.display = ( document.getElementById('termcontent').checked ) ? 'block' : 'none'; 
+           
+            document.getElementById('acceptTax').checked=result.ble.Accept_Tax_Rate__c;
+            document.getElementById('taxrateval').value=result.ble.Tax_Rate__c==undefined?'':result.ble.Tax_Rate__c;
+            document.getElementById('termscondcontent1').style.display= ( document.getElementById('acceptTax').checked ) ? 'block' : 'none';  
+           
+           try{
+           for(b=0;b<result.ble.Event_Pay_Gateway__r.length;b++)
+           {
+              if(result.ble.Event_Pay_Gateway__r[b].Registration_Type__c==$('.current').attr('id')){
+                if(result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name=='Stripe'){
+                $('input[name="pgopt"][value="' +result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name+ '"]').attr("checked",true);
+                document.getElementById('spkey').value=result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PG_Signature__c;
+                 var rads = document.getElementsByName( "pgopt" );
+        document.getElementById( 'paypal' ).style.display = ( rads[0].checked ) ? 'block' : 'none';
+        document.getElementById( 'stripe' ).style.display = ( rads[1].checked ) ? 'block' : 'none';
+        document.getElementById( 'authorize' ).style.display = ( rads[2].checked ) ? 'block' : 'none';
+        document.getElementById( 'trustcommerce' ).style.display = ( rads[3].checked ) ? 'block' : 'none';
+                }
+                if(result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name=='Authorize.Net'){
+                $('input[name="pgopt"][value="' +result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name+ '"]').attr("checked",true);
+                document.getElementById('authid').value=result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PG_User_Key__c;
+                document.getElementById('authkey').value=result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PG_Signature__c;
+                var rads = document.getElementsByName( "pgopt" );
+        document.getElementById( 'paypal' ).style.display = ( rads[0].checked ) ? 'block' : 'none';
+        document.getElementById( 'stripe' ).style.display = ( rads[1].checked ) ? 'block' : 'none';
+        document.getElementById( 'authorize' ).style.display = ( rads[2].checked ) ? 'block' : 'none';
+        document.getElementById( 'trustcommerce' ).style.display = ( rads[3].checked ) ? 'block' : 'none';
+                
+                }
+                if(result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name=='TrustCommerce'){
+                $('input[name="pgopt"][value="' +result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name+ '"]').attr("checked",true);
+                document.getElementById('trustid').value=result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PG_User_Key__c;
+                document.getElementById('trustkey').value=result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PG_Signature__c;
+                var rads = document.getElementsByName( "pgopt" );
+        document.getElementById( 'paypal' ).style.display = ( rads[0].checked ) ? 'block' : 'none';
+        document.getElementById( 'stripe' ).style.display = ( rads[1].checked ) ? 'block' : 'none';
+        document.getElementById( 'authorize' ).style.display = ( rads[2].checked ) ? 'block' : 'none';
+        document.getElementById( 'trustcommerce' ).style.display = ( rads[3].checked ) ? 'block' : 'none';
+                
+                }
+                if(result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name=='PayPal'){
+                $('input[name="pgopt"][value="' +result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name+ '"]').attr("checked",true);
+                document.getElementById('ppemailaddr').value=result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PG_Email_Id__c;
+                var rads = document.getElementsByName( "pgopt" );
+        document.getElementById( 'paypal' ).style.display = ( rads[0].checked ) ? 'block' : 'none';
+        document.getElementById( 'stripe' ).style.display = ( rads[1].checked ) ? 'block' : 'none';
+        document.getElementById( 'authorize' ).style.display = ( rads[2].checked ) ? 'block' : 'none';
+        document.getElementById( 'trustcommerce' ).style.display = ( rads[3].checked ) ? 'block' : 'none';
+                
+                }
+                if(result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name=='Check'){
+                
+                $('input[id="check1"][value="' +result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name+ '"]').attr("checked",true);
+                hidethischeck();
+                }
+                if(result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name=='Cash'){
+                
+                $('input[id="cash1"][value="' +result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name+ '"]').attr("checked",true);
+
+                }
+                 if(result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name=='External Pay Gateway'){
+                
+                $('input[id="external1"][value="' +result.ble.Event_Pay_Gateway__r[b].Pay_Gateway__r.PGateway_Type__r.Name+ '"]').attr("checked",true);
+
+                }
+              }  
+           }
+           }catch(e){}
+         
+           
+            }, 
+            {escape: true}
+        );
+        
+        
+        
+        //end
+    
+        
+}     
+                  
+               
+            
+      </script>   
+ 
+<c:myComponent BLN_UtillDisplayLinks="{!Ticket}" id="comp">
+ 
+
+<style>
+ #tabs-container{
+ overflow: hidden;
+margin: 0px;
+
+padding: 0px;
+clear: none;
+
+
+
+ background: #fefefe;
+background: -moz-linear-gradient(top,#fefefe 0,#f3f3f3 100%);
+background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#fefefe),color-stop(100%,#f3f3f3));
+background: -webkit-linear-gradient(top,#fefefe 0,#f3f3f3 100%);
+background: -o-linear-gradient(top,#fefefe 0,#f3f3f3 100%);
+background: -ms-linear-gradient(top,#fefefe 0,#f3f3f3 100%);
+background: linear-gradient(top,#fefefe 0,#f3f3f3 100%);
+ }
+ 
+ .tabs-menu {
+ list-style: none;
+    margin: 0px;
+padding: 0px;
+font-size: 13px;
+outline: none;
+}
+
+.tabs-menu li {
+ position: relative;
+/* top: 1px; */
+float: left;
+padding: 4px 10px;
+margin: 0px 1px 0px 0px;
+
+/* background-color: #DDD; */
+list-style: none;
+border-right: 1px solid #ddd;
+border-bottom: 1px solid #ddd;
+-moz-user-select: none;
+-khtml-user-select: none;
+cursor: pointer;
+padding: 11px 20px 9px 20px;
+}
+
+
+.tabs-menu li.current {
+   
+    background-color: #ffffff;
+border-bottom: 1px solid #fff;
+/* height: 14.4px; */
+-moz-box-shadow: inset 0 2px #2a90d3;
+-webkit-box-shadow: inset 0 2px #2a90d3;
+box-shadow: inset 0 2px #2a90d3;
+
+}
+
+
+.tabs-menu li:hover { background: -webkit-linear-gradient(top,#fcfcfc 0,#dedede 100%);
+background: #fcfcfc;
+background: -moz-linear-gradient(top,#fcfcfc 0,#dedede 100%);
+background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#fcfcfc),color-stop(100%,#dedede));}
+
+
+.tabs-menu li a {
+    outline: none;
+focus: none;
+color: #555;
+font-weight: 300;
+text-decoration:none;
+}
+
+
+.tabs-menu .current a {
+    outline: none;
+focus: none;
+color: #555;
+font-weight: 300;
+}
+
+.tab {
+    border: 1px solid #d4d4d1;
+    background-color: #fff;
+    float: left;
+    margin-bottom: 20px;
+    width: auto;
+}
+
+
+.tab-content {
+    width: 660px;
+    padding: 20px;
+    display: none;
+}
+
+#tab-1 {
+ display: block;   
+}
+ </style>
+ <apex:form >
+ <apex:actionFunction name="CallComponent"  
+    rerender="componentcontainer" >
+    <apex:param name="modules" assignTo="{!modules}" value="" />
+</apex:actionFunction>
+
+</apex:form>
+ 
+<div class="boxed">
+ 
+            <div id="tabs-container">
+    <ul class="tabs-menu">
+                    <li class="current" id="Online" onclick="CallComponent('Online');">Online Registration</li>
+                    <li id="Onsite" onclick="CallComponent('Onsite');">Onsite Registration</li>
+                    <li id="ScanAttendee" onclick="CallComponent('ScanAttendee');">Scan Attendee</li>
+                </ul>
+</div>
+                           
+                         
+                            
+                            
+                            <div class="form" style="width:100%; border:0px solid #000; margin:0px auto;  height:auto; padding-bottom:50px; "> <!-- Not Closed4 -->
+                            <style type="text/css">
+                                .distance p{ float:none; line-height:none;}
+                                .boxed {
+  border: 1px solid green ;
+}
+                            </style>
+                           
+                            
+                            
+                           <apex:outputpanel id="componentcontainer"  layout="block">  
+                            
+                            
+                            <c:PaymentSettingCommonComponent module="{!modules}" ></c:PaymentSettingCommonComponent>
+                           
+                           <script>
+                             $('#{!modules}').addClass("current");
+        $('#{!modules}').siblings().removeClass("current");
+          
+         eventload();
+                            </script>
+                            </apex:outputpanel> 
+                            </div>
+                            </div> 
+                            
+                            <!-------------------------Refund policy--------------------------------->
+                            <script>
+                                function hiderefund(va) {
+                                    //thePage:comp.frm:commoncomponent:frm:refundcontent
+                                    //alert(va.id);
+                                    if(document.getElementById(va.id).checked){
+                                        document.getElementById('refundpolicycontent').style.display = 'block';
+                                    }else{
+                                        document.getElementById('refundpolicycontent').style.display = 'none';
+                                    }
+                                };
+                            </script>
+                    
+                            <div  id="refundpolicy" style="border:0px solid #F00; margin-top:15px;">
+                                <span style=" margin-left:5px;font-size:18px; margin-top:15px; font-family:cuprum;  color:#4f91cd;">Refund Policy:</span>
+                                <input type="checkbox" onClick="hiderefund(this)"  id="refundcontent" style="outline:none; margin-left:.5%;"  />
+                            </div><!--clode of refund policy-->
+                            <div id="refundpolicycontent" style="width:50%; display:'block'}; margin-left:12%;">
+                                <!-- <textarea class="medium" id="message" name="message" rows="3" style="text-indent:3px;"></textarea>-->
+                                <textarea  id="message" class="medium" style="text-indent:3px;" rows="13"/>
+                            </div>
+                            <!--ticketopt-content--->
+                    
+                            <!-------------------------Terms and Conditions--------------------------------->
+                            <script>
+                                function hideterms(va1) {
+                                    if(document.getElementById(va1.id).checked){
+                                    document.getElementById('termscondcontent').style.display = 'block';
+                                    }else{
+                                    document.getElementById('termscondcontent').style.display = 'none';
+                                    }
+                                };
+                    
+                                function hideterms1(va2) {
+                                    if(document.getElementById(va2.id).checked){
+                                    document.getElementById('termscondcontent1').style.display = 'block';
+                                    }else{
+                                    document.getElementById('termscondcontent1').style.display = 'none';
+                                    }
+                                };
+                            </script>
+                    
+                            <div  style="border:0px solid #F00; margin-top:15px;">
+                                <span style=" margin-left:5px;font-size:18px; margin-top:15px; font-family:cuprum;  color:#4f91cd;"> Terms And Conditions:</span>
+                                <input type="checkbox" onClick="hideterms(this)" id="termcontent" style="outline:none; margin-left:.5%;" />
+                            </div><!--clode of refund policy-->
+                    
+                            <div id="termscondcontent" style="width:50%; display:'block'; margin-left:12%;">
+                                <textarea   id="message1" class="medium" style="text-indent:3px;" rows="13"/>
+                            </div>
+                            <!--ticketopt-content--->
+                    
+                            <!----------------Tax Rate: ------------------------------->
+                            <div  id="taxrate" style="border:0px solid #F00; margin-top:15px;">
+                                <span style=" margin-left:5px;font-size:18px; margin-top:15px; font-family:cuprum;  color:#4f91cd;">Tax Rate:</span>
+                                <input type="checkbox" onClick="hideterms1(this)"  id="acceptTax" style="outline:none; margin-left:.5%;"  />
+                            </div><!--clode of taxrate-->
+                    
+                            <div id="termscondcontent1" style="width:50%; display:'block'; margin-left:10%;">
+                                <input type="text" id="taxrateval"  style="width:20%; outline:none;"/>
+                            </div>
+                    
+                            <!----------------------------------------------->
+                            
+                            
+                            
+                            
+                            <button class="button-a blue" style="width:10%;height:32px; " onclick="savespaymentfunction();">Save</button>
+                            
+                           
+                            
+      
+  </c:myComponent> 
+            
+</apex:page>

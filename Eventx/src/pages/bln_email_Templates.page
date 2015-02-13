@@ -1,0 +1,36 @@
+<apex:page controller="BLN_Email_Templatecon" showHeader="false" sidebar="false">
+
+    <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabsss.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/tables.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/style-button.css')}"/>
+    
+ <c:myComponent BLN_UtillDisplayLinks="{!myemaildashboards}" id="comid">
+ 
+ <apex:form >
+ 
+     <apex:repeat value="{!Etemplates}" var="em">
+         <table><tr><td>
+             <apex:commandLink value="{!em.name}" action="{!edittemp}">
+                 <apex:param value="{!em.id}" name="temid"/>
+             </apex:commandLink>
+         </td></tr></table>
+     </apex:repeat>
+ 
+ </apex:form>
+ 
+ <apex:form id="editform">
+ 
+ <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!editbool}" id="Popup2"/>
+ <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!editbool}"  id="guestForm2">
+    
+ 
+ 
+ 
+ 
+ </apex:outputPanel>
+ </apex:form>
+ 
+ 
+ </c:myComponent>
+  
+</apex:page>

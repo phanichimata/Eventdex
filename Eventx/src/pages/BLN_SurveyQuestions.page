@@ -1,0 +1,1416 @@
+<apex:page controller="BLN_SurveyQuestionscon" standardStylesheets="false" showHeader="false" id="pageid"   action="{!displayPermissions}">
+    
+          <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/style.css')}"/> 
+          <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/style-button.css')}"/>
+          <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/nwbuttons.css')}"/>
+          <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/tables.css')}"/>
+          <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/chosen.css')}"/> 
+          <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/responsive.css')}"/> 
+          
+          <!--<script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/jquery.min.js')}"></script>-->
+        <!-- <script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/jquery-ui-1.8.16.custom.min.js')}"></script>-->
+         <!---   <script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/functions.js')}"></script>
+          <script type="text/javascript" src="{!URLFOR($Resource.draganddropjs, 'tablednd.js')}"></script>    --->
+        
+       <!--<script type="text/javascript" src="{!URLFOR($Resource.jqueryhigher, 'jqueryhigher/jquery-1.9.1.js')}"></script>-->
+       <!----------------------STYLES FOR DISCOUNTS MENU--------------------------------------->
+    
+         
+    
+    <script type="text/javascript">
+    
+    // To Check If Duplicate Answer Options Are Given ----------------------------------
+    
+    function dupoptinn(){
+    
+     var arryan = [];
+         var arryanid = [];
+         var valu = '';
+         
+        $('tr td input[type="text"]').each(function(){
+    
+         var aid = $(this).attr('id') ;
+    
+         var n = aid.search('queordclas');
+        
+    
+                    if(n != -1){
+                    //  valu = document.getElementById(aid).value;
+                   //  arryan.push(valu);
+                     arryan.push(document.getElementById(aid));
+                    }
+                                       
+                                
+            });
+      
+    
+          var dup = '';
+      
+            for (var i=0; i<arryan.length; i++) {    
+                     
+                     arryan[i].style.border = "1 px";
+                     arryan[i].style.borderColor = "#E3E3E3"; 
+                     
+              }       
+            for (var i=0; i<arryan.length; i++) {
+                for (var j=0; j<arryan.length; j++) {
+                 
+                    
+                  if(j!=i){
+                 
+                      if(arryan[i].value.toLowerCase() == arryan[j].value.toLowerCase()){                
+                      dup = true;
+                      arryan[i].style.border = "1 px";
+                      arryan[i].style.borderColor = "#FF0000";  
+                      arryan[j].style.border = "1 px";
+                      arryan[j].style.borderColor = "#FF0000"; 
+                    
+                    }
+                    
+                    
+                  }
+                }
+            }
+            
+           return  dup;
+    }
+    
+    
+    
+    
+    
+     function dupoptck(){
+    //alert('thiru123');
+        dup = dupoptinn();
+         if(dup != true){
+            dupanschk('');  
+          }
+          else{
+           
+           alert('Duplicate Option Found:Please Change The Option.');
+            return false;
+          }
+        }
+     
+     
+     // End Of Dup Options Check--------------------------------------------------
+     
+     function getselvalues(a,selvalue){
+        
+                       if(selvalue == 'a089000000Mg123456'){ 
+                      
+                       
+                           if(a.checked){
+                  <!-- -----------------------------------------------------------------------Logic to checkkkkkk------------------------------------------------------------------------------ -->
+                 
+                               $('tr td input[type="checkbox"]').each(function(){
+                                        if($(this).hasClass( "chkticket" ) || $(this).hasClass( "chkvisticket" )){
+                      
+                                        $(this).attr('checked', true);
+                                      } 
+                                       
+                                   
+                               });
+                          }    
+                         
+                          if(!a.checked){
+                                 $('tr td input[type="checkbox"]').each(function(){
+                                  if ($(this).attr('disabled')) {
+                                  }
+                                  else{
+                                   $(this).attr('checked', false);
+                                  }
+                                  
+                                }); 
+                                
+                 
+                                       
+                                
+                              }    
+                          }
+               if(selvalue!= 'a089000000Mg123456'){ 
+               
+               if(a.checked) {
+                $('tr td input[type="checkbox"]').each(function(){
+                  
+                  if($(this).hasClass( "chkvisticket" )){
+                     if($(this).val() == selvalue){               
+                      $(this).attr('checked', true);
+                      } 
+                  } 
+                });
+                } 
+               
+               if(!a.checked) {
+                  $('tr td input[type="checkbox"]').each(function(){
+                //  alert($(this).val());
+                  if($(this).hasClass( "chkreqticket" ) || $(this).hasClass( "chkvisticket" )){
+                      if($(this).val() == selvalue){               
+                      $(this).attr('checked', false);
+                      }    
+                  }                     
+                 });
+              }           
+             }   
+             
+                       
+                         
+        } 
+          
+      function getreqvalues(a,reqvalue){
+           
+           if(reqvalue == 'a089000000Mg123456'){ 
+                      
+                       
+                           if(a.checked){
+                  
+                 
+                               $('tr td input[type="checkbox"]').each(function(){
+                               //modified by thirupathi 
+                                       if($(this).hasClass( "chkreqticket" ) || $(this).hasClass( "chkticket" ) || $(this).hasClass("chkvisticket")){
+                                        $(this).attr('checked', true);
+                                      }    
+                                   
+                               });
+                          }    
+                         
+                          if(!a.checked){
+                                $('tr td input[type="checkbox"]').each(function(){
+                                 if($(this).hasClass( "chkreqticket" )){
+                                    $(this).attr('checked', false);
+                                  }
+                                });
+                                
+                 
+                                       
+                                
+                         }    
+          }
+          
+           if(reqvalue != 'a089000000Mg123456'){ 
+          if(a.checked){
+              $('tr td input[type="checkbox"]').each(function(){
+            //  alert($(this).val());
+              if($(this).hasClass("chkticket") || $(this).hasClass("chkvisticket")){
+                  //alert('hi1111111111');
+                  if($(this).val() == reqvalue){               
+                  $(this).attr('checked', true);
+                  }    
+              }                     
+             });
+          }
+          
+         }
+         
+         
+          
+        }    
+       
+       
+       
+        function getvisvalues(a,visvalue){
+        
+        if(visvalue == 'a089000000Mg123456'){ 
+                      
+                       
+                           if(a.checked){
+                  
+                 
+                               $('tr td input[type="checkbox"]').each(function(){
+                                       //alert('1111111111111');
+                                       if(!$(this).hasClass( "chkreqticket" )){
+                                        $(this).attr('checked', true);
+                                     }    
+                                   
+                               });
+                          }    
+                         
+                          if(!a.checked){
+                                $('tr td input[type="checkbox"]').each(function(){
+                                 if($(this).hasClass( "chkvisticket" )){
+                                    $(this).attr('checked', false);
+                                  }
+                                });   
+                                
+                         }
+                         
+                         if(!a.checked){
+                                $('tr td input[type="checkbox"]').each(function(){
+                                 if($(this).hasClass( "chkreqticket" )){
+                                    $(this).attr('checked', false);
+                                  }
+                                });   
+                                
+                         }       
+          }
+          
+           if(visvalue != 'a089000000Mg123456'){ 
+          
+              $('tr td input[type="checkbox"]').each(function(){
+            //  alert($(this).val());
+              if($(this).hasClass( "chkreqticket" )){
+                  //alert('@@@@@@@@@@@@@');
+                  if($(this).val() == visvalue ){               
+                  $(this).attr('checked', false);
+                  }    
+              }                     
+             });
+          }
+        
+        
+         }  
+                  
+    </script >
+    
+    <!------------saving reorder rows in database----------->
+    <script type="text/javascript">
+    function reorder(optchoice2) {
+        var table3 = document.getElementById(optchoice2);
+        var rowCount = table3.rows.length;
+        for(var i=1; i<=rowCount; i++) {
+            var row = table3.rows[i];
+            row.cells[1].innerHTML= i;
+        }
+    }
+    </script >
+     
+        <script type="text/javascript">
+            function validatefun() {  
+        
+              var selbol = '';
+                      var quelevel = '';             
+                   var els = $('.requiredInput');
+                   els.each(function(index, el) {
+    
+                       el = $(el);
+    
+                       el = el.find("input,textarea,select");
+                       var fildname = el.attr('id');
+               
+                   //   alert(fildname);
+                                      // alert(el.val());
+    
+                      if (fildname == 'pageid:compid:commoncomponent:queformid:querepid:0:quelevel') { 
+                       quelevel = el.val();
+                      }             
+                                      
+                       if ($.trim(el.val()) == '') {
+                       
+    
+                           selbol = true;
+                            
+                           el.css('border', '1px solid red');
+                       }
+                          else{
+                            el.css('border', '1px solid #E3E3E3');
+                       }
+              
+                      
+                 })
+                 
+                 
+                 if(selbol == true)
+                  {
+                      alert('Required Fields Missing');
+                      return false;
+                          
+                  } 
+                 
+            // To Check If Duplicate Answer Options Are Given ----------------------------------
+                 dup = dupoptinn();
+                 
+                 if(dup == true){
+                    alert('Duplicate Option Found:Please Change The Option.');
+                    return false;
+                  }
+    
+    
+    
+                  
+                 var chkArray = '';
+                 var chkreqArray = '';
+                 var chkvisArray = '';
+                   
+                 if(quelevel == 'Ticket Level'){ 
+                        $('.chkticket:checked').each(function() {
+                           if($(this).val()!='a089000000Mg123456'){
+                            chkArray += ($(this).val()) + '-';
+                           }
+                      });
+                   //alert('1111111111111111' + chkArray );
+                
+     
+                    
+                   if(chkArray==''){
+                      alert('Please Select Atleast one Ticket');
+                      document.getElementById("$(this)").value = ""; 
+                      return false;
+                   }
+    
+                        $('.chkreqticket:checked').each(function() {
+                           if($(this).val()!='a089000000Mg123456'){
+                            chkreqArray += ($(this).val()) + '-';
+                           }
+                      });
+    
+                      $('.chkvisticket:checked').each(function() {
+                           if($(this).val()!='a089000000Mg123456'){
+                            chkvisArray += ($(this).val()) + '-';
+                           }
+                      });
+                      
+                   if(chkArray!=''){              
+                  
+                  //alert('3333333333333333' + chkArray);
+                   savequestion(chkArray,chkreqArray,chkvisArray); 
+                   }
+                }
+                  
+                else{
+                    savequestion(chkArray,chkreqArray,chkvisArray); 
+                }  
+                  
+                  
+                  
+        
+            }
+        </script > 
+    
+     <style>
+     
+    
+        .selectclass{
+        border: 1px solid #e3e3e3;
+        height: 28px;
+        font-family: Helvetica, Arial, sans-serif;
+        padding-left: 10px;
+        padding-right: 10px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        color: #575757;
+        background-color: #FFF;
+        background-image: url(../images/input.png);
+        }
+     </style>
+     
+            <style>
+                #ticketselect{width:60%; padding:3px; margin-left:17.5%; margin-top:10px; height:243px;background-color:#FDFDFD;border: 1px solid #e3e3e3;border-radius: 3px;}
+                #ticketlist{ width:100%; height:243px; background-color:;overflow: auto;}
+                #ticketlist table{  border-collapse:collapse; font-family: Helvetica, Arial, sans-serif;font-size: 14px;}
+                #ticketlist tr{border-bottom: 1px solid #E4E4E4;}
+                #ticketlist td{ padding:5px;}
+                #ticketstitle{ font-size:15px;text-shadow: 0 1px 1px rgba(0,0,0,.25);color:#247dba;text-align:center;}
+            </style>
+     
+     
+     
+     <script type="text/javascript">
+     
+     
+     function  editquestion(queid){
+       rendereditquestion(queid);
+     }
+     
+     </script>
+    
+    
+      <c:myComponent BLN_UtillDisplayLinks="{!mysurveyque}" id="compid">
+       <body >
+    
+    <!------------------------------------Start Of Survey Table For The Selected Event.-------------------------------------------->
+    
+    
+    
+    <div id="surveytablediv">
+     <apex:form id="displaytableid" >   
+     
+              
+     
+     
+      <apex:outputPanel rendered="{!displaytablebool}" >
+             <div class="grid-1"  >
+              <div class="title-grid-selectevent" style=""></div>
+    
+                <div class="content-gird-selectevents" style="">
+          
+          <apex:outputPanel rendered="{!errormessagebool}" id="errormbboolid">
+               <div style="margin: 10px 10px 2px 20px;">
+                   <apex:outputText value="{!failuremessageset}" id="errorMessage" style="color:red;" escape="false" ></apex:outputText>
+               </div> 
+         </apex:outputPanel>
+         <!--Add survey questions Button-->
+         <apex:commandButton action="{!AddQuestion}"  value="Add Survey Questions"   Styleclass="button-a blue" style="height:32px; float:right; margin-top:-10px; margin-bottom:3px; margin-right:-1%; " />
+              <!-- reRender="displaytableid,queformid,errorbboolid,errormbboolid,itemdisplayboolid" -->
+                     </div><!--close of content-grid-->
+                     </div><!--title-grid-->
+            
+          <!--survey questions table-->
+        <script>  
+       document.onmousemove = function(ev){
+        if (currenttable && currenttable.dragObject) {
+            ev   = ev || window.event;
+            var mousePos = currenttable.mouseCoords(ev);
+            var y = mousePos.y - currenttable.mouseOffset.y;
+            if (y != currenttable.oldY) {
+                // work out if were going up or down...
+                var movingDown = y > currenttable.oldY;
+                // update the old value
+                currenttable.oldY = y;
+                // update the style to show were dragging
+                currenttable.dragObject.style.backgroundColor = "#eee";
+                // If were over a row then move the dragged row to there so that the user sees the
+                // effect dynamically
+                var currentRow = currenttable.findDropTargetRow(y);
+                if (currentRow) {
+                    if (movingDown && currenttable.dragObject != currentRow) {
+                        currenttable.dragObject.parentNode.insertBefore(currenttable.dragObject, currentRow.nextSibling);
+                        <!-- //document.getElementById(!$Component.AjaxLoaderId).style.display=""; -->
+                        //myFunction(questionrecord.id);
+                    } else if (! movingDown && currenttable.dragObject != currentRow) {
+                        currenttable.dragObject.parentNode.insertBefore(currenttable.dragObject, currentRow);
+                        <!-- //document.getElementById("AjaxLoaderId").style.display=""; -->
+                        //myFunction(questionrecord.id);
+                    }
+                }
+            }
+    
+            return false;
+        }
+    }
+    
+    // Similarly for the mouseup
+    document.onmouseup   = function(ev){
+        if (currenttable && currenttable.dragObject) {
+            var droppedRow = currenttable.dragObject;
+            // If we have a dragObject, then we need to release it,
+            // The row will already have been moved to the right place so we just reset stuff
+           droppedRow.style.backgroundColor = '#fcfcfc';
+            currenttable.dragObject   = null;
+            // And then call the onDrop method in case anyone wants to do any post processing
+            currenttable.onDrop(currenttable.table, droppedRow);
+            currenttable = null; // let go of the table too
+            
+        }
+    }
+    
+    
+    /** get the source element from an event in a way that works for IE and Firefox and Safari
+     * @param evt the source event for Firefox (but not IE--IE uses window.event) */
+    function getEventSource(evt) {
+        if (window.event) {
+            evt = window.event; // For IE
+            return evt.srcElement;
+        } else {
+            return evt.target; // For Firefox
+        }
+    }
+    
+    /**
+     * Encapsulate table Drag and Drop in a class. Well have this as a Singleton
+     * so we dont get scoping problems.
+     */
+    function TableDnD() {
+        /** Keep hold of the current drag object if any */
+        this.dragObject = null;
+        /** The current mouse offset */
+        this.mouseOffset = null;
+        /** The current table */
+        this.table = null;
+        /** Remember the old value of Y so that we dont do too much processing */
+        this.oldY = 0;
+       
+        /** Initialise the drag and drop by capturing mouse move events */
+        this.init = function(table) {
+            this.table = table;
+            var rows = table.tBodies[0].rows; //getElementsByTagName("tr")
+            
+            for (var i=0; i<rows.length; i++) {
+            
+                // John Tarr: added to ignore rows that Ive added the NoDnD attribute to (Category and Header rows)
+                var nodrag = rows[i].getAttribute("NoDrag")
+                if (nodrag == null || nodrag == "undefined") { //There is no NoDnD attribute on rows I want to drag
+                    this.makeDraggable(rows[i]);
+                }
+            }
+        }
+        
+        <!-----------------saving reorder table rows in database ---------------->
+        
+        /** This function is called when you drop a row, so redefine it in your code
+            to do whatever you want, for example use Ajax to update the server */
+        
+     
+        
+        this.onDrop = function(table, row) {
+         /*var arryan = [];
+         var valu = '';    
+         
+        $('#listcountid').each(function(){
+         var aid = $(this).attr('id') ;
+         var n = aid.search('listcountid');
+              if(n != -1){
+                    valu = document.getElementById(aid).value;
+                    valu = valu.replace('-','*&^%$');
+                      arryan.push(valu);
+                    }
+                    });
+      
+          var debugStr = '';
+    
+            for (var i=0; i<arryan.length; i++) {
+                debugStr = debugStr + arryan[i]+'-';
+            }
+           
+        
+            questionorder2(debugStr);*/
+            var rows = this.table.tBodies[0].rows;
+        var debugStr = "";
+        for (var i=0,j=rows.length; i<rows.length; i++,j--) {
+            debugStr += rows[i].id+","+Number(j)+" ";
+        }
+        
+        questionorder2(debugStr);
+        }
+        
+        <!----------------------------------------------------------------------->
+    
+        
+        /** Get the position of an element by going up the DOM tree and adding up all the offsets */
+        this.getPosition = function(e){
+            var left = 0;
+            var top  = 0;
+                    
+            /** Safari fix -- thanks to Luis Chato for this! */
+            if (e.offsetHeight == 0) {
+                /** Safari 2 doesnt correctly grab the offsetTop of a table row
+                    this is detailed here:
+                    http://jacob.peargrove.com/blog/2006/technical/table-row-offsettop-bug-in-safari/
+                    the solution is likewise noted there, grab the offset of a table cell in the row - the firstChild.
+                    note that firefox will return a text node as a first child, so designing a more thorough
+                    solution may need to take that into account, for now this seems to work in firefox, safari, ie */
+                e = e.firstChild; // a table cell
+                    
+            }
+    
+            while (e.offsetParent){
+                left += e.offsetLeft;
+                top  += e.offsetTop;
+                e     = e.offsetParent;
+                    
+            }
+    
+            left += e.offsetLeft;
+            top  += e.offsetTop;
+    
+            return {x:left, y:top};
+                    
+        }
+    
+        /** Get the mouse coordinates from the event (allowing for browser differences) */
+        this.mouseCoords = function(ev){
+            if(ev.pageX || ev.pageY){
+                return {x:ev.pageX, y:ev.pageY};
+            }
+            return {
+                x:ev.clientX + document.body.scrollLeft - document.body.clientLeft,
+                y:ev.clientY + document.body.scrollTop  - document.body.clientTop
+            };
+        }
+    
+        /** Given a target element and a mouse event, get the mouse offset from that element.
+            To do this we need the elements position and the mouse position */
+        this.getMouseOffset = function(target, ev){
+            ev = ev || window.event;
+    
+            var docPos    = this.getPosition(target);
+            var mousePos  = this.mouseCoords(ev);
+            return {x:mousePos.x - docPos.x, y:mousePos.y - docPos.y};
+        }
+    
+        /** Take an item and add an onmousedown method so that we can make it draggable */
+        this.makeDraggable = function(item) {
+            if(!item) return;
+            var self = this; // Keep the context of the TableDnd inside the function
+            item.onmousedown = function(ev) {
+                // Need to check to see if we are an input or not, if we are an input, then
+                // return true to allow normal processing
+                var target = getEventSource(ev);
+                if (target.tagName == 'INPUT' || target.tagName == 'SELECT') return true;
+                currenttable = self;
+                self.dragObject  = this;
+                self.mouseOffset = self.getMouseOffset(this, ev);
+                return false;
+                
+            }
+            item.style.cursor = "move";
+            
+        }
+    
+        /** Were only worried about the y position really, because we can only move rows up and down */
+        this.findDropTargetRow = function(y) {
+            var rows = this.table.tBodies[0].rows;
+            for (var i=0; i<rows.length; i++) {
+                var row = rows[i];
+                // John Tarr added to ignore rows that Ive added the NoDnD attribute to (Header rows)
+                var nodrop = row.getAttribute("NoDrop");
+                if (nodrop == null || nodrop == "undefined") {  //There is no NoDnD attribute on rows I want to drag
+                    var rowY    = this.getPosition(row).y;
+                    var rowHeight = parseInt(row.offsetHeight)/2;
+                    if (row.offsetHeight == 0) {
+                        rowY = this.getPosition(row.firstChild).y;
+                        rowHeight = parseInt(row.firstChild.offsetHeight)/2;
+                    }
+                    // Because we always have to insert before, we need to offset the height a bit
+                    if ((y > rowY - rowHeight) && (y < (rowY + rowHeight))) {
+                        // thats the row were over
+                        return row;
+                    }
+                }
+            }
+            return null;
+        }
+    }
+    
+    
+    window.onload=function() {      
+    var table = document.getElementById('optchoice2');
+    
+    var tableDnD = new TableDnD();
+    tableDnD.init(table);
+    
+    
+    }
+    
+    </script> 
+    
+          <c:AjaxLoader LoaderImage="{!$Resource.AjaxLoaderImage}" rendered="{!answeroptorder2!=null}"/> 
+            <!--Statistic-->
+            <div class="grid-1"  >
+            
+                 <table id="optchoice2"  class="display" >
+                  <thead>
+                    <tr >
+                      <th width ="2%"></th>
+                      <th width="10%" >Survey ID</th>
+                      <th width="27%" >Questions</th>
+                      <th width="15%">Answer Type</th>
+                      <th width="15%">Answer Options</th>
+                      <th width="25%">Question Level</th>
+                      <th width="10%" >Action</th>
+                     
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <apex:variable var="listcou" value="{!0}" id="listcountid"/>
+                   <apex:repeat value="{!questionslist}" var="que">
+                     <apex:variable var="listcou" value="{!listcou+1}"/>
+                    
+                    <apex:variable value=" " var="answeroptions"/>
+                    <apex:variable value="{!0}" var="itmcount"/>
+                    <apex:variable value=" " var="itmquestion"/>
+                    <apex:variable value="{!0}" var="count"/>
+                    
+                      <apex:repeat value="{!que.Answers__r}" var="ans">
+                          <apex:variable value="{!ans.Answer_Text__c}" var="answeroptions" rendered="{!IF(count == 0,TRUE,FALSE)}"/>
+                              <apex:variable value="{!answeroptions},{!ans.Answer_Text__c}" var="answeroptions" rendered="{!IF(count > 0 , TRUE,FALSE)}"/>
+                           <apex:variable value="{!count+1}" var="count"/>
+                      </apex:repeat>
+                       <apex:repeat value="{!que.Item_Question__r}" var="queitem">
+                       <apex:variable value="{!queitem.Item__r.item_name__c}" var="itmquestion" rendered="{!IF(itmcount== 0 , TRUE,FALSE)}"/>
+                              <apex:variable value="{!itmquestion},{!queitem.Item__r.item_name__c}" var="itmquestion" rendered="{!IF(itmcount> 0 , TRUE,FALSE)}"/>
+                          <apex:variable value="{!itmcount+1}" var="itmcount"/>
+                      </apex:repeat>
+                  <tr  class="item" id="{!que.ID}"> 
+                    
+               <td  width="2%" ><apex:image url="{!$Resource.DragButton}"  style="margin-left:-5px;" /> </td>
+              <td><apex:outputText value="{!que.Name}" id="queordclas" html-placeholder="{!listcou}"/>
+           
+               </td>
+                      <td class="name"><apex:outputText value="{!que.Question_Text__c}"/></td>
+                      <td class="name"><apex:outputText value="{!que.Answer_Type__c}"/></td>
+                      
+                      
+                      <td class="name"><apex:outputText value="{!answeroptions}"/></td>
+                         <td class="name"><!-- <apex:outputText value="{!itmquestion}"/> -->
+                              
+                                <apex:outputText value="{!IF(que.Item_Question__r.size>0,que.Item_Question__r[0].Question_Level__c,'')}"/> 
+                         </td>
+                         
+                         
+                         <td class="subject">
+                      
+                           <a href="" onclick="editquestion('{!que.Id}');"  id="edtancor" style="text-decoration:none;cursor: pointer;" title="Edit"  >
+                               <apex:image url="{!URLFOR($Resource.Promocodes, 'promocodes/images/edit-1.png')}" />
+                           </a>  
+               
+               <apex:variable value="{!0}" var="useranscount" id="usercouid" />
+                 <apex:repeat value="{!itmqueansMap[que.Id]}" var="usid">
+                  <apex:variable value="{!useranscount+usid.User_Answers__r.size}" var="useranscount"/>
+                 </apex:repeat> 
+    
+                 
+                    <apex:commandLink onclick="if(!confirm('This Survey Question is answered by some of the Registrants.Deleting the question will delete all the answers answered by registrants.Please Edit the record and uncheck visible for respective Ticket.')){return};"  title="Delete"  rendered="{!IF(useranscount != 0 ,TRUE,FALSE)}" reRender="displaytableid,queformid,createquestionid,errorbboolid">
+                           <apex:param value="{!que.Id}" name="delquid"/>
+                          
+                           <apex:image url="{!URLFOR($Resource.Promocodes, 'promocodes/images/remove.png')}" style="margin-left:5px;"/>
+                      </apex:commandLink>     
+                         <apex:commandLink onclick="if(!confirm('Are you sure,Do you want to Delete Survey Question?')){return};"  action="{!delquestion}" title="Delete"  rendered="{!IF(useranscount = 0 ,TRUE,FALSE)}"  reRender="displaytableid,queformid,createquestionid,errorbboolid">
+                          <apex:param value="{!que.Id}" name="delquid"/>
+                          <apex:param value="{!0}" name="queanscount"/>
+                        <apex:image url="{!URLFOR($Resource.Promocodes, 'promocodes/images/remove.png')}" style="margin-left:5px;"/>
+                          </apex:commandLink>           
+                      
+                      
+                       </td>
+                      
+                    </tr>
+                  
+                  </apex:repeat> 
+                  </tbody>
+                </table>
+                </div><!--close of grid1-->
+                
+                 
+                 <!---------- Action function for updating reordered rows of survey questions table ---------------------->             
+                 <apex:actionFunction action="{!updateanswerslist2}" name="questionorder2" reRender="optchoice2" status="AjaxLoader">
+                    <apex:param value="" name="answeroptorder2"/>
+                </apex:actionFunction> 
+                 
+               <!-- <apex:commandButton value="Save Session" onClick="reorder(optchoice2);"  styleclass="button-a blue" reRender="displaytableid,queformid,createquestionid,errorbboolid" /> -->
+                 </apex:outputPanel>
+                 
+              <apex:actionFunction action="{!editquestion}" name="rendereditquestion" reRender="displaytableid,queformid,createquestionid,errorbboolid">
+                      <apex:param value="" name="editquid"/>
+            </apex:actionFunction>   
+                 
+                 
+            <!---  <apex:actionFunction action="{!updatequestion}" name="questionorder" reRender="displaytableid,queformid,createquestionid,errorbboolid">
+                      <apex:param value="" name="questionorder"/>
+            </apex:actionFunction>   --->
+               
+               
+      
+          </apex:form>
+                 </div>
+            <!--close of survey table-->
+    
+    
+     <!----------------------------------Add SurveyQuestions----------------------------->
+       
+       
+       <apex:pageMessages id="msgs"/>
+       <apex:form id="queformid">
+    
+        
+     
+     
+        <apex:outputPanel id="createquestionid" rendered="{!createquestionbool}">  
+       
+       <div id="addsurvey"  >
+              <div style=" width:100%; height:48px;">
+                
+              </div><!--close of content-grid-->
+              
+                  <div class="form" style="width:70%; margin:0px auto;   border:0px solid #000;  ">
+              
+       
+        <apex:outputPanel rendered="{!errormessagebool}" id="errorbboolid">
+               <div style="margin: 10px 10px 2px 20px;">
+                   <apex:outputText value="{!failuremessageset}" id="errorMessage" style="color:red;" escape="false" ></apex:outputText>
+               </div> 
+         </apex:outputPanel>
+        
+        
+        
+               <apex:repeat value="{!questionslist}" var="q" id="querepid">
+                 <div class="requiredInput">
+                            <div class="requiredBlock"></div>   
+                    <div class="elem">
+                       <label>Question Level: </label>  
+                      <div class="indent" style="margin-left:120px;">
+                          <apex:selectList id="quelevel" value="{!selectedquelevl}"    multiselect="false" size="1" style="outline:none;width:74%;" Styleclass="selectlist  levelclass">
+                             <apex:selectOptions value="{!questionlevel}" id="levelid"/>
+                                <apex:actionSupport action="{!itemdisplay}" event="onchange" reRender="queformid,createquestionid,itemdisplayboolid">
+                             </apex:actionSupport>
+                              
+                            </apex:selectList>
+                       
+                     </div>
+                     </div> 
+                     </div>
+    <!-- -------------------------------------------------------------Action Region Area--------------------------------------------------------------------------------------------------------- -->
+                       <apex:actionRegion > 
+                        <div class="requiredInput">
+                            <div class="requiredBlock"></div>
+                        <div class="elem">
+                      <label>Question Title: </label><label id="mandatory">*</label>   
+                      <div class="indent" style="margin-left:120px;">
+                         <apex:inputField value="{!q.Question_Text__c}" styleClass="medium"  />
+                      </div>
+                     </div>
+                    </div>
+                      
+                     <div class="elem">
+                       <label>Answer Type: </label>  
+                      <div class="indent" style="margin-left:120px;">
+                          <apex:selectList id="options" value="{!selectedtype}" multiselect="false" size="1" style="outline:none;width:74%;" Styleclass="selectlist" required="false">
+                               <apex:selectOptions value="{!quetyps}" />
+                               <apex:actionSupport action="{!addOptionsOnchange}" event="onchange"  reRender="queformid,createquestionid,opt" />
+                          </apex:selectList>
+                     </div>
+                     </div>
+                    </apex:actionRegion> 
+          <!----------------Adding Of Options ------------------------------------------------------------------------>           
+                   <apex:outputPanel rendered="{!multiplechoiceoptions}" id="opt">
+                        <div class="elem">
+                            <apex:outputText rendered="{!IF(selectedtype== 'Scale',TRUE,FALSE)}"  value="Scale"/>
+                         </div>
+                      <apex:outputText rendered="{!IF(selectedtype == 'Scale',TRUE,FALSE)}"> 
+                     
+                         <div class="indent" style="margin-top:-15px;">
+                          <table border="0"><tr>
+                         <td>
+                           <apex:selectList value="{!selctdminscale}" rendered="{!IF(selectedtype == 'Scale',TRUE,FALSE)}" multiselect="false" size="1" style="outline:none;width:40%;" Styleclass="selectlist ">
+                             <apex:selectOptions value="{!minscale}"></apex:selectOptions>
+                           </apex:selectList>  
+                            <apex:outputText value="   To   " rendered="{!IF(selectedtype == 'Scale',TRUE,FALSE)}"/>
+                           <apex:selectList value="{!selctdmaxscale}"  rendered="{!IF(selectedtype == 'Scale',TRUE,FALSE)}" multiselect="false" size="1" style="outline:none;width:40%;" Styleclass="selectlist">
+                              <apex:selectOptions value="{!maxscale}"></apex:selectOptions>
+                           </apex:selectList>
+                     
+                        </td></tr> </table> </div>
+                      </apex:outputText>
+                  
+                  <style>
+                    .indent{white-space:nowrap; }
+                    .indent tr td {border:0px solid #000;margin:0px;padding:0.5px;}
+                   </style>   
+    
+     <!---------------------------------------------------------------------------------------->
+    
+     <script> 
+    
+     
+    /*$( document ).ready(function() {*/
+       document.onmousemove = function(ev){
+        if (currenttable && currenttable.dragObject) {
+            ev   = ev || window.event;
+            var mousePos = currenttable.mouseCoords(ev);
+            var y = mousePos.y - currenttable.mouseOffset.y;
+            if (y != currenttable.oldY) {
+                // work out if were going up or down...
+                var movingDown = y > currenttable.oldY;
+                // update the old value
+                currenttable.oldY = y;
+                // update the style to show were dragging
+                currenttable.dragObject.style.backgroundColor = "#eee";
+                // If were over a row then move the dragged row to there so that the user sees the
+                // effect dynamically
+                var currentRow = currenttable.findDropTargetRow(y);
+                if (currentRow) {
+                //alert('kkkkkkkkkkkkkkkkk');
+                    if (movingDown && currenttable.dragObject != currentRow) {
+                        currenttable.dragObject.parentNode.insertBefore(currenttable.dragObject, currentRow.nextSibling);
+                    } else if (! movingDown && currenttable.dragObject != currentRow) {
+                        currenttable.dragObject.parentNode.insertBefore(currenttable.dragObject, currentRow);
+                    }
+                }
+            }
+    
+            return false;
+        }
+    }
+    
+    // Similarly for the mouseup
+    document.onmouseup   = function(ev){
+        if (currenttable && currenttable.dragObject) {
+            var droppedRow = currenttable.dragObject;
+            // If we have a dragObject, then we need to release it,
+            // The row will already have been moved to the right place so we just reset stuff
+            droppedRow.style.backgroundColor = '#fcfcfc';
+            currenttable.dragObject   = null;
+            // And then call the onDrop method in case anyone wants to do any post processing
+            currenttable.onDrop(currenttable.table, droppedRow);
+            currenttable = null; // let go of the table too
+        }
+    }
+    
+    
+    /** get the source element from an event in a way that works for IE and Firefox and Safari
+     * @param evt the source event for Firefox (but not IE--IE uses window.event) */
+    function getEventSource(evt) {
+        if (window.event) {
+            evt = window.event; // For IE
+            return evt.srcElement;
+        } else {
+            return evt.target; // For Firefox
+        }
+    }
+    
+    /**
+     * Encapsulate table Drag and Drop in a class. Well have this as a Singleton
+     * so we dont get scoping problems.
+     */
+    function TableDnD() {
+        /** Keep hold of the current drag object if any */
+        this.dragObject = null;
+        /** The current mouse offset */
+        this.mouseOffset = null;
+        /** The current table */
+        this.table = null;
+        /** Remember the old value of Y so that we dont do too much processing */
+        this.oldY = 0;
+    
+        /** Initialise the drag and drop by capturing mouse move events */
+        this.init = function(table) {
+            this.table = table;
+            var rows = table.tBodies[0].rows; //getElementsByTagName("tr")
+    
+            for (var i=0; i<rows.length; i++) {
+            
+                // John Tarr: added to ignore rows that Ive added the NoDnD attribute to (Category and Header rows)
+                var nodrag = rows[i].getAttribute("NoDrag")
+                if (nodrag == null || nodrag == "undefined") { //There is no NoDnD attribute on rows I want to drag
+                    this.makeDraggable(rows[i]);
+                }
+            }
+        }
+    
+       /** This function is called when you drop a row, so redefine it in your code
+            to do whatever you want, for example use Ajax to update the server */
+        
+     
+        
+        this.onDrop = function(table, row) {
+         
+         var arryan = [];
+         var valu = '';
+         
+        $('tr td input[type="text"]').each(function(){
+    
+         var aid = $(this).attr('id') ;
+    
+         var n = aid.search('answertexrID');
+        
+    
+                    if(n != -1){
+                    valu = document.getElementById(aid).value;
+                    valu = valu.replace('-','*&^%$');
+                      arryan.push(valu);
+                    }
+                                       
+                                
+            });
+      
+          var debugStr = '';
+    
+            for (var i=0; i<arryan.length; i++) {
+                debugStr = debugStr + arryan[i]+'-';
+            }
+        
+            questionorder(debugStr);
+        
+        }
+    
+        
+        /** Get the position of an element by going up the DOM tree and adding up all the offsets */
+        this.getPosition = function(e){
+            var left = 0;
+            var top  = 0;
+            /** Safari fix -- thanks to Luis Chato for this! */
+            if (e.offsetHeight == 0) {
+                /** Safari 2 doesnt correctly grab the offsetTop of a table row
+                    this is detailed here:
+                    http://jacob.peargrove.com/blog/2006/technical/table-row-offsettop-bug-in-safari/
+                    the solution is likewise noted there, grab the offset of a table cell in the row - the firstChild.
+                    note that firefox will return a text node as a first child, so designing a more thorough
+                    solution may need to take that into account, for now this seems to work in firefox, safari, ie */
+                e = e.firstChild; // a table cell
+            }
+    
+            while (e.offsetParent){
+                left += e.offsetLeft;
+                top  += e.offsetTop;
+                e     = e.offsetParent;
+            }
+    
+            left += e.offsetLeft;
+            top  += e.offsetTop;
+    
+            return {x:left, y:top};
+        }
+    
+        /** Get the mouse coordinates from the event (allowing for browser differences) */
+        this.mouseCoords = function(ev){
+            if(ev.pageX || ev.pageY){
+                return {x:ev.pageX, y:ev.pageY};
+            }
+            return {
+                x:ev.clientX + document.body.scrollLeft - document.body.clientLeft,
+                y:ev.clientY + document.body.scrollTop  - document.body.clientTop
+            };
+        }
+    
+        /** Given a target element and a mouse event, get the mouse offset from that element.
+            To do this we need the elements position and the mouse position */
+        this.getMouseOffset = function(target, ev){
+            ev = ev || window.event;
+    
+            var docPos    = this.getPosition(target);
+            var mousePos  = this.mouseCoords(ev);
+            return {x:mousePos.x - docPos.x, y:mousePos.y - docPos.y};
+        }
+    
+        /** Take an item and add an onmousedown method so that we can make it draggable */
+        this.makeDraggable = function(item) {
+            if(!item) return;
+            var self = this; // Keep the context of the TableDnd inside the function
+            item.onmousedown = function(ev) {
+                // Need to check to see if we are an input or not, if we are an input, then
+                // return true to allow normal processing
+                var target = getEventSource(ev);
+                if (target.tagName == 'INPUT' || target.tagName == 'SELECT') return true;
+                currenttable = self;
+                self.dragObject  = this;
+                self.mouseOffset = self.getMouseOffset(this, ev);
+                return false;
+            }
+            item.style.cursor = "move";
+        }
+    
+        /** Were only worried about the y position really, because we can only move rows up and down */
+        this.findDropTargetRow = function(y) {
+            var rows = this.table.tBodies[0].rows;
+            for (var i=0; i<rows.length; i++) {
+                var row = rows[i];
+                // John Tarr added to ignore rows that Ive added the NoDnD attribute to (Header rows)
+                var nodrop = row.getAttribute("NoDrop");
+                if (nodrop == null || nodrop == "undefined") {  //There is no NoDnD attribute on rows I want to drag
+                    var rowY    = this.getPosition(row).y;
+                    var rowHeight = parseInt(row.offsetHeight)/2;
+                    if (row.offsetHeight == 0) {
+                        rowY = this.getPosition(row.firstChild).y;
+                        rowHeight = parseInt(row.firstChild.offsetHeight)/2;
+                    }
+                    // Because we always have to insert before, we need to offset the height a bit
+                    if ((y > rowY - rowHeight) && (y < (rowY + rowHeight))) {
+                        // thats the row were over
+                        return row;
+                    }
+                }
+            }
+            return null;
+        }
+    }
+    
+    var table2 = document.getElementById('optchoice1');
+    var tableDnD1 = new TableDnD();
+    tableDnD1.init(table2);
+    </script> 
+    <!------------------------------------------------------------------------------------->
+                <apex:variable var="increment" value="{!0}" id="itemincid"/>
+                      <div class="indent" Style="margin-left:18%;">
+                     <!--  <table class="dynamic" border="0" width="100%" id="optchoice" >-->
+                      <table class="dynamic" border="0" width="70%" id="optchoice1" >
+                     <apex:repeat value="{!answerslist}" var="as" id="ansrepid">
+                     
+                         <apex:variable var="increment" value="{!increment+ 1}" id="incid"/>
+                         
+                         
+                         <tr style="padding:0px;" id="{!as.Answer_Text__c}">
+                             <td  width="2%"> <apex:image url="{!$Resource.DragButton}"  style="margin-left:-5px;"/> </td> 
+                         <td  width="2%">
+                             <apex:image url="{!$Resource.CheckboxImage}" rendered="{!IF(selectedtype == 'Checkboxes',TRUE,FALSE)}" /> 
+                             <apex:image url="{!$Resource.RadioButtonImage}" rendered="{!IF(selectedtype== 'Single Selection',TRUE,FALSE)}" /> 
+                              <apex:outputText value="{!increment}" rendered="{!IF(selectedtype == 'Choose from a list',TRUE,FALSE)}"/>
+                          </td>
+                           
+                      
+                       <td   width="75%">
+                            <apex:inputField value="{!as.Answer_Text__c}"   styleClass="medium" id="answertexrID" style="width:90%;" html-placeholder="Option {!increment}"/>
+                       </td>
+                             <td width="3%">  
+                               <apex:commandButton value="+" title="AddOption"  onclick="return dupoptck();"  rendered="{!answerslist.size = (increment) }" rerender="aa"   styleclass="button-a blue" /> 
+                            </td>  
+                             <td  > <apex:commandButton value="-" title="DeleteOption"  immediate="true" onclick="if(!confirm('Are you sure?')){return};" action="{!deleteoptionline}"  rerender="opt" styleclass="button-a blue" rendered="{!answerslist.size > 1 }" >   
+                                 <apex:param value="{!increment-1}" name="deletedid"/>   </apex:commandButton>   <apex:outputText value="  Default Answer." rendered="{!IF(AND(selectedtype == 'Choose from a list',(increment) = 1),TRUE,FALSE)}" styleClass="medium" style="font-size:15px;text-shadow: 0 1px 1px rgba(0,0,0,.25);color:#247dba;text-align:center;"/>
+                          
+                            </td> 
+                         </tr>
+                      </apex:repeat></table> </div>
+                  </apex:outputPanel>
+                  
+               <!---------------- End of Adding Of Options ------------------------------------------------------------------------>     
+           
+        <apex:outputPanel rendered="{!itemdisplaybool}" id="itemdisplayboolid">
+               
+               <div id="ticketselect" style="">
+               
+               <div id="ticketlist" style="">
+               
+               
+               
+               <table width="100%" border="0">
+      <tr style="border:0px">
+      
+      <!------------td for select ticket table------------>
+      
+      
+         <td style="padding:0px" width="100%">
+     
+         <!-- -------------------------------------Old code pasting---------------------------- -->
+         <!-- --------------------------------------new Code writing ------------------------- -->
+     
+          <table width="100%" border="0">
+           <apex:repeat value="{!itemnames}" var="inm" >
+               
+       <apex:variable value="{!inm.label}" var="labl"/>
+        <tr>
+       <td width="2%"> 
+     
+       <apex:outputText rendered="{!CONTAINS(CheckTicketsforedit,inm.value)}">
+      
+      <apex:variable var="useranswerscount" value="{!0}"/>
+      <apex:repeat value="{!useranswersMAP[inm.value]}" var="el">
+       <apex:variable var="useranswerscount" value="{!useranswerscount+ 1}"/>
+       </apex:repeat>
+       
+        <apex:outputText rendered="{!If(useranswerscount == 0,TRUE,FALSE)}">
+           <input type="checkbox" value="{!inm.value}" class="chkticket" checked='True'  onclick="getselvalues(this,'{!inm.value}');"  ></input> 
+       </apex:outputText> 
+       
+        <apex:outputText rendered="{!If(useranswerscount > 0,TRUE,FALSE)}">
+          <input type="checkbox" value="{!inm.value}" class="chkticket" checked='True' disabled= 'disabled' onclick="getselvalues(this,'{!inm.value}');"  ></input>
+       </apex:outputText> 
+       
+       </apex:outputText> 
+        
+        <!-- ---------------------------------------------Select ticket checkboxessss------------------------------------------------------ -->
+                          
+       <apex:outputText rendered="{!NOT(CONTAINS(CheckTicketsforedit,inm.value))}">
+          <input type="checkbox" value="{!inm.value}" class="chkticket"  onclick="getselvalues(this,'{!inm.value}');"  ></input>
+       </apex:outputText> 
+      
+       </td>
+       
+        <!-- *******-------------------------------------------------------------------Start showing tickets for package------------------------------------------------------------------------------------------------- -->
+         <td width="70%">
+            <apex:outputText rendered="{!If(labl == 'Select All', True,False)}" value="Select Tickets" style="font-size:15px;text-shadow: 0 1px 1px rgba(0,0,0,.25);color:#247dba;text-align:center;"/>
+            <apex:outputText rendered="{!If(labl != 'Select All', True,False)}" value="{!inm.label}" /> 
+              </td> 
+    
+            <!--<td width="50%">-->
+            
+            
+                
+            <!--</td>-->
+            
+           <!-- *******-------------------------------------------------------------------End showing tickets for package------------------------------------------------------------------------------------------------- -->  
+          
+       <apex:outputText rendered="{!If(labl == 'Select All', True,False)}"> 
+        
+        <!-- ---------------------------------Required------------------------------------------------------------------------- --> 
+        <td> 
+          <apex:outputText rendered="{!CONTAINS(CheckreqTicketsforedit,inm.value)}">
+              <input type="checkbox" value="{!inm.value}" class="chkreqticket" checked='True'  onclick="getreqvalues(this,'{!inm.value}');"   ></input>
+          </apex:outputText> 
+                          
+           <apex:outputText rendered="{!NOT(CONTAINS(CheckreqTicketsforedit,inm.value))}">
+                 <input type="checkbox" value="{!inm.value}" class="chkreqticket"  onclick="getreqvalues(this,'{!inm.value}');"   > </input>
+           </apex:outputText> 
+        </td>
+                           
+                   
+        <td >
+           <apex:outputText rendered="{!If(labl == 'Select All', True,False)}" value="Required" style="font-size:15px;text-shadow: 0 1px 1px rgba(0,0,0,.25);color:#247dba;text-align:center;"/>
+        </td>
+        
+        </apex:outputtext>
+        
+        <apex:outputText rendered="{!If(labl != 'Select All', True,False)}"> 
+       
+       
+        <td colspan="2" >
+        
+        <!-- ----------------------------------------------------Ticket Required Checkboxesssss------------------------------------------- -->
+        
+         <apex:outputText rendered="{!CONTAINS(CheckreqTicketsforedit,inm.value)}">
+                           <input type="checkbox" value="{!inm.value}" class="chkreqticket" checked='True'  onclick="getreqvalues(this,'{!inm.value}');"   ></input>
+                          </apex:outputText> 
+                          
+                             <apex:outputText rendered="{!NOT(CONTAINS(CheckreqTicketsforedit,inm.value))}">
+                               <input type="checkbox" value="{!inm.value}" class="chkreqticket"  onclick="getreqvalues(this,'{!inm.value}');"   > </input>
+                           </apex:outputText> 
+         </td>
+         
+         
+        </apex:outputtext>
+        
+         
+        
+        
+        
+         <apex:outputText rendered="{!If(labl == 'Select All', True,False)}"> 
+        
+        <!-- ----------------------------------------------------Visible------------------------------------------- -->
+        
+        <td> 
+        <apex:outputText rendered="{!CONTAINS(CheckvisTicketsforedit,inm.value)}">
+              <input type="checkbox" value="{!inm.value}" class="chkvisticket" checked='True'  onclick="getvisvalues(this,'{!inm.value}');"   ></input>
+          </apex:outputText> 
+                          
+           <apex:outputText rendered="{!NOT(CONTAINS(CheckvisTicketsforedit,inm.value))}">
+                 <input type="checkbox" value="{!inm.value}" class="chkvisticket"  onclick="getvisvalues(this,'{!inm.value}');"   > </input>
+           </apex:outputText> 
+        </td>
+                           
+                   
+        <td >
+           <apex:outputText rendered="{!If(labl == 'Select All', True,False)}" value="Visible" style="font-size:15px;text-shadow: 0 1px 1px rgba(0,0,0,.25);color:#247dba;text-align:center;"/>
+        </td>
+        
+        </apex:outputtext>
+        
+        <apex:outputText rendered="{!If(labl != 'Select All', True,False)}"> 
+       
+       <!-- --------------------------------------------------Ticket Visibility checkboxessssssss----------------------------------- -->
+        <td colspan="2" >
+            <apex:outputText rendered="{!CONTAINS(CheckvisTicketsforedit,inm.value)}">
+                           <input type="checkbox" value="{!inm.value}" class="chkvisticket" checked='True'  onclick="getvisvalues(this,'{!inm.value}');"   ></input>
+                          </apex:outputText> 
+                          
+                            <apex:outputText rendered="{!NOT(CONTAINS(CheckvisTicketsforedit,inm.value))}">
+                               <input type="checkbox" value="{!inm.value}" class="chkvisticket"  onclick="getvisvalues(this,'{!inm.value}');"   > </input>
+                           </apex:outputText> 
+         </td>
+         
+         
+        </apex:outputtext>
+        
+        
+        
+         </tr>
+         
+    <!-- ********************************************Code For Package Line Items************************************************************************ -->     
+         
+    <!-- <tr class="">
+    <td colspan="6" style="padding:0px;">
+    <style>
+    .pkg-lineitem tr td{ padding:0px;}
+    
+    </style>
+    <table width="100%" border="0" class="pkg-lineitem" style="color:#247dba;">
+        <apex:repeat value="{!ItemListMAP[inm.value]}" var="firstKey" rendered="{!IF(CONTAINS(mapchecker,inm.value) ,true,false)}">
+            <tr style="border:none; border-bottom:0px;">
+                
+                <td width="10%" style="text-indent:5%;">
+                    <apex:outputText rendered="{!IF(CONTAINS(mapchecker,inm.value) ,true,false)}">
+                        <input type="checkbox" value="{!firstKey.Item_Pool_Name__c}" class="chkticket"  onclick="getselvalues(this,'{!firstKey.Item_Pool_Name__c}');"  />
+                    </apex:outputText>
+                </td>
+            
+                <td width="50.7%">
+                    <apex:outputText > 
+                        {!firstKey.Item_Pool_Name__c}
+                    </apex:outputText>
+                </td>
+                
+                <td width="21.8%">
+                    <apex:outputText rendered="{!CONTAINS(CheckreqTicketsforedit,inm.value)}">
+                        <input type="checkbox" value="{!inm.value}" class="chkreqticket" checked='True'  onclick="getreqvalues(this,'{!inm.value}');"  />
+                    </apex:outputText> 
+                      
+                    <apex:outputText rendered="{!NOT(CONTAINS(CheckreqTicketsforedit,inm.value))}">
+                        <input type="checkbox" value="{!inm.value}" class="chkreqticket" checked='True'  onclick="getreqvalues(this,'{!inm.value}');"  />
+                    </apex:outputText>
+                </td> 
+                
+                <td>
+                    <apex:outputText rendered="{!CONTAINS(CheckvisTicketsforedit,inm.value)}">
+                        <input type="checkbox" value="{!inm.value}" class="chkvisticket" checked='True'  onclick="getvisvalues(this,'{!inm.value}');"   ></input>
+                    </apex:outputText> 
+                    
+                    <apex:outputText rendered="{!NOT(CONTAINS(CheckvisTicketsforedit,inm.value))}">
+                        <input type="checkbox" value="{!inm.value}" class="chkvisticket"  onclick="getvisvalues(this,'{!inm.value}');"   > </input>
+                    </apex:outputText> 
+                </td>
+            </tr>
+        </apex:repeat> 
+    </table>
+    </td>
+</tr> -->
+         <!----------------------------------------->
+         <apex:variable value="" var="labl"/>
+            </apex:repeat>     </table> 
+            
+            <!-- ----------------------------------old code removing------------------- -->
+         
+        </td> 
+              
+       
+      </tr> 
+    </table>  
+              
+            </div><!--close of ticketlist-->
+                 </div><!--ticketselect-->   
+       </apex:outputPanel>    
+             
+           
+        </apex:repeat> 
+        
+          <apex:outputPanel rendered="{!(NOT(itemdisplaybool))}" id="itemdisplayboolid">
+                     
+           <table style="width:50%;border:1px solid red;"> 
+            <!-- checkboxes for event level ----------------------- -->
+            
+              <tr> 
+              
+              <td style="font-size:15px;text-shadow: 0 1px 1px rgba(0,0,0,.25);color:#247dba;text-align:center;">
+                 <apex:inputCheckbox id="reqEventlevel" selected="{!itemQuestionForEventlevel.isRequired__c}" />Required 
+               </td> 
+               <td style="font-size:15px;text-shadow: 0 1px 1px rgba(0,0,0,.25);color:#247dba;text-align:center;"><apex:inputCheckbox id="visEventlevel"  selected="{!itemQuestionForEventlevel.Visibility__c}"/> Visible </td> </tr>
+               
+          </table> 
+         
+         
+         </apex:outputPanel> 
+          
+        <apex:actionFunction action="{!updateanswerslist}" name="questionorder" reRender="opt">
+               <apex:param value="" name="answeroptorder"/>
+        </apex:actionFunction> 
+        
+         <apex:actionFunction action="{!optionslabel}"   name="dupanschk" reRender="opt">
+               <apex:param value="" name="dupanschk"/>
+        </apex:actionFunction> 
+            
+        <div class="clear"> </div>
+                 
+             <div class="indent" style="margin-top:20px;text-align:right;"> 
+       
+                  <apex:commandButton value="Save" action="{!saveRefreshAction}"  onclick="validatefun();"  styleclass="button-a blue" reRender="aa,optchoice2" oncomplete="location.reload()"/>&nbsp;&nbsp;<!--   oncomplete="location.reload()" --> 
+                      <apex:commandButton value="Cancel" action="{!cancelmethod}" immediate="true" reRender="queformid,displaytableid,errorbboolid,usercouid" styleclass="button-a dark-blue"   />
+                        
+                       <apex:actionFunction name="savequestion" action="{!savequestion}" reRender="queformid,displaytableid,errorbboolid,usercouid"  >
+                    <apex:param name="chkArray"  value=""/>
+                    <apex:param name="chkreqArray"  value=""/>
+                    <apex:param name="chkvisArray"  value=""/>
+                    <!-- ---------------------------Newly Added ------------------ -->
+                     <apex:param name="chPackItm"  value=""/>
+                    
+                    
+                   </apex:actionFunction> 
+               </div>
+               
+           <div class="clear"></div>
+           
+     </div></div>  </apex:outputpanel>  </apex:form>
+    <!----------------------------------End of Add SurveyQuestions----------------------------->
+     
+    </body>
+    
+         </c:myComponent>
+    
+    
+    
+    </apex:page>

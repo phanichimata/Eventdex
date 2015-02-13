@@ -1,0 +1,169 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_SurveyQuestionsReportCon" contentType="application/vnd.ms-excel#SurveyQuestions.xls"><apex:pageBlock ><apex:outputtext rendered="{!showQuestionLevelSurvey}">      
+    Survey By Question Report (View Summary Response)<br/>
+    Question Name : {!questionsForItemMAP[selectedQuestion].Question__r.Question_Text__c}<br/>
+     <table  style=" width:70%; margin:0px auto; font-weight:700;" border="1">
+  <tr>
+
+    <td class="labeltitles" width="18.5%" >Response Count :</td>
+    <td width="10%">{!allResponses}</td>
+    <td class="labeltitles" width="15%">Response % :</td>
+    <td width="10%">{!responseGivenPercent}</td>
+    <td class="labeltitles" width="14.5%">Skips Count :</td>
+    <td width="10%">{!notGivenResponses}</td>
+    <td class="labeltitles" width="11%">Skips % :</td>
+    <td>{!responseNotGivenPercent}</td>
+  </tr>
+</table>
+
+
+     <table cellspacing="0"  border="1" width="100%">
+                <thead>
+                    <tr>
+                        <th>Response Type</th>
+                        <th>Response Count</th>
+                        <th>Response Percentage(%)</th>                         
+                    </tr>
+                </thead>
+
+    <tbody> 
+     
+     <apex:repeat value="{!responsesInnerList}" var="summary">
+         <tr>             
+             <td>{!summary.answerType}</td>
+             <td>{!summary.answerCount} </td>
+             <td>{!summary.answerPercentage}</td>
+         </tr>
+    </apex:repeat>
+    
+                </tbody>
+            </table>
+        
+
+    Survey By Question Report (View Detail Response)<br/>
+    Question Name : {!questionsForItemMAP[selectedQuestion].Question__r.Question_Text__c}<br/>
+    <apex:variable var="summaryCount" value="{!0}"/>
+        <table border="1" width="100%">
+                        <thead>
+                            <tr>
+                                <th>S No</th>  
+                                <th>Name</th>
+                                <th>Answer</th>
+                                                       
+                            </tr>
+                        </thead>
+        
+            <tbody> 
+             
+             <apex:repeat value="{!userAnswersList}" var="answer">
+                 <tr>             
+                     <td><apex:variable var="summaryCount" value="{!summaryCount+1}"/>{!summaryCount}.</td>
+                     <td>{!answer.User__r.First_Name__c} {!answer.User__r.Last_Name__c} </td>
+                     <td>{!answer.UAnswer_Text__c}</td>
+                 </tr>
+            </apex:repeat>
+            
+                        </tbody>
+                    </table>
+
+</apex:outputtext>
+
+ <apex:outputtext rendered="{!showItemLevelSurvey}">
+ Survey By Ticket Report 
+     <table border="1" width="100%">
+             
+              <style>
+              #report{ line-height:20px;}
+              .labeltitles{ color:#247dba; font-size:14px;}
+}
+              </style>
+              <tbody>
+                
+        
+             
+                <apex:repeat value="{!itemLevelSurveyList}" var="item">
+               
+               <tr class="item">
+               
+                  <td width="20%" class="subject" style="vertical-align: top;font-weight:bold;font-size:18px;">Ticket Name: {!item.itemData.item_name__c}</td></tr>
+                 
+                  <tr>
+                    <td id="childReport" width="65%" style="vertical-align: top;">
+                        
+                        <table border="1" width="100%" cellsapcing="0" cellpadding="0">    
+                            <apex:repeat value="{!item.ticketsData}" var="gnUserData">
+                                <tr><td style="cursor:pointer;font-weight:bold;" ><apex:outputText style="font-size:16px;" value="{!gnUserData.Client_GN_User__r.First_Name__c} {!gnUserData.Client_GN_User__r.Last_Name__c}"/>
+                                <apex:outputText style="font-size:11px;" value=" {!gnUserData.Name}"/><!--{!gnUserData.Client_GN_User__r.Email__c} {!gnUserData.Client_GN_User__r.Company_Name__c} --></td>
+                                
+                                </tr>
+                                <tr>
+                                    <td width="25%" style="vertical-align: top;font-weight:bold;">Questions</td>
+                                    <td width="20%" style="vertical-align: top;font-weight:bold;">Answers</td>
+                                </tr>
+                                <apex:repeat value="{!gnUserData.User_Answers__r}" var="userAnswer">
+                                <tr style="display: table-row;">
+                                    <td width="25%">{!userAnswer.Item_Question__r.Question__r.Question_Text__c}</td>
+                                    <td width="20%">{!userAnswer.UAnswer_Text__c}</td>
+                              </tr>  
+                              </apex:repeat>          
+                            </apex:repeat>   
+                        </table>
+                    </td>
+                        
+                </tr>
+         
+        </apex:repeat>   
+              <!--------------------------------------->  
+              </tbody>
+            </table> 
+            </apex:outputtext>
+            
+             <apex:outputtext rendered="{!showAttendeeLevelSurvey}">
+             <apex:variable var="attendeeNumber" value="{!0}"/> 
+     <table cellspacing="0"  border="1" width="100%">
+                <thead>
+                    <tr>
+                        <th width="25%">Attendee Details </th>
+                        <th width="15%">Ticket Id</th>
+                        <th width="15%">Ticket Name</th>                         
+                        <th width="25%">Question</th> 
+                        <th width="20%">Answer</th> 
+                                                
+                    </tr>
+                </thead>
+
+    <tbody> 
+     
+     <apex:repeat value="{!surveyAttendeeInnerList}" var="attendee">
+         <tr>             
+             <td colspan="5" style="fone-weight:16px; font-weight:bold;">
+                 <apex:variable var="attendeeNumber" value="{!attendeeNumber+1}"/>({!attendeeNumber}/ {!surveyAttendeeInnerList.size})<br/>
+                 Attendee Name: {!attendee.gnUserData.First_Name__c}{!attendee.gnUserData.Last_Name__c}<br/>
+                 Email Id: {!attendee.gnUserData.Email__c}<br/>
+                 Cell No: {!attendee.gnUserData.Phone__c}
+             </td>
+            
+         </tr>
+         <apex:repeat value="{!attendee.ticketsData}" var="ticket">
+             <tr>
+                 <td width="25%"></td>             
+                 <td width="15%">{!ticket.Name}</td>
+                 <td colspan="3">{!ticket.Item__r.item_name__c} <apex:outputText value="{!IF(ticket.Item__c != NULL, '(Ticket Level)','(Event Level)')}"/> </td>
+                 </tr>
+                 <apex:repeat value="{!ticket.User_Answers__r}" var="userAnswer">
+                 <tr>                 
+                 <td width="25%"></td> 
+                 <td width="15%"></td> 
+                 <td width="15%"></td>
+                 <td width="25%">{!userAnswer.Item_Question__r.Question__r.Question_Text__c}</td>
+                 <td width="20%">{!userAnswer.UAnswer_Text__c}</td>
+                 </tr>
+                 </apex:repeat>
+             
+         </apex:repeat>
+    </apex:repeat>
+    
+                </tbody>
+            </table>
+            </apex:outputtext>
+</apex:pageBlock>
+</apex:page>

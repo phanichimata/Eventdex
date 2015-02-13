@@ -1,0 +1,69 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" cache="false" controller="SiteLoginController">
+    <html>
+        <head>
+            <meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+            <meta name="format-detection" content="telephone=no" />
+            <title>
+                login
+            </title>
+            <apex:stylesheet value="{!$Resource.login}"/>
+        </head>
+        <body>
+        <div id="login">
+            <div id="login_wrapper" class="page-curl">
+                <div id="login_component"  >
+                    <div id="logo_wrapper">
+                    </div>
+                    <div id="loginwidget">
+                        <apex:form id="loginForm" forceSSL="true">
+                        <div class="loginbox_container" onClick="document.login.un.focus();">
+                            <div id="header">Developer Edition Portal Login</div>
+                            <div id="error"><apex:pageMessages id="error" /></div>
+                            <div id="username" onclick="">
+                                <div>
+                                    <div id="user"></div>
+                                    <apex:inputText value="{!username}" styleClass="input un" id="un"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loginbox_container" onClick="document.login.pw.focus();">
+                            <div id="password">
+                                <div>
+                                    <div id="lock"></div>
+                                    <label for="un" class="zen-assistiveText">Password</label>
+                                    <apex:inputSecret id="pw" value="{!password}" styleClass="input pw"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loginbox_container">
+                            <apex:commandButton action="{!login}" value="Login with your Portal ID" id="submit" styleClass="button btn"/>
+                        </div>
+                        
+                        <apex:outputPanel rendered="true"> 
+                        
+                        <fieldset class="loginbox_container" id="facebook">    
+                            <legend align="center">- or -</legend>  
+                            <a href="{!authProviderURL}?site={!URLENCODE(siteURL)}&startURL={!URLENCODE(startURL)}">
+                                <div class="idp">
+                                    <!-- <img class="" src="{!URLFOR($Resource.fb)}"></img> --> Facebook
+                                </div>
+                            </a>
+                         </fieldset>
+                         </apex:outputPanel>
+                        
+                        <div class="loginbox_container" id="spacer">&nbsp;</div>
+                        </apex:form>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </body>
+    <!--<script src="{!URLFOR($Resource.jquery)}"/> -->
+    <script>
+    $(document).ready(function() {
+        $('.un').attr('placeholder','Username');
+        $('.pw').attr('placeholder','Password');
+    });
+    </script>
+    </html>
+</apex:page>

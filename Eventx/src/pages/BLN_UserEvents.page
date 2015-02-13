@@ -1,0 +1,543 @@
+<apex:page controller="BLN_UserEvents" standardStylesheets="false" showHeader="false" sidebar="false"  >
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/style.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/style-button.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/jquery-ui-1.8.16.custom.css')}"/>   
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/tipTip.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/tables.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/responsive.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/popup.css')}"/>    
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/chosen.css')}"/> 
+    
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery-ui-1.8.16.custom.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/fancybox.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/elfinder.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery.wysiwyg.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery.tipTip.minified.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/forms.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/chosen.jquery.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/autoresize.jquery.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/colorpicker.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/functions.js')}"/>
+
+  <apex:form id="thefrm"> 
+    <!--   <apex:actionFunction action="{!listOfEvents}" name="evelistfilter" reRender="thefrm"> 
+   </apex:actionFunction> -->
+  
+  
+<div id="header">
+    <div id="logo">
+        <apex:image url="{!$Resource.evendexlogo}" style="padding-top:10px;padding-left:10px;"/>
+    </div><!--close of logo-->
+</div><!--close of header--->
+<div  id="ribbon"></div><!--close of ribbon-->
+ <header>
+        <div id="centered-head" class="res"> 
+        <nav>
+          <ul style="margin-left:0px;font-size:11px;">
+            <li id="login" style=" margin-left:0px;"> <span id="login-trigger"> <span id="login-triggers"> <span id="user-panel-check"></span> <span id="user-panel-title ">My Account</span> </span> </span>
+              <div id="login-content" style="border:0px solid red;">
+                <ul style="margin-left:0px;font-size:11px;">                                                                        
+                  <li style=" margin-left:0px;"><apex:outputLink value="/apex/BLN_Profile"> <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/setting.png')}"/> <span>Settings</span></apex:outputLink></li>
+                    <li style=" margin-left:0px;"><apex:outputLink value="/apex/bln_Changepassword"> <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/setting.png')}"/> <span>Change Password</span></apex:outputLink></li>
+                  <!--<li style=" margin-left:0px;"><a href="#"> <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/upgrade.png')}" height="13px" width="13px;"/> <span>Upgrade Account</span> </a></li>-->
+                  <li style="width:100px:height:10px;margin-left:0px;padding-left:16px;"><apex:commandLink onclick="destroy();" action="{!$Site.Prefix}/secur/logout.jsp" style="padding-left:0px;"><apex:image value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/images/logout.png')}"/><span>{!$Label.site.logout}</span></apex:commandLink></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <div class="account-name">
+            <p><span class="welcome">Welcome, </span><strong>{!$User.Firstname}&nbsp;{!$User.Lastname}</strong></p>
+                <div class="account-separator"></div>
+        </div>
+        <div class="account-name"></div>
+       <!-- <div class="account-name" style="float:left;valign:middle;align:left;"> -->
+        <div id="quickbuttons" style="border:0px solid #F00;" > <span>
+            <apex:image value="{!$Resource.HomeIcon}" height="40" width="40"/> </span>&nbsp; 
+             <span><a title="My Tickets" style="text-decoration:none;  margin-left:1%" href="/apex/BLN_Mytickets">
+              <apex:image url="{!URLFOR($Resource.MyTickets, 'images/ticketstab.png')}" width="120" height="44"/> </a></span>
+        </div>
+        <!-- Navigation end--> 
+        </div>
+    </header>
+    <body style="background-color:#b8cdeb;"> 
+<div style="margin-top:-37px; margin-bottom:9px; text-align:right; margin-left:2%;border:0px Solid Red;width:70%;float:left;">
+   <table width="100%" border="0" align="center" >
+        <tr>              
+          <!--  <apex:outputPanel rendered="{!IF(listOfEvents.size > 0, TRUE, FALSE)}"> -->
+            <td align="left" width="50%" valign="top" style="font-size:15px;font-weight:bold;color:#FFF;padding-left:50px;"> 
+                <marquee behavior="alternate" scrollamount="2">Click on '<apex:image value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/images/setting.png')}" width="15" height="15" />' icon, to manage your event !</marquee>
+            </td>
+          <!--  </apex:outputPanel> -->
+        </tr>
+    </table>  
+</div> 
+
+<div style="margin-top:-37px; margin-bottom:9px; text-align:right; margin-right:2%;border:0px Solid Red;width:20%;float:right;">
+    
+  
+  <!--this is the old button need to be deleted-->
+        <apex:outputLink value="/apex/BLN_EventNew" onclick="destroy();" styleclass="button-a blue" style="width:50%; font-size:15px;color:#FFFFFF;">Create New Event</apex:outputLink>
+      
+</div>    
+<div style="margin-top:-37px; margin-bottom:9px; text-align:right; margin-right:2.5%;border:0px Solid Red;width:19%;float:right;">
+<!--<apex:outputLink value="/apex/BL_Event" onclick="destroy();" styleclass="button-a dark-blue" style="width:100%; height:auto;padding:4.7px; font-size:18px;color:#FFFFFF;">Create Event</apex:outputlink> -->
+
+<script>
+function destroy()
+{
+  try{
+           sessionStorage.removeItem("event");
+           sessionStorage.removeItem("ticket");
+           sessionStorage.removeItem("blproduct");}catch(e){}
+}
+</script>
+</div>    
+
+   <section id="middle" style=" border:0px #000000 solid;margin-top:0%;" class="res">
+    <div id="container" style="border:0px #000000 solid;  background-color:#FFF; margin-top:0px;">
+    <div id="content" style="padding:0px; margin-bottom:8px;">
+    <div class="speedbar" style=" border:0px #FF0000 solid; margin-right:0px; ">
+      <div class="speedbar-nav">Eventdex ›› Events </div>
+      <!--close of speedbar-nav--> 
+      <!-- <div class="speedbar-nav" style="float:right;margin-top:-5px;"><apex:inputText value="{!serchEvent}" style="width:200px;" html-placeholder="Search Event" onkeyup="evelistfilter();" /> </div> -->
+    </div>
+    <!--reveal pop up----->  
+    <script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery.reveal.js')}"/>
+
+    <div class="grid-1" style="padding-top:0px; margin-top:8px; width:98.8%; margin-left:0.6%;  ">
+        
+        <div class="content-gird" style="padding:0px; background-image: url({!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/images/background_top.png')})">
+    
+             <div class="container">
+              <h1>&nbsp;</h1>
+              <div id="ca-container" class="ca-container" style="margin-bottom:-10px;">
+                <div class="ca-wrapper">
+                
+                
+              <!-- -------------------------------------------------------- Event Display --------------------------------------------------------- -->  
+                <apex:repeat value="{!wrapperEventList}" var="Event">
+                 <div class="ca-item">
+                 
+                  <div class="ca-item-main">
+                    <div class="ca-icon">   
+                        <apex:image value="/servlet/servlet.ImageServer?id={!Event.eventwrap.Logo_URL__c}&oid={!$Organization.Id}" width="280" height="180" />
+                       
+                    </div>
+                    <br/>
+                     <h3>{!Event.eventwrap.Name}</h3>
+                   
+                    <table cellspacing="0" cellpadding="0" width="100%" height="50px" >
+                        <tr>
+                            <td>       
+                            <b><apex:outputText value="{0,date,MMMM d, yyyy}"> 
+                                <apex:param value="{!Event.eventwrap.Start_Date__c}"/>
+                            </apex:outputText> &nbsp;{!Event.eventwrap.Start_Time__c} &nbsp; - &nbsp;
+                            <apex:outputText value="{0,date,MMMM d, yyyy}"> 
+                                <apex:param value="{!Event.eventwrap.End_Date__c}"/>
+                               
+                            </apex:outputText> &nbsp;{!Event.eventwrap.End_Time__c}</b>      
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <b>{!Event.eventwrap.Venue_Name__c}</b>
+                            </td>
+                        </tr>
+                       <tr>
+                            <td align="left">  
+                                <apex:commandLink onclick="destroy();" title="Manage Event" action="{!manageEvent}" style=" text-decoration:none;margin-left:10px;"><!--rendered="{!IF(OR(Event.UCRole.RoleId__r.Name == 'Event Admin',Event.UCRole.RoleId__r.Name == 'Company Admin'),TRUE,FALSE)}"-->
+                                    <apex:image value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/images/setting.png')}" width="20" height="20" />                                
+                                    <apex:param value="{!Event.eventwrap.id}" name="EventName"/>      
+                                </apex:commandLink> 
+                                <apex:commandLink onclick="destroy();" title="Edit Event" action="{!Editevent}" style=" text-decoration:none; margin-left:10px;" rendered="{!IF(Event.eventwrap.Organizer_Email__c==$User.Email,TRUE,FALSE)}">                           
+                                    <apex:image value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/images/edit-1.png')}" width="20" height="20" />                                 
+                                    <apex:param value="{!Event.eventwrap.id}" name="EventName"/>
+                                </apex:commandLink> 
+                               <!--<apex:commandLink onclick="destroy();" title="Edit Event" action="{!myTickets}" style=" text-decoration:none; margin-left:10px;">                           
+                                    <apex:image value="{!URLFOR($Resource.NewDBEvents, 'images/viewevent.png')}" width="20" height="20" />                                 
+                                    <apex:param value="{!Event.eventwrap.id}" name="EventName"/>
+                                </apex:commandLink>-->
+                                <apex:commandLink onclick=" return confirm('Are you sure you want to delete?');" title="Delete Event" action="{!deleteparamval}" style=" text-decoration:none; margin-left:10px;" rendered="{!IF(Event.eventwrap.Organizer_Email__c==$User.Email,TRUE,FALSE)}">                           
+                                    <apex:image value="{!$Resource.deleterow}" width="20" height="20" />                                 
+                                    <apex:param value="{!Event.eventwrap.id}" name="EventName"/>
+                                </apex:commandLink>
+                            </td>
+                        </tr>   
+                    </table>  
+                    <a href="#" style="color:#fff" class="ca-more">Event Info...</a>
+                    
+                    </div>
+                     <div class="ca-content-wrapper">
+                <div class="ca-content"> 
+                <apex:outputLink styleclass="ca-close">close</apex:outputLink>
+                         <table width="100%" border="0"  cellspacing="5px"  style="font-size:12px;font-family: Helvetica, Arial, sans-serif; text-indent:5px; color:#000; border-collapse:collapse;">
+                         <tr><td> </td></tr>
+                         </table>
+                <table width="100%" border="0"  cellspacing="5px"  style="font-size:12px;font-family: Helvetica, Arial, sans-serif; text-indent:5px; color:#000; border-collapse:collapse;">
+                <tr>
+                        <td colspan="5"> 
+                          <div style="width:100%;text-align:left; background:url({!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/images/background-header.png')}) no-repeat; height:100px;">
+                           <span style="color:#fff; font-size:25px; margin-left:5px;"> {!Event.eventwrap.Name}</span>
+                          </div>
+                 </td>
+                 </tr>
+                
+                <tr style="border-top: #D8D8D8 1px solid; margin-top:5px;">
+                                <td height="30px" width="20%"><label>Phone:</label></td>
+                                <td align="left" width="30%"><label>{!Event.eventwrap.Phone_Number__c}</label></td>
+                                <td width="20%"><label>Hosting Time Zone:</label></td>
+                                <td align="left" width="30%"><label>{!Event.eventwrap.Time_Zone__c}</label></td>
+                            </tr>
+                            
+                            <tr>
+                                <td height="30px" width="20%"><label>Website:</label></td>
+                                <td align="left" width="30%"><label>{!Event.eventwrap.Website_Url__c}</label></td>
+                                <td width="20%"><label>City:</label></td>
+                                <td align="left" width="30%"><label>{!Event.eventwrap.City__c}</label></td>
+                            </tr>
+                            <tr>
+                                <td height="30px" width="20%"><label>Status:</label></td>
+                                <td align="left" width="30%"><label>{!Event.eventwrap.Event_Status__c}</label></td>
+                                <td width="20%"><label>Country:</label></td>
+                                <td align="left" width="30%"><label>{!Event.eventwrap.BLN_Country__r.Short_Name__c}</label></td>
+                            </tr>
+                            <tr>
+                                <td height="30px" width="20%"><label>Hosting Organization:</label></td>
+                                <td align="left" width="30%"><label>{!Event.UCRole.Company__r.Name}</label></td>
+                                <td width="20%"><label>State:</label></td>
+                                <td align="left" width="30%"><label>{!Event.eventwrap.BLN_State__r.Long_Name__c}</label></td>
+                            </tr>
+                            <tr>
+                                <td height="30px" width="20%"><label>Hosting Address 1:</label></td>
+                                <td align="left" width="30%"><label>{!Event.eventwrap.Street1__c}</label></td>
+                                <td width="20%"><label>Zip code:</label></td>
+                                <td align="left" width="30%"><label>{!Event.eventwrap.ZipCode__c}</label></td>
+                            </tr>
+                            <tr>
+                                <td height="30px" width="20%"><label>Hosting Address 2:</label></td>
+                                <td align="left" width="30%"><label>{!Event.eventwrap.Street2__c}</label></td>
+                                <td width="20%"><label>Event Description:</label></td>
+                                <td align="left" width="30%"><label>{!Event.eventwrap.Description__c}</label></td>
+                            </tr>
+                            
+                           
+
+                        </table>      
+                </div> <!--close of ca-content------------------>
+                </div><!--close of ca -content-wrapper---------------->
+                
+                </div>
+                </apex:repeat>
+                
+                
+              <!-- -------------------------------------------------------- Event Display End--------------------------------------------------------- -->  
+                
+                
+             <apex:outputPanel rendered="{!IF(wrapperEventList.size ==0, TRUE, FALSE)}">
+                     <table height="100%" width="100%">
+                         <tr>
+                             <td valign="middle" align="center" style="text-align:center;margin-left:50%" width="100%">
+                                 <apex:outputText value="Create an Event to get started !" style="font-size:32px;color:#ffffff;text-align:center;align:center;"/>            
+                             </td>
+                         </tr>
+                     </table>
+                </apex:outputPanel>
+               
+             </div> 
+              
+             </div>   
+            
+    
+
+              </div>  
+                </div>
+                    </div>
+     <script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery.easing.1.3.js')}"/>
+    <script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery.contentcarousel.js')}"/>
+
+    <script type="text/javascript">
+        $('#ca-container').contentcarousel();
+    </script>
+    <div class="clear"></div>
+   </div>
+   </div> 
+   </section>
+ </body>   
+ </apex:form>   
+<!-------------------------------------------EDIT EVENT POP UP------------------------------------------------>  
+ <!----------------------------------------   Event more options ------------------------------------------>    
+   <style>
+       .custPopup{color:#000000;background-color:#f6f6f6;position: absolute;top:10px;left:0px;right:0px;z-index: 75;width:70%;height: auto; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px;
+-moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; -moz-box-shadow:0 0 64px #000; -webkit-box-shadow:0 0 64px #000; box-shadow:0 0 64px #000;font: 12px/24px "Lucida Grande",Arial,sans-serif; padding-bottom:4px;
+//background-color:#eee; color:#000; padding-bottom:4px; width:600px; margin-top:0px;
+-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;-webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px; -moz-box-shadow:6px 0 64px #000; -webkit-box-shadow:0 0 64px #000; box-shadow:0 0 64px #000; padding:0px; height:75%;}
+
+.custPopupForMorePopUp{color:#000000;background-color:#f6f6f6;position: absolute;top:10px;left:0px;right:0px;z-index: 85;width:70%;height: auto; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px;
+-moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; -moz-box-shadow:0 0 64px #000; -webkit-box-shadow:0 0 64px #000; box-shadow:0 0 64px #000;font: 12px/24px "Lucida Grande",Arial,sans-serif; padding-bottom:4px;
+//background-color:#eee; color:#000; padding-bottom:4px; width:600px; margin-top:0px;
+-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;-webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px; -moz-box-shadow:6px 0 64px #000; -webkit-box-shadow:0 0 64px #000; box-shadow:0 0 64px #000; padding:0px; height:75%;}
+
+
+
+.popupBackground{background-color:#000000; Opacity:0.50; width: 100%;height:100%;position: absolute;left:0px;top:0px; z-index: 50; }
+.popupBackgroundForMorePopUp{background-color:#000000; Opacity:0.50; width: 100%;height:100%;position: absolute;left:0px;top:0px; z-index: 80; }
+
+
+</style>
+ <script>
+ function choosenForPopUp(){
+        
+        $(".chzn-select-deselect").chosen({allow_single_deselect:true});   
+        $(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});  
+         
+     }
+  </script>       
+<apex:form id="eventMoreOptions" >    <!-------  rendered="{!eventMoreOptionBool}"  ----->
+
+    <apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/chosen.css')}"/> 
+    <script>
+        choosenForPopUp();
+    </script>
+  <apex:outputPanel styleClass="popupBackground" layout="block" id="eventMoreOptionsText" rendered="{!editpopup}" style="width:100%"/>  
+    <apex:outputPanel styleClass="custPopup" style="width:80%; height:720px;"  rendered="{!editpopup}">
+       
+       <div id="eventMoreOptionsDiv"  style="width:100%; margin-left:0px; left:13% ">  
+         
+              <div  class="grid-1" style="text-align:left;"  >
+                
+                <div class="title-grid">Edit Event</div>
+                <div class="content-gird">
+                  <div class="form">
+                    <div id="left-form" style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:left">
+                   
+                    <div class="elem">
+                        <label>Event Organizer Email: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">    
+                            <apex:inputField value="{!Eventedit.Organizer_Email__c }" styleClass="medium"/>
+                        </div>
+                      </div>  
+                   
+                      <div class="elem">
+                        <label>Title: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">  
+                            <apex:inputField value="{!Eventedit.Name }" styleClass="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Hosting Time Zone: </label>
+                        <div class="indent">
+                            <apex:inputField value="{!Eventedit.Time_Zone__c }" styleClass="chzn-select medium-select select"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label >Start Date:</label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                          <c:RemoveLink id="EditPopUpStartDate" > 
+                             <apex:inputField value="{!Eventedit.Start_Date__c}" style="width:20%;  "/>   
+                             <apex:inputField value="{!Eventedit.Start_Time__c}" styleClass="chzn-select medium-select select" style="width:40%;  "/>  
+                          </c:RemoveLink>  
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>End Date:</label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                            <c:RemoveLink id="EditPopUpEndDate" > 
+                                 <apex:inputField value="{!Eventedit.End_Date__c}" style="width:20%;  "/>   
+                                 <apex:inputField value="{!Eventedit.End_Time__c}" styleClass="chzn-select medium-select select" style="width:40%;  "/>  
+                              </c:RemoveLink>
+                             
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Phone Number: </label>
+                        <div class="indent">
+                            <apex:inputField value="{!Eventedit.Phone_Number__c }" styleClass="medium"/> 
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Website Url:</label>
+                        <div class="indent">
+                            <apex:inputField value="{!Eventedit.Website_Url__c }" styleClass="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Event Category:</label>
+                        <div class="indent">
+                            <apex:inputField value="{!Eventedit.Event_Type__c}" styleClass="chzn-select medium-select select"/>
+                        </div>
+                      </div>
+                      
+                      <div class="elem">
+                        <label>Primary Category:</label>
+                        <div class="indent">
+                            <apex:inputField value="{!Eventedit.Event_Topic__c}" styleClass="chzn-select medium-select select"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Twitter Hash Tag: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!Eventedit.Twitter_Hash_Tag__c}" styleClass=""/>
+                        </div>
+                      </div>
+                      
+                       <div class="elem">
+                        <label>Twitter URL: </label> 
+                        <div class="indent">
+                          <apex:inputField value="{!Eventedit.Twitter_URL__c}" styleClass=""/>
+                        </div>
+                      </div>
+                      
+                      <div class="elem">
+                        <label>Facebook URL: </label>
+                        <div class="indent">
+                           <apex:inputField value="{!Eventedit.Facebook_URL__c}" styleClass=""/>
+                        </div>
+                      </div>
+                      
+                       <div class="elem">
+                        <label>Event Status:</label>
+                        <div class="indent">
+                            <apex:inputField value="{!Eventedit.Event_Status__c}" styleClass="chzn-select medium-select select"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Event Logo:</label>  
+                        <div class="indent">
+                         
+                            
+                             <apex:inputFile value="{!eventImage}" fileName="{!eventImageName}" contentType="image" ></apex:inputFile>  
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <!--close of left-form-->
+                    
+                    <div class="right-form"  style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:right">
+                      <div class="elem">
+                        <label>Hosting Organization: </label>
+                        <div class="indent">
+                          <input type="text" id="name" name="name" class="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Venue: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!Eventedit.Venue_Name__c }" styleClass="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Hosting Address 1: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!Eventedit.Street1__c}" styleClass="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Hosting Address 2: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!Eventedit.Street2__c}" styleClass="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>City: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!Eventedit.City__c}" styleClass="medium"/>
+                        </div>
+                      </div>
+                     
+                      <div class="elem">
+                        <label>Country: </label>
+                        <div class="indent">
+                          <!--  <apex:inputField value="{!Eventedit.BLN_Country__r.Short_Name__c}" styleClass="medium"/>-->
+                          
+                            <apex:selectList value="{!Eventedit.BLN_Country__c}" multiselect="false" size="1" styleClass="chzn-select medium-select select" style="width:80%" id="countrySelections">
+                                 <apex:selectOptions value="{!countryOptions}"/>
+                                
+                                <apex:actionSupport event="onchange" action="{!statesBasedOnCountry}" >
+                                     <apex:param value="{!Eventedit.Country__c}" assignTo="{!selectedCountry}"/>
+                                 </apex:actionSupport>   
+                             </apex:selectList> 
+    
+                        </div>
+                      </div>
+                      <apex:outputPanel id="statePannel">
+                          
+                       <div class="elem">
+                        <label>State:</label>
+                        <div class="indent">
+                           <!--    <apex:inputField value="{!Eventedit.BLN_State__r.Long_Name__c}" styleClass="medium"/>-->
+                         <apex:selectList value="{!Eventedit.BLN_State__c}" multiselect="false" size="1" styleClass="chzn-select medium-select select" style="width:80%" id="statesSelections">
+                                 <apex:selectOptions value="{!stateOptions}"/>
+                             </apex:selectList>
+                            
+        
+                        </div>
+                      </div>
+                      </apex:outputPanel>
+                       <div class="elem">
+                        <label>Zip Code: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!Eventedit.ZipCode__c}" styleClass="medium"/>
+                        </div>
+                      </div>
+                        <div class="elem">
+                        <label>Po Box: </label>
+                        <div class="indent">
+                          <apex:inputField value="{!Eventedit.PO_Box__c}" styleClass="medium"/>
+                        </div>
+                      </div>
+                      <div class="elem">
+                        <label>Event Description:</label>
+                        <div class="indent">
+                            <apex:inputField value="{!Eventedit.Description__c}" styleClass="medium"/>
+                        </div>
+                      </div>
+            <!---  <div style=" margin-top:10px;">
+                        <label>Event Description:</label>
+                        <div style="margin-left:150px; margin-top:-30px;">
+                            
+                            <apex:selectRadio value="{!Eventedit.Service_Fee__c}"  layout="PageDirection"  required="true" id="eventAddpage">
+                                 <apex:selectOptions value="{!eventServiceFee}"/>
+                             </apex:selectRadio>
+                        </div>
+                      </div>  ------>
+                      <br/>
+                      <div class="indent"> 
+   
+                        <apex:commandButton value="Save" action="{!UpdateEvent}" />
+                        &nbsp;&nbsp;
+                        <apex:commandButton value="Cancel" action="{!Cancel}" />
+                      </div>
+                    </div>
+                    <!--close of right-form-->
+                    
+                    <div class="clear"> </div>
+                  </div><!--close of form-->
+                  <a class="close-reveal-modal">&#215;</a>
+                  <div class="clear"> </div>
+                </div><!--close of contentgrid-->
+           </div>
+         </div>
+        
+          <!---Close of More Events--->
+          <!----Start of Event Options--->    
+  </apex:outputPanel>           
+  </apex:form>          
+      
+   <!----------------------------------------  End of Event more options Start AT(1821) ------------------------------------------>      
+    
+    
+    
+    
+    
+    
+<!--------------------------------------------END OF EDIT EVENT POP UP------------------------------------------>
+    
+    
+    
+</apex:page>

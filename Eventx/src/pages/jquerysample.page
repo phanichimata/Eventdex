@@ -1,0 +1,595 @@
+<apex:page controller="BLN_PromoCodecon" standardStylesheets="true" showHeader="false" id="pageid"    >
+     
+<head><title>Booth Leads</title></head>
+<title>Boothleads-Promo Codes</title>
+   
+  
+     <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/style.css')}"/> 
+      <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/nwbuttons.css')}"/>
+    <!-- <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/tables.css')}"/> -->
+      <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/chosen.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/responsive.css')}"/> 
+       <apex:stylesheet value="{!URLFOR($Resource.nwdatatable, 'nwdatatable/css/jquery.dataTables.css')}"/> 
+       
+     <!--   <script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/jquery.min.js')}"></script> --->
+      <script type="text/javascript" src="{!URLFOR($Resource.nwdatatable, 'nwdatatable/js/jquery.js')}"></script>
+       <script type="text/javascript" src="{!URLFOR($Resource.nwdatatable, 'nwdatatable/js/jquery.dataTables.js')}"></script>
+       <script type="text/javascript" language="javascript" class="init">
+
+$(document).ready(function() {
+    $('#example').dataTable( {
+        "pagingType": "full_numbers",
+        /**default orderid in asc sorting**/
+         "order": [[ 1, "asc" ]],
+        /**sorting coloumn disable**/
+        "aoColumnDefs": [
+      { 'bSortable': false, 'aTargets': [ 0 ] },
+     
+   ]
+        
+    } );
+} );
+
+    </script>
+     <script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/jquery-ui-1.8.16.custom.min.js')}"></script> 
+     <script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/functions.js')}"></script> 
+
+ 
+
+       
+ 
+
+
+ <!----------------------STYLES FOR DISCOUNTS MENU--------------------------------------->
+
+
+
+ 
+ 
+ 
+  
+<body style="background-color:#c5d7ec;">
+<!----------- popups-----------------> 
+
+<!----------popupstyle for Multi promocodes-------------------->
+  
+            
+<div id="header">
+  <div id="logo">
+    <h1 style=" padding-top:5px; padding-left:20px; color:#FFF ">
+     <apex:image url="{!URLFOR($Resource.Promocodes, 'promocodes/images/boothleads_logo_with_whitetext.png')}"/> 
+ 
+           
+    </h1>
+  </div>
+  
+  <!--close of logo--> 
+</div>
+<!--close of header--->
+<div  id="ribbon"></div>
+<!--close of ribbon-->
+ 
+<header>
+  <div id="centered-head" class="res" style="width:96.8%;"> 
+    <!-- Logo --> 
+    <!-- <h1><a href="./Color life Admin Panel   Dashboard_files/Color life Admin Panel   Dashboard.htm" class="logo">Color life Admin Panel</a></h1>--> 
+    <!-- Logo end --> 
+    
+    <!-- Navigation --> 
+ 
+<nav>
+          <ul style="margin-left:0px;">
+            <li id="login" style=" margin-left:0px;"> <span id="login-trigger"> <span id="login-triggers"> <span id="user-panel-check"></span> <span id="user-panel-title ">My Account</span> </span> </span>
+              <div id="login-content" style="border:0px solid red;">
+                <ul style="margin-left:0px;">                                                                        
+                  <li style=" margin-left:0px;"><a href="#"> <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/setting.png')}"/> <span>Settings</span></a></li>
+                  <li style=" margin-left:0px;"><a href="#"> <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/upgrade.png')}" height="13px" width="13px;"/> <span>Upgrade Account</span> </a></li>
+                  <li style=" margin-left:0px;">
+                  <apex:form ><apex:commandLink action="{!$Site.Prefix}/secur/logout.jsp" style="padding-left:0px;">
+                    <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/logout.png')}"/>  <span>Log Out</span>
+                    </apex:commandLink></apex:form></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </nav>
+ 
+           
+           
+   
+  
+  
+    <div class="account-name">
+      <p><span class="welcome">Welcome,</span> <strong><apex:outputText value="{!$User.FirstName} {!$User.LastName}"/></strong></p>
+      <div class="account-separator"></div>
+    </div>
+    <div class="account-name"></div>
+    <div id="quickbuttons" style="border:0px solid #F00;" > <span><a title="My Events" style="text-decoration:none" href="/apex/BLN_UserEvents"> <apex:image url="{!URLFOR($Resource.Promocodes, 'promocodes/images/myevents.png')}" width="79" height="45"/> </a></span>
+     <span ><a title="My Tickets" style="text-decoration:none;  margin-left:5%" href="/apex/BLN_Mytickets"><apex:image url="{!URLFOR($Resource.Promocodes, 'promocodes/images/ticketstab.png')}" width="120"  height="44"/></a></span> </div>
+    <!--close of quickbuttons--> 
+    <!-- Navigation end--> 
+    
+  </div>
+</header>
+<section id="middle" style=" border:0px #000000 solid;width:96.8%;" class="res">
+  <div id="container-main">
+    <div id="container" style="border:0px #000000 solid; margin-bottom:30px;">
+      <div id="content">
+        <div class="speedbar" style=" border:0px #FF0000 solid">
+          <div class="speedbar-nav">Booth Leads ›› Promo Codes</div>
+          <!--close of speedbar-nav--> 
+          <!--  <div class="search">
+            <form>
+              <input type="text">
+            </form>          </div>--> 
+          <div style="float:right;padding-right:10px;">Selected Event: <apex:outputText value="{!eventslist.Name}"/>   <b></b></div>
+     
+        </div>
+         
+       <div id="promocodetable">  
+       
+       
+       <table id="example" class="display" cellspacing="0"  border="0" bordercolor="#F7F7F7" width="100%">
+                <thead>
+                    <tr>
+                    <th width=".5%" style=""><input type="checkbox" name="set" onclick="setChecked(this)"/></th>
+                        <th width="10%">Order No</th>
+            <th width="15%">Name</th>
+            <th width="15%">Company</th>
+            <th width="15%">Email</th>
+            <th width="10%">Phone</th>
+            <th width="18%">Payment Date</th>
+    
+            <th width="9%">Payment Type</th>
+            <th width="10%">Status</th>
+    
+            <th width="">Amount</th>    
+                    </tr>
+                </thead>
+    <tbody>
+                    <tr>
+                    <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14732</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>05/29/2014 06:38 AM</td>
+            <td>Credit Card</td>
+            <td>Paid</td>
+             <td>2500.00</td>
+             
+        </tr>
+                        <tr>
+                  <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>       
+        <td><a href="#" onclick="Alert.render()">C-14733</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>07/29/2014 06:38 AM</td>
+            <td>Cash</td>
+            <td>Paid</td>
+             <td>4500.00</td>
+             
+        </tr>
+                        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14734</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>05/29/2014 06:38 AM</td>
+            <td>Cheque</td>
+            <td>Not paid</td>
+             <td>2500.00</td>
+             
+        </tr>
+                        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14735</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>06/29/2014 06:38 AM</td>
+            <td>Credit Card</td>
+            <td>Paid</td>
+             <td>3500.00</td>
+             
+        </tr>
+        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14734</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>05/29/2014 06:38 AM</td>
+            <td>Cheque</td>
+            <td>Not paid</td>
+             <td>2500.00</td>
+             
+        </tr>
+                        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14735</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>06/29/2014 06:38 AM</td>
+            <td>Credit Card</td>
+            <td>Paid</td>
+             <td>3500.00</td>
+             
+        </tr>
+        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14734</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>05/29/2014 06:38 AM</td>
+            <td>Cheque</td>
+            <td>Not paid</td>
+             <td>2500.00</td>
+             
+        </tr>
+                        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14735</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>06/29/2014 06:38 AM</td>
+            <td>Credit Card</td>
+            <td>Paid</td>
+             <td>3500.00</td>
+             
+        </tr>
+        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14734</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>05/29/2014 06:38 AM</td>
+            <td>Cheque</td>
+            <td>Not paid</td>
+             <td>2500.00</td>
+             
+        </tr>
+                        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14735</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>06/29/2014 06:38 AM</td>
+            <td>Credit Card</td>
+            <td>Paid</td>
+             <td>3500.00</td>
+             
+        </tr>
+        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14734</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>05/29/2014 06:38 AM</td>
+            <td>Cheque</td>
+            <td>Not paid</td>
+             <td>2500.00</td>
+             
+        </tr>
+                        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14735</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>06/29/2014 06:38 AM</td>
+            <td>Credit Card</td>
+            <td>Paid</td>
+             <td>3500.00</td>
+             
+        </tr>
+        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14734</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>05/29/2014 06:38 AM</td>
+            <td>Cheque</td>
+            <td>Not paid</td>
+             <td>2500.00</td>
+             
+        </tr>
+                        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14735</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>06/29/2014 06:38 AM</td>
+            <td>Credit Card</td>
+            <td>Paid</td>
+             <td>3500.00</td>
+             
+        </tr>
+        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14734</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>05/29/2014 06:38 AM</td>
+            <td>Cheque</td>
+            <td>Not paid</td>
+             <td>2500.00</td>
+             
+        </tr>
+                        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14735</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>06/29/2014 06:38 AM</td>
+            <td>Credit Card</td>
+            <td>Paid</td>
+             <td>3500.00</td>
+             
+        </tr>
+        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14734</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>05/29/2014 06:38 AM</td>
+            <td>Cheque</td>
+            <td>Not paid</td>
+             <td>2500.00</td>
+             
+        </tr>
+                        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14735</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>06/29/2014 06:38 AM</td>
+            <td>Credit Card</td>
+            <td>Paid</td>
+             <td>3500.00</td>
+             
+        </tr>
+        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14734</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>05/29/2014 06:38 AM</td>
+            <td>Cheque</td>
+            <td>Not paid</td>
+             <td>2500.00</td>
+             
+        </tr>
+                        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14735</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>06/29/2014 06:38 AM</td>
+            <td>Credit Card</td>
+            <td>Paid</td>
+             <td>3500.00</td>
+             
+        </tr>
+        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14734</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>05/29/2014 06:38 AM</td>
+            <td>Cheque</td>
+            <td>Not paid</td>
+             <td>2500.00</td>
+             
+        </tr>
+                        <tr>
+                         <td width="1%"><input type="checkbox" name="id[]" value="1"/></td>
+        <td><a href="#" onclick="Alert.render()">C-14735</a></td>
+            <td>Oprah Winfrey</td>
+            <td>Acme</td>
+            <td>oprah@hotmail.com</td>
+            <td>9999090909</td>
+            <td>06/29/2014 06:38 AM</td>
+            <td>Credit Card</td>
+            <td>Paid</td>
+             <td>3500.00</td>
+             
+        </tr>
+                </tbody>
+            </table>
+       
+       
+       
+       
+       
+    
+            </div> 
+        <!--close of Promocode table-->
+      
+        
+        <div class="clear"></div>
+        
+                          
+ 
+      </div>
+      <!-- #content--> 
+    </div>
+    <!-- #container-->
+
+      
+      
+      
+        <apex:form >  
+       
+    <div id="cssmenu">
+      <aside class="sideLeft">
+        <ul class="menu">
+          <li class="expand" style="width:100%;margin-left:-0.1%;"><a href="#" class="heading">Events<span class="holder"></span></a>
+            <ul class="acitem content" style="display: block;">
+              <li style="margin-left:-0.5%;"><a href="/apex/BLN_Dashboard"><span class="home icon">Dashboard</span></a></li>
+              <li class="expand" style="margin-left:-0.5%;"><a href="/apex/BLN_Tickets" class="subheading" style="background-color:#7f8c8d;"><span class="charts icon">Tickets</span><span class="holder"></span></a>
+                <ul class="acitem content">
+                  <li style="margin-left:-0.5%;">
+                  <apex:commandLink action="{!promotionslist}" reRender="AS_EventsForm,formid,menuid,createformid" styleclass="active"   style="{!IF(displaypromotionbool = TRUE,'padding-left:55px;','')}" >
+                  Promo Codes</apex:commandLink></li>
+                  <li style="margin-left:-0.5%;"><a href="apex/BLN_SurveyQuestions" style="padding-left:55px;" >Survey Questions</a></li>
+                </ul>
+              </li>
+              <li style="margin-left:-0.5%;"><a href="/apex/BLN_Attendees" class="subheading" ><span class="attendee1 icon">Attendees<span class="holder"></span></span></a>
+                <ul class="acitem content">
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;" ><span class="import icon">Import Attendees</span></a></li>
+                  <li style="margin-left:-0.5%;"><a href="/apex/BLN_registration_settings" style="padding-left:55px;"><span class="settings icon">Attendee Settings</span></a></li>
+                </ul>
+              </li>
+              <li style="margin-left:-0.5%;"><a href="/apex/BLN_Registration" class="subheading" ><span class="registration icon">Registration<span class="holder"></span></span></a>
+                <ul class="acitem content">
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Onsite Registration</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Registration iFrame Links</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;"><span class="settings icon">Display Settings</span></a></li>
+                </ul>
+              </li>
+              <li style="margin-left:-0.5%;"> <a href="/apex/BLN_Orders">Orders</a></li>
+              <li style="margin-left:-0.5%;"><a href="" class="subheading" id="emails_subheading"><span class="emails icon">Emails<span class="holder"></span></span></a>
+                <ul class="acitem content">
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;"><span class="emails icon">Email Templates</span></a></li>
+                </ul>
+              </li>
+              <li style="margin-left:-0.5%;"><a href="" class="subheading" id="badges_subheading"><span class="badge icon">Badges<span class="holder"></span></span></a>
+                <ul class="acitem content">
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;"><span class="settings icon">Badge Settings</span></a></li> <li><a href="#" style="padding-left:55px;"><span class="print icon">Print Status</span></a></li>
+                </ul>
+              </li>
+              <li style="margin-left:-0.5%;"><a href="" class="subheading" id="reports_subheading"><span class="reports icon">Reports<span class="holder"></span></span></a>
+                <ul class="acitem content">
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Event Summary</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Demographics</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Orders Report</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Tickets Report</a></li>
+                </ul>
+              </li>
+              <li style="margin-left:-0.5%;"><a href="" class="subheading" id="eventsettings_subheading"><span class="settings icon">Event Settings<span class="holder"></span></span></a>
+                <ul class="acitem content">
+                  <li style="margin-left:-0.5%;"> <a href="#" style="padding-left:55px;">Schedule</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Seminars</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Speakers</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Event Staff</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;"><span class="settings icon">Payment Settings</span></a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li id="clickme" style="width:100%;margin-left:-0.1%;"><a href="">Booth Leads Apps</a></li>
+          <li style="width:100%;margin-left:-0.1%;">  <a href="" class="heading">Lead Retrieval<span class="holder"></span></a>
+            <ul class="#" style="display: none;">
+              <li style="margin-left:-0.5%;"> <a href="#"><span class="home icon">Dashboard</span></a></li>
+              <li style="margin-left:-0.5%;"><a href="#"><span class="leads_icon icon">Leads</span></a></li>
+              <li style="margin-left:-0.5%;"><a href="#"><span class="attendee1 icon">Booth Staff</span></a></li>
+              <li style="margin-left:-0.5%;"><a href="#"><span class="reports icon">Reports</span></a></li>
+              <li style="margin-left:-0.5%;"><a href="#"><span class="settings icon">Settings</span></a></li>
+            </ul>
+          </li>
+          <li style="width:100%;margin-left:-0.1%;"> <a href="" class="heading">Match Leads<span class="holder"></span></a>
+            <ul class="acitem content" style="display: none;">
+              <li style="margin-left:-0.5%;"><a href="#"><span class="home icon">Dashboard</span></a></li>
+              <li style="margin-left:-0.5%;"><a href="#">Schedule</a></li>
+              <li style="margin-left:-0.5%;"><a href="#">Buyer Directory</a></li>
+              <li style="margin-left:-0.5%;"><a href="#">Seller Directory</a></li>
+              <li style="margin-left:-0.5%;"><a href="#"><span class="reports icon">Reports</span></a></li>
+              <li style="margin-left:-0.5%;"><a href="#"><span class="settings icon">Settings</span></a></li>
+            </ul>
+          </li>
+          <li style="width:100%;margin-left:-0.1%;"> <a href="" class="heading">Scan Attendee<span class="holder"></span></a>
+            <ul class="acitem content" style="display: none;">
+              <li style="margin-left:-0.5%;"> <a href="#"><span class="home icon">Dashboard</span></a></li>
+              <li style="margin-left:-0.5%;"><a href="#" class="heading"><span class="items icon">Items</span><span class="holder"></span></a>
+                <ul class="acitem content" style="display: none;">
+                  <li style="margin-left:-0.5%;"><a href="#" >Import Items</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" >Item promocodes</a></li>
+                </ul>
+              </li>
+              <li style="margin-left:-0.5%;"><a href="#" class="heading"><span class="reports icon">Reports<span class="holder"></span></span></a>
+                <ul class="acitem content" style="display: none; ">
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Payment Details</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Check In Status</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Item Sales</a></li>
+                  <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;">Payment Mode</a></li>
+                </ul>
+              </li>
+              <li style="margin-left:-0.5%;"><a href="#"><span class="settings icon">Settings</span></a></li>
+            </ul>
+          </li>
+          <li style="width:100%;margin-left:-0.1%;">  <a href="" class="heading"><span class="mappin icon">Booth Map<span class="holder"></span></span></a>
+            <ul class="acitem content" style="display: none;">
+              <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;"><span class="home icon">Dashboard</span></a></li>
+              <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;"><span class="reports icon">Reports</span></a></li>
+              <li style="margin-left:-0.5%;"><a href="#" style="padding-left:55px;"><span class="settings icon">Settings</span></a></li>
+            </ul>
+          </li>
+          <li style="width:100%;margin-left:-0.1%;"> <a href="" class="heading">Kiosk<span class="holder"></span></a>
+            <ul class="acitem content" style="display: none;">
+              <li  style="margin-left:-0.5%;"><a href="#"><span class="settings icon">Settings</span></a></li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+    </div>
+   </apex:form> </div>
+  <!-- #sideLeft --> 
+  <!-- #container main-->
+ 
+  <footer>
+    <div class="info-footer">
+      <div id="left">
+        <p>Copyright © 2014  Global Nest.</p>
+      </div>
+      <div id="right">
+        <p>Booth Leads</p>
+      </div>
+    </div>
+  </footer>
+</section>
+<!-- #middle-->
+
+<div class="clear"></div>
+</body>
+         
+  
+</apex:page>

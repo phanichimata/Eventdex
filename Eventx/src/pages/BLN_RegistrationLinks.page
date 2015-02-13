@@ -1,0 +1,96 @@
+<apex:page controller="BLN_RegistrationLinks" showHeader="false" standardStylesheets="false">
+
+
+    <c:myComponent BLN_UtillDisplayLinks="{!RegistrationLinks}" >
+  <script type="text/javascript" src="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabssss.js')}"></script>
+  <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabsss.css')}"/>
+  <apex:form >
+    <style type="text/css">
+        dl.Zebra_Accordion { width: 100%; font-family: Arial, sans-serif;  }
+        dl.Zebra_Accordion dt { background: #A3A8A8;cursor:pointer; font-size: 13px; border-bottom:1px #ccc dotted; color: #FFF; font-weight: bold; padding: 5px }
+        dl.Zebra_Accordion dd {  height:auto;  background-color: #F6F6F6; padding: 15px; margin: 1px 0;  }
+        
+        dl.Zebra_Accordion dt.Zebra_Accordion_Expanded { background:#bdc3c7;}
+        
+        #registration-iframe-box{width:99%; background-color:#F6F6F6;margin:0px auto;margin-top:5px;}
+        
+        #registration-iframe-box table { border-collapse:collapse;}
+        
+        #registration-iframe-box table tr td{ padding:5px; }
+        #tableheadings{ background-color:#939393; color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:17px;}
+        #tablesubheadings{ background-color:#C2C2C2; color:#333; font-family:Arial, Helvetica, sans-serif;font-size:13px;}
+    </style>
+    
+    <script>
+    function disvalue(vd){
+       if(vd=='div1'){
+       
+          document.getElementById('div2content').style.display="none";
+          document.getElementById('div1content').style.display="block";
+        
+       }else{
+         document.getElementById('div1content').style.display="none";
+          document.getElementById('div2content').style.display="block";
+         
+       }
+    }
+    </script>
+  
+    <table width="100%" border="0" >
+        <tr >
+            <td width="100%" style="background-color:#939393; color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:17px;">
+            <strong style="padding-left:10px">All</strong>
+            </td>
+        </tr>
+        <tr>
+          <td width="100%">
+           <!-- <div style="width:250px;">
+               <div id="div1" style="width:100px;float:left;" onclick="disvalue('div1');">Share Link</div> <div style="width:100px;float:right;" id="div2" onclick="disvalue('div2');">Embed Link</div>
+            </div> 
+             
+           <div style="width:100%;padding-top:40px;" id="div1content">           
+               <a href="{!RegistrationLink}" target="_blank" style="padding-left:10px">{!RegistrationLink}</a> 
+           </div> 
+              
+               <div style="width:100%;padding-top:40px;display:none;" id="div2content">           
+                 <apex:inputText value="{!iframes}" style="height:40px;width:90%;"/>
+               </div> -->
+                <div id="TabbedPanels1" class="TabbedPanels" style="" >
+                    <ul class="TabbedPanelsTabGroup">
+                      <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555; font-weight:300;">Share Link</li>
+                      <li class="TabbedPanelsTab  " tabindex="0" style="outline:none; focus:none;color: #555;font-weight:300;">Embed Link</li>
+                   </ul>
+                
+                
+                <div class="TabbedPanelsContentGroup">
+                   <!--Start of content of standard Templates-->
+                  <div class="TabbedPanelsContent" style="min-height:110px;">
+                   <!------------------------------------------------------------------------------->
+                    <!---starts of tickets table---->
+                   <div id="tickets table" style="width:97%; margin-left:2%; padding-bottom:90px; padding-top:0px;">
+                           <a href="{!RegistrationLink}" target="_blank" style="padding-left:10px">{!RegistrationLink}</a>
+                 </div> 
+                </div> 
+                
+              <div class="TabbedPanelsContent" style="min-height:110px;">
+                 
+               <div id="tickets table" style="width:97%; margin-left:2%; padding-bottom:90px; padding-top:0px;">
+                  <apex:inputText value="{!iframes}" style="height:40px;width:90%;"/>
+              </div>   </div>  </div>
+ 
+ 
+ 
+                <!--------------------start of ist tab------------------>
+              </div>  
+          </td> 
+        </tr>
+    </table>
+  </apex:form>
+  <script type="text/javascript">
+window.onload=function(){
+var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
+document.getElementById(TabbedPanels1).defaultTab=1;
+}
+</script>
+  </c:myComponent>
+</apex:page>

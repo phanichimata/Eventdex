@@ -1,0 +1,15 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_AttendeeReportCon" contentType="application/vnd.ms-excel#Attendees.xls"><apex:pageBlock > 
+    <apex:repeat value="{!listOfListTickets}" var="tickets">   
+        <apex:pageBlockTable value="{!tickets}" var="ticket" border="1">
+            <apex:column value="{!ticket.Client_GN_User__r.First_Name__c}" headerValue="First Name"/>
+            <apex:column value="{!ticket.Client_GN_User__r.Last_Name__c}" headerValue="Last Name"/>
+            <apex:column value="{!ticket.Company__c}" headerValue="Company Name"/>
+            <apex:column value="{!ticket.TKT_Job_Title__c}" headerValue="Designation"/>                    
+            <apex:column value="{!ticket.Client_GN_User__r.Email__c}" headerValue="Email"/>                      
+            <apex:column value="{!ticket.Client_GN_User__r.Phone__c}" headerValue="Phone Number"/>                      
+            <apex:column value="{!ticket.item__r.item_name__c}" headerValue="Ticket Name"/>                                          
+            <apex:column value="{!ticket.Badge_Label__c}" headerValue="Tag Name"/>                                      
+        </apex:pageBlockTable>
+     </apex:repeat>
+      </apex:pageBlock>  
+</apex:page>

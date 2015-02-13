@@ -1,0 +1,748 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false">
+ 
+<apex:stylesheet value="{!URLFOR($Resource.bl_css, 'css/style.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.bl_css, 'css/style-button.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.bl_css, 'css/jquery-ui-1.8.16.custom.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.bl_css, 'css/fullcalendar.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.bl_css, 'css/tipTip.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.bl_css, 'css/tables.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.bl_css, 'css/chosen.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.bl_css, 'css/responsive.css')}"/>
+
+
+
+<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/jquery.min.js')}"/>
+<!--<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/zebra_accordion.src -att.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/fancybox.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/fullcalendar.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/elfinder.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/chosen.jquery.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/jquery.wysiwyg.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/jquery.tipTip.minified.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/forms.js')}"/>
+
+<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/autoresize.jquery.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/colorpicker.js')}"/>-->
+
+<apex:includeScript value="{!URLFOR($Resource.bl_js, 'js/functions.js')}"/>
+
+
+ 
+ 
+ 
+
+
+<title>Boothleads-Attendees</title>
+
+<meta name="description" content=""/>
+
+
+
+
+                 <script>
+function showpackage(show,hide)
+{
+document.getElementById(show).style.display="";
+document.getElementById(hide).style.display="none";
+
+
+}
+     </script>  
+
+<!-------------------Zebra Accordian---------------->
+<script type="text/javascript" src="js/zebra_accordion.src -att.js"></script>
+<script >
+
+  $(document).ready(function() {
+  var myAccordion = new $.Zebra_Accordion($('.Zebra_Accordion'));
+
+    
+});
+    
+  </script>
+
+
+<style type="text/css">
+input.styled {
+    display: none;
+}
+select.styled {
+    position: relative;
+    width: 190px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 5;
+}
+.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+.dynatable .prototype {
+    display:none;   
+            }
+</style>
+<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
+<script src="js/autoresize.jquery.min.js"></script>
+<script type="text/javascript" src='js/colorpicker.js'></script>
+
+<script src="js/functions.js"></script>
+
+
+
+
+
+ 
+
+
+
+
+ <div id="header">
+    <div id="logo">
+    <h1 style=" padding-top:5px; padding-left:20px; color:#FFF "><img src="images/boothleads_logo_with_whitetext.png" /></h1>
+    </div><!--close of logo-->
+     
+    </div><!--close of header--->
+      <div  id="ribbon"></div><!--close of ribbon-->
+
+
+
+<header>
+  <div id="centered-head" class="res"> 
+    <!-- Logo -->
+   <!-- <h1><a href="./Color life Admin Panel   Dashboard_files/Color life Admin Panel   Dashboard.htm" class="logo">Color life Admin Panel</a></h1>-->
+    <!-- Logo end --> 
+    
+    <!-- Navigation -->
+    <nav>
+
+      <ul>
+        <li id="login"> <span id="login-trigger"> <span id="login-triggers"> <span id="user-panel-check"></span> <span id="user-panel-title ">My Account</span> </span> </span>
+          <div id="login-content">
+            <ul>
+              <li><a href="editprofile.htm"><img src="images/setting.png" alt=""/> <span>Settings</span></a></li>
+              <li><a href="upgradeacc.htm"><img src="images/upgrade.png" width="13px" height="13px" alt=""/><span>Upgrade Account</span></a></li>
+              <li><a href="login.htm"><img src="images/logout.png" alt=""/><span>Log Out</span></a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+    
+    <div class="account-name">
+      <p><span class="welcome">Welcome,</span> <strong>David Cameron</strong></p>
+      
+      <div class="account-separator"></div>
+      
+    </div>
+
+ 
+    <div id="quickbuttons" style="border:0px solid #F00;" >
+<span><a title="My Events" style="text-decoration:none" href="events.htm"><img src="images/myevents.png" width="79" height="45"  /></a></span>
+<span ><a title="My Tickets" style="text-decoration:none;  margin-left:5%" href="mytickets.htm"><img src="images/ticketstab.png" width="120"  height="44"/></a></span>
+</div><!--close of quickbuttons-->
+    <!-- Navigation end--> 
+    
+  </div>
+</header>
+
+
+  <div id="container-main">
+    <div id="container" style="border:0px #000000 solid">
+      <div id="content">
+        <div class="speedbar" style=" border:0px #FF0000 solid">
+          <div class="speedbar-nav">Booth leads ›› Attendees</div><!--close of speedbar-nav-->
+        
+        </div><!--close fo speedbar-->
+        <!--start if add attendee button-->
+              <div class="grid-1"  >
+          <div class="title-grid-selectevent" style=""></div>
+   <div class="content-gird-selectevents" style="">
+             <button class="button-a blue" style="height:32px; float:right; margin-top:-10px; margin-bottom:3px; margin-right:-1%; "  onClick="showpackage('addattendee','attendeetable')" >Add Attendee</button>
+                 </div><!--close of content-grid-->
+                 </div><!--grid---->
+   
+         <!--end of add attendee button-->
+         <!----------------start of attendee table----------------------------------->
+           <div id="attendeetable">
+            <div class="grid-1" >      
+        <table class="display">
+              <thead>
+                <tr>
+                  
+                  <th width="30%" >Name</th>
+                  <th width="20%" >Email</th>
+                  <th width="25%">Company Name</th>
+                  <th width="15%" >Phone Number</th>
+                  <th width="10%"  >Action</th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="item">
+                  
+                  <td>David Cameron</td>
+                   <td>david@euro.com</td>
+                   <td>Eurocopter</td>
+                  <td class="name">9898989898</td>
+               <td class="subject"><span><a href="#" title="Edit"><img src="images/edit-1.png"/></a></span><span><a href="#" title="Remove"><img src="images/remove.png" style="margin-left:5px;"/></a></span></td>
+                       
+                </tr>
+                <tr class="item">
+                 <td>Michael Adam</td>
+                   <td>michael@lripl.com</td>
+               <td>Lripl</td>
+                  <td class="name">9898989898</td>
+                     <td class="subject"><span><a href="#" title="Edit"><img src="images/edit-1.png"/></a></span><span><a href="#" title="Remove"><img src="images/remove.png" style="margin-left:5px;"/></a></span></td>
+                     
+                          
+                </tr>
+                
+               
+              </tbody>
+            </table>
+            </div><!--close of grid1-->
+            
+            </div><!--close of attendeetable-->
+            
+              <!-----------------end of attendee table------------------------------------>
+        <div id="addattendee" style="display:none; margin-top:-10px">
+       <!--------------start of  multiple list heading-------------------->
+       <div class="grid-1"  style="margin-top:0px;">
+          <div class="title-grid-selectevent" style=""></div>
+
+     
+            <div class="content-gird-selectevents" style="">
+            
+            <div class="form">
+            <div class="elem">
+                   <label id="selectevent" >Item Type:</label>
+                  <div class="indent" style="margin-left:14%; margin-top:-2px;">
+                    <select class="chzn-select medium-select select" style=" width:700%;" multiple="">
+                      <option value="o1">Booth</option>
+                      <option value="o2">Wifi</option>
+                      <option value="o3">Admission</option>
+                         <option value="o4">Lead Retieval</option>
+               
+                    
+                    </select>
+                  </div><!--close of indent-->
+                </div><!--close of elem-->
+                 
+                 </div><!--close of form-->
+                 </div><!--close of content-grid-->
+                 </div><!--title-grid-->
+       
+       <!------------------------------------->
+       
+       
+        <!--Statistic-------------->
+        <div class="grid-1" style="margin-top:0px;">
+          <div class="title-grid">Add Attendee</div>
+    
+            <div class="content-gird">
+            <div class="form">
+   
+               
+              <div id="left-form" style=" width:50%; padding-bottom:10px; margin-top:15px;  border:0px #000000 solid; float:left">
+               <div class="elem">
+                        <label>Image:</label>
+                        <div class="indent">
+                          <div class="uploader black">
+                            <input type="text" style="width:59%" class="filename"   />
+                            <input type="button" name="file" class="button_files "  value="Browse..."/>
+                            <input type="file"/>
+                          </div>
+                        </div>
+                      </div>
+               
+               <div class="elem">
+                  <label>First Name: </label><label id="mandatory">*</label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                
+                 <div class="elem">
+                  <label>Last Name: </label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                
+                  <div class="elem">
+                  <label>Email:</label><label id="mandatory">*</label>
+                  <div class="indent">
+                    <input type="text" id="email" name="email" class="medium"/>
+                  </div>
+                </div>
+                
+                
+                
+            
+              
+              </div><!--close of left-form-->
+                
+              <div class="right-form"  style=" width:50%; padding-bottom:10px; margin-top:15px;  border:0px #000000 solid; float:right">
+           <div class="elem">
+                  <label>Designation: </label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                
+           
+           <div class="elem">
+                  <label>Mobile Number: </label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                  
+                  <div class="elem">
+                  <label>Work Phone:  </label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                
+                 <div class="elem">
+                  <label>Company: </label><label id="mandatory">*</label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                  
+                  <!--<div class="elem">
+                  <label>Ticket Type:  </label>
+                  <div class="indent" style="margin-top:2px;">
+                    <input type="checkbox" /><span style="margin-left:3px;">MBE</span><br/>
+                    <input type="checkbox" style="margin-top:8px;" /><span style="margin-left:3px;">Corporate</span><br/>
+                    <input type="checkbox" style="margin-top:8px;"  /><span style="margin-left:3px;">Staff</span>
+                  </div>
+                </div>-->
+              
+                
+                  </div><!--close of right-form-->
+              <div style="clear:both;"></div>
+                  </div><!--close of form-->
+  
+       
+
+            
+            <!--accordian-->
+             <style type="text/css">
+  dl.Zebra_Accordion { width: 100%; font-family: Arial, sans-serif;  }
+dl.Zebra_Accordion dt { background: #42BDC4;cursor:pointer; font-size: 12px; border-bottom:1px #ccc dotted; color: #FFF; font-weight: bold; padding: 5px }
+dl.Zebra_Accordion dd { background: #EFEFEF; height:auto; padding: 15px; margin: 1px 0;  }
+
+dl.Zebra_Accordion dt.Zebra_Accordion_Expanded { background: #9FD7DB;  }
+  </style>
+  
+            
+            
+             <dl class="Zebra_Accordion">
+             <!--start of business information-->
+    <dt><span style="margin-right:5px;"><img src="images/general (1).png" style=" margin-bottom:-4px;"/></span>Business Information</dt>
+      <dd style="padding-bottom:460px;">
+         <div class="form">
+   
+               
+              <div id="left-form" style=" width:50%; padding-bottom:10px; margin-top:15px;  border:0px #000000 solid; float:left">
+               <div class="elem">
+                        <label>Company Logo:</label>
+                        <div class="indent">
+                          <div class="uploader black">
+                            <input type="text" style="width:51%" class="filename" />
+                            <input type="button" name="file" class="button_files "  value="Browse..."/>
+                            <input type="file"/>
+                          </div>
+                        </div>
+                      </div>
+               
+               <div class="elem">
+                  <label>Primary Category: </label>
+                  <div class="indent">
+                   <select class="chzn-select medium-select select" style="width:230%">
+                            <option value="1">Albama</option>
+                            <option value="2">Alaska</option>
+                            <option value="3">Arizona</option>
+                            <option value="4">California</option>
+                            <option value="5">Florida</option>
+                          </select>
+                  </div>
+                </div>
+                
+                 <div class="elem">
+                  <label>Secondary Category: </label>
+                  <div class="indent">
+                   <select class="chzn-select medium-select select" style="width:230%"  >
+                            <option value="1">Albama</option>
+                            <option value="2">Alaska</option>
+                            <option value="3">Arizona</option>
+                            <option value="4">California</option>
+                            <option value="5">Florida</option>
+                          </select>
+                  </div>
+                </div>
+                
+                  <div class="elem">
+                  <label>No. of Employees:</label>
+                  <div class="indent">
+                    <input type="text" id="email" name="email" class="medium"/>
+                  </div>
+                </div>
+                
+                 <div class="elem">
+                  <label>WebSite URL: </label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                
+                 <div class="elem">
+                  <label>Blog URL: </label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                
+                  <div class="elem">
+                  <label>Diversity Type: </label>
+                  <div class="indent">
+                    <select class="chzn-select medium-select select" style=" width:320%;" multiple="">
+                      <option value="o1">Vip</option>
+                      <option value="o2">Golden Sponsor</option>
+                      <option value="o3">Platinum Sponsor</option>
+                         <option value="o4">Corporate</option>
+                            <option value="o5">Media Sponsor</option>
+                    
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="elem">
+                   <label>NAICS CODES</label>
+                  <div class="indent">
+                     <select class="chzn-select medium-select select" style="width:450%" multiple="multiple">
+                            <option value="1">Space Research and Technology</option>
+                            <option value="2">Regulation, Licensing, and Inspection of Miscellaneous Commercial</option>
+                            <option value="3">Regulation of Agricultural Marketing and Commodities</option>
+                            <option value="4">Regulation and Administration of Communications, Electric, Gas, </option>
+                            <option value="5">Regulation and Administration of Transportation Programs</option>
+                          </select>
+                  </div>
+                  </div>
+                  
+                   
+            
+            
+              
+              </div><!--close of left-form-->
+                
+              <div class="right-form"  style=" width:49%; padding-bottom:10px; margin-top:15px;  border:0px #000000 solid; float:right">
+            
+            <div class="elem">
+                  <label>Business Established Date: </label>
+                  <div class="indent">
+                   <input type="text"  placeholder="(dd-mm-yyyy)" class="datepicker small" />
+                  </div>
+                </div>
+               
+               <div class="elem">
+                  <label>Business Revenue: </label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                
+                 <div class="elem">
+                  <label>Business Tax ID: </label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                
+                  <div class="elem">
+                  <label>Business Duns Number:</label>
+                  <div class="indent">
+                    <input type="text" id="email" name="email" class="medium"/>
+                  </div>
+                </div>
+                
+                 <div class="elem">
+                  <label>Business Description: </label>
+                  <div class="indent">
+                    <textarea class="medium" id="message" name="message" rows="7" style="width:75%"></textarea>
+                  </div>
+                </div>
+                
+                  </div><!--close of right-form-->
+              <div style="clear:both;"></div>
+                  </div><!--close of form-->
+      </dd>
+      <!--end of business information-->
+      
+      <!--start of business address-->
+      <dt><span style="margin-right:5px;"><img src="images/general (1).png" style=" margin-bottom:-4px;"/></span>Business Address</dt>
+      <dd style="padding-bottom:290px;">
+       <div class="form">
+   
+               
+              <div id="left-form" style=" width:50%; padding-bottom:10px; margin-left:25%; margin-top:15px;  border:0px #000000 solid; float:left">
+              
+               
+               <div class="elem">
+                  <label>Address 1: </label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                
+                 <div class="elem">
+                  <label>Address 2: </label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                
+                  <div class="elem">
+                  <label>Country:</label>
+                  <div class="indent">
+                   <select class="chzn-select medium-select select" style="width:230%">
+                            <option value="1">United States Of America</option>
+                            <option value="2">Netherland</option>
+                            <option value="3">India</option>
+                          </select>
+                  </div>
+                </div>
+                
+                 <div class="elem">
+                  <label>State: </label>
+                  <div class="indent">
+                   <select class="chzn-select medium-select select" style="width:230%">
+                            <option value="1">Albama</option>
+                            <option value="2">Alaska</option>
+                            <option value="3">Arizona</option>
+                            <option value="4">California</option>
+                            <option value="5">Florida</option>
+                          </select>
+                  </div>
+                </div>
+                
+                 <div class="elem">
+                  <label>City: </label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                
+                 <div class="elem">
+                  <label>Zip Code: </label>
+                  <div class="indent">
+                    <input type="text"  id="name" name="name" class="medium"/>
+                  </div>
+                </div>
+                
+            
+              
+              </div><!--close of left-form-->
+                
+             
+              <div style="clear:both;"></div>
+                  </div><!--close of form-->
+      </dd>
+      
+      <!--end of business address-->
+      
+ 
+    </dl>
+            <!------------->
+            <!--save cancel button start-->
+             <div  style="text-align:right; margin-top:15px">
+                  <!--   <input id="send" name="send" type="submit" class="button-a gray" value="Save">-->
+                      <button class="button-a blue" onClick="showpackage('attendeetable','addattendee')"  >Save</button>
+                    &nbsp;&nbsp;
+                   
+                    <button class="button-a dark-blue" onClick="showpackage('attendeetable','addattendee')"  >Cancel</button>
+                  </div>    
+                
+           <!--save cancel button end-->
+    
+            
+               <!----------------------------->
+         
+              <div class="clear"> </div>
+           
+          </div>
+          <!--------------------------------------------------------------------------------->
+          
+          
+            
+            
+            
+           
+            
+    <div class="clear"></div>
+         
+        </div>
+   <!-------------------------------->
+</div><!--close of addattendee--->
+        
+      </div>
+      <!-- #content--> 
+    </div>
+    <!-- #container-->
+    
+    <div id="cssmenu">
+        <aside class="sideLeft">
+          <ul class="menu">
+            <li class="expand"><a href="#" class="heading">Events<span class="holder"></span></a>
+            
+              <ul class="acitem content" style="display: block;">
+              
+                <li><a href="events-dashboard.htm"><span class="home icon">Dashboard</span></a></li>
+                
+                <li><a href="ticket.htm" class="subheading"><span class="charts icon">Tickets</span><span class="holder"></span></a>
+                    <ul class="acitem content">
+                      <li><a href="promocodes-nw.htm"  style="padding-left:55px;" >Promo Codes</a></li>
+                        <li><a href="surveyquestions.htm" style="padding-left:55px;" class="active">Survey Questions</a></li>
+                    </ul>
+                </li>
+                <li class="expand"><a href="attendee.htm" class="subheading"><span class="attendee1 icon">Attendees<span class="holder"></span></span></a>
+                    <ul class="acitem content">
+                        <li><a href="importattendee.htm" style="padding-left:55px;"><span class="import icon">Import Attendees</span></a></li>
+                        <li><a href="attendee-settings.htm" style="padding-left:55px;"><span class="settings icon">Attendee Settings</span></a></li>
+                    </ul>
+                </li>
+                
+                <li><a href="registration.htm" class="subheading" ><span class="registration icon">Registration<span class="holder"></span></span></a>
+                    <ul class="acitem content">
+                        <li><a href="onsite-registration.htm" style="padding-left:55px;">Onsite Registration</a></li>
+                        <li><a href="registrations-links.htm" style="padding-left:55px;">Registration iFrame Links</a></li>
+                        <li><a href="#" style="padding-left:55px;"><span class="settings icon">Display Settings</span></a></li>
+                    </ul>
+                </li>
+                
+                
+                <li><a href="order.htm">Orders</a></li>
+                
+                
+                <li><a href="#" class="subheading" id="emails_subheading"><span class="emails icon">Emails<span class="holder"></span></span></a>
+                    <ul class="acitem content">
+                        <li><a href="#" style="padding-left:55px;"><span class="emails icon">Email Templates</span></a></li>
+                    </ul>
+                </li>
+                <li><a href="#" class="subheading" id="badges_subheading"><span class="badge icon">Badges<span class="holder"></span></span></a>
+                    <ul class="acitem content">
+                        <li><a href="#" style="padding-left:55px;"><span class="settings icon">Badge Settings</span></a></li>
+                        <li><a href="#" style="padding-left:55px;"><span class="print icon">print Status</span></a></li>
+                    </ul>
+                </li>
+                <li><a href="#" class="subheading" id="reports_subheading"><span class="reports icon">Reports<span class="holder"></span></span></a>
+                    <ul class="acitem content">
+                        <li><a href="#" style="padding-left:55px;">Event Summary</a></li>
+                        <li><a href="#" style="padding-left:55px;">Demographics</a></li>
+                        <li><a href="#" style="padding-left:55px;">Orders Report</a></li>
+                        <li><a href="#" style="padding-left:55px;">Tickets Report</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" class="subheading" id="eventsettings_subheading"><span class="settings icon">Event Settings<span class="holder"></span></span></a>
+                    <ul class="acitem content">
+                      <li><a href="event-schedule.htm" style="padding-left:55px;">Schedule</a></li>
+                        <li><a href="seminar.htm" style="padding-left:55px;">Seminars</a></li>
+                        <li><a href="speaker.htm" style="padding-left:55px;">Speakers</a></li>
+                        <li><a href="event-staff.htm" style="padding-left:55px;">Event Staff</a></li>
+                        <li><a href="paymentsettings.htm" style="padding-left:55px;"><span class="settings icon">Payment Settings</span></a></li>
+                    </ul>
+                </li>
+                
+                
+              </ul>
+            
+            </li>
+            
+             <li id="clickme"><a href="#">Booth Leads Apps</a></li>
+             
+             
+             
+             
+            <li> <a href="#" class="heading">Lead Retrieval<span class="holder"></span></a>
+                  <ul class="acitem content" style="display: none;">
+                    <li><a href="index.htm"><span class="home icon">Dashboard</span></a></li>
+                    <li><a href="addattendee.htm"><span class="leads_icon icon">Leads</span></a></li>
+                    <li><a href="importattendee.htm"><span class="attendee1 icon">Booth Staff</span></a></li>
+                    <li><a href="#"><span class="reports icon">Reports</span></a></li>
+                    <li><a href="#"><span class="settings icon">Settings</span></a></li>
+                  </ul>
+            </li>
+            
+            
+            
+            
+            
+            
+            <li> <a href="#" class="heading">Match Leads<span class="holder"></span></a>
+              <ul class="acitem content" style="display: none;">
+                <li><a href="report-paymentdetails.htm"><span class="home icon">Dashboard</span></a></li>
+                <li><a href="report-checkin.htm">Schedule</a></li>
+                <li><a href="report-itemsales.htm">Buyer Directory</a></li>
+                <li><a href="report-paymentmode.htm">Seller Directory</a></li>
+                <li><a href="report-paymentmode.htm"><span class="reports icon">Reports</span></a></li>
+                <li><a href="#"><span class="settings icon">Settings</span></a></li>
+              </ul>
+            </li>
+            
+            <li> <a href="#" class="heading">Scan Attendee<span class="holder"></span></a>
+              <ul class="acitem content" style="display: none;">
+                <li><a href="editprofile.htm"><span class="home icon">Dashboard</span></a></li>
+                <li><a href="addusers.htm" class="heading"><span class="items icon">Items</span><span class="holder"></span></a>
+                        <ul class="acitem content" style="display: none;">
+                            <li><a href="report-paymentdetails.htm">Import Items</a></li>
+                            <li><a href="report-checkin.htm">Item promocodes</a></li>
+                            
+                       </ul>
+                 </li>
+                <li><a href="#" class="heading"><span class="reports icon">Reports<span class="holder"></span></span></a>
+                    <ul class="acitem content" style="display: none; ">
+                            <li><a href="report-paymentdetails.htm" style="padding-left:55px;">Payment Details</a></li>
+                            <li><a href="report-checkin.htm" style="padding-left:55px;">Check In Status</a></li>
+                             <li><a href="report-checkin.htm" style="padding-left:55px;">Item Sales</a></li>
+                              <li><a href="report-checkin.htm" style="padding-left:55px;">Payment Mode</a></li>
+                           
+                       </ul>
+                </li>
+                <li><a href="#"><span class="settings icon">Settings</span></a></li>
+              </ul>
+            </li>
+            
+            
+            
+            
+             <li> <a href="#" class="heading"><span class="mappin icon">Booth Map<span class="holder"></span></span></a>
+              <ul class="acitem content" style="display: none;">
+                <li><a href="index.htm" style="padding-left:55px;"><span class="home icon">Dashboard</span></a></li>
+                <li><a href="#" style="padding-left:55px;"><span class="reports icon">Reports</span></a></li>
+                <li><a href="#" style="padding-left:55px;"><span class="settings icon">Settings</span></a></li>
+              </ul>
+            </li>
+            
+            
+            
+            
+            
+             <li> <a href="#" class="heading">Kiosk<span class="holder"></span></a>
+              <ul class="acitem content" style="display: none;">
+                <li><a href="#"><span class="settings icon">Settings</span></a></li>
+                
+              </ul>
+            </li>
+            
+        </ul>
+        </aside>
+     </div>
+  </div>
+  
+  
+  
+ </apex:page>

@@ -1,0 +1,274 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_AttendeeDetailReportCon"  action="{!hideEventsTab}">
+
+                
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.dataTables.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.dataTables.js')}"></script>
+
+<apex:stylesheet value="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/css/jquery.dataTables.css')}"/> 
+ 
+    <script type="text/javascript" language="javascript" class="init">
+var $j = jQuery.noConflict();
+$j(document).ready(function() {
+    var table = $j('#example').DataTable( {
+       
+        scrollX:        true,
+        scrollCollapse: true,
+       
+    } );
+    new $j.fn.dataTable.FixedColumns( table );
+} );
+
+    </script>
+ <c:myComponent BLN_UtillDisplayLinks="{!myticket}">            
+        <apex:form > 
+<style type="text/css">
+input.styled {
+    display: none;
+}
+select.styled {
+    position: relative;
+    width: 190px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 5;
+}
+.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+border-bottom: 0px solid #111111;
+}
+</style>
+
+<!-----------------popup content for edit---------------->
+
+  
+<section id="middle" style="width:96.8%; border:0px #000000 solid" class="res">
+  <div>
+    <div>
+      <div>
+       
+        <style>
+        #tablemenubar{
+            width:99.8%; height:50px;
+             background-color:#ccc; 
+            padding-top:10px;
+             margin-bottom:-60px;
+             background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8faf9), color-stop(100%,#d1d2d5));
+background: -webkit-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+background: -o-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+background: -ms-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+background: linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8faf9', endColorstr='#d1d2d5',GradientType=0 );
+border: 1px solid #CCC;
+            
+            }
+        
+        </style>
+        <style>
+
+#datefilter table{ border-collapse:collapse;}
+
+#datefilter table tr td { padding:5px;}
+#labeltext{font-weight: 100;
+font-family: 'Cuprum', Arial, sans-serif;
+font-size: 15px;
+color: #247dba;
+text-shadow: 0 1px 1px rgba(0,0,0,.25);}
+</style>
+   
+    <div id="datefilter" style="width:60%; float:left;margin-top: 10px;margin-bottom: -5px;">
+    
+    <table width="100%" border="0">
+  <tr>
+    <td id="labeltext">From Date:</td>
+    <td width="30%"><c:noDateLink ><apex:inputField value="{!EventDates.Start_Date__c}" style="width:150px;" styleClass="tdr"/></c:noDateLink></td>
+    <td id="labeltext" >To Date:</td>
+    <td width="30%" id="labeltext"><c:noDateLink ><apex:inputField value="{!EventDates.End_Date__c}" style="width:150px;" styleClass="tdr"/></c:noDateLink></td>
+    <td style="padding-left:0px;"><apex:commandButton value="Go" action="{!displayAttendeesInDetail}" styleClass="button-a blue"/></td>
+    <td align="right">   
+    <apex:commandButton action="{!exportAttendeesInDetail}" image="{!URLFOR($Resource.Export)}" style="width:25px;height:25px;" />
+        
+    </td>
+     <td align="right">
+     <apex:commandLink action="{!printAttendeesInDetail}" target="_blank">
+         <apex:commandButton action="{!printAttendeesInDetail}" image="{!URLFOR($Resource.Print)}" style="width:25px;height:25px;" />
+         </apex:commandLink>
+
+
+    </td>
+  </tr>
+</table>
+    
+    </div>
+     <div style="clear:both;"></div>   
+        
+        <div style=" width:99%; margin:0px auto; margin-top:10px;">   
+        <div id="tablemenubar" style="">
+        
+          <!--actions_icon--->
+            
+            <!--end of actions_icon-->
+        
+        
+        
+        
+        </div><!--close of tablemenubar-->
+        <style type="text/css" class="init">
+
+.display th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    </style>
+    <div>
+      <table id="example" class="display" cellspacing="0"  border="0" bordercolor="#F7F7F7" width="100%">
+                <thead>
+                    <tr>
+                        <th>Prefix</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Suffix</th>
+                        <th>Email Id</th>
+                        <th>Company</th>
+                        <th>Designation</th>                      
+                        <th>Mobile Number</th>
+                        <th>Ticket Name</th>
+                        <th>Tag name</th>
+                        <th>Home Address1</th>
+                        <th>Home Address2</th>
+                        <th>Home City</th>
+                        <th>Home State</th>
+                        <th>Home Country</th>
+                        <th>Home Zip</th>
+                        <th>Primary Business Category</th>
+                        <th>Secondary Business Category</th>
+                        <th>Business Established Date</th>
+                        <th>Business Duns Number</th>
+                        <th>Business Revenue</th>
+                        <th>Business Tax Id</th>
+                        <!-- <th>Blog URL</th> -->
+                        <th>Website URL</th>
+                        <th>Business Description</th>
+                        <th>Work Phone</th>
+                        <th>Business Address1</th>
+                        <th>Business Address2</th>
+                        <th>Business City</th>
+                        <th>Business State</th>
+                        <th>Business Country</th>
+                        <th>Business Zip Code</th>
+                        <th>NAICS Code 1</th>
+                        <th>NAICS Code 2</th>
+                        <th>Diversity Type</th>
+                        <th>Survey Questions</th>
+                        <th>Survey Answers</th>              
+                    </tr>
+                </thead>
+
+    <tbody> 
+  
+     <apex:repeat value="{!listOfListTickets}" var="tickets">
+         <apex:repeat value="{!tickets}" var="ticket">
+            <tr>
+                <td>{!ticket.ticketData.Client_GN_User__r.Prefix__c}</td>
+                <td>{!ticket.ticketData.First_Name__c} <!--{!ticket.ticketData.Client_GN_User__r.First_Name__c}--></td>
+                <td>{!ticket.ticketData.Last_Name__c} <!-- {!ticket.ticketData.Client_GN_User__r.Last_Name__c} --></td>
+                <td>{!ticket.ticketData.Client_GN_User__r.Suffix__c}</td>
+                <td>{!ticket.ticketData.Email__c} <!-- {!ticket.ticketData.Client_GN_User__r.Email__c} --> </td>
+                <td>{!ticket.ticketData.Company__c} <!-- {!ticket.ticketData.Client_Company__r.Name} {!ticket.ticketData.Client_GN_User__r.Company_Name__c} --></td>
+                 
+                <td>{!ticket.ticketData.TKT_Job_Title__c}</td>
+                <td>{!ticket.ticketData.Client_GN_User__r.Mobile__c}</td>
+                <td>{!ticket.ticketData.item__r.item_name__c}</td>
+                <td>{!ticket.ticketData.Badge_Label__c}</td>
+                <td>{!ticket.ticketData.Client_GN_User__r.Address1__c}</td>
+                <td>{!ticket.ticketData.Client_GN_User__r.Address2__c}</td>
+                <td>{!ticket.ticketData.Client_GN_User__r.City__c}</td>
+                <td>{!ticket.ticketData.Client_GN_User__r.State__r.Long_Name__c}</td>
+                <td>{!ticket.ticketData.Client_GN_User__r.Country__r.Long_Name__c}</td>
+                <td>{!ticket.ticketData.Client_GN_User__r.Zip_Code__c}</td>
+                <td>{!ticket.companyExtData.Primary_Business_Category__c}</td>
+                <td>{!ticket.companyExtData.Secondary_Business_Category__c}</td>
+                <td><apex:outputField value="{!ticket.companyExtData.Established_Date__c}"/></td>
+                <td>{!ticket.companyExtData.Duns_Number__c}</td>
+                <td>{!ticket.companyExtData.Revenue__c}</td>
+                <td>{!ticket.companyExtData.Tax_Id__c}</td>
+                <td>{!ticket.companyExtData.Blog_URL__c}</td>
+               <!-- <td>{!ticket.ticketData.Client_GN_User__r.User_Website__c}</td>      -->          
+                <td>{!ticket.companyExtData.Keywords__c}</td>
+                <td>{!ticket.companyExtData.Work_Phone__c}</td>
+                <td>{!ticket.companyExtData.Business_Address1__c}</td>
+                <td>{!ticket.companyExtData.Business_Address2__c}</td>
+                <td>{!ticket.companyExtData.Business_City__c}</td>
+                <td>{!ticket.companyExtData.BLN_Business_State__r.Long_Name__c}</td>
+                <td>{!ticket.companyExtData.BLN_Business_Country__r.Long_Name__c}</td>
+                <td>{!ticket.companyExtData.Business_Zipcode__c}</td>
+                <td>{!ticket.companyExtData.Primary_NAICS_Code__r.Description__c}</td>
+                <td>{!ticket.companyExtData.Secondary_NAICS_Code__r.Description__c}</td>
+                <td><apex:repeat value="{!ticket.companyDiversityData}" var="diversity">
+                    {!diversity.Diversity__r.Name}<br/>
+                    </apex:repeat>
+                </td> 
+                
+                <td> 
+                    <apex:variable var="questionNumber" value="{!0}"/> 
+                    <apex:repeat value="{!ticket.uans}" var="ans">
+                     Question <apex:variable var="questionNumber" value="{!questionNumber+1}"/>{!questionNumber}.  {!ans.Item_Question__r.Question__r.Question_Text__c} <br/>
+                    </apex:repeat>
+                </td>
+                <td>
+                    <apex:variable var="answerNumber" value="{!0}"/> 
+                    <apex:repeat value="{!ticket.uans}" var="ans">
+                     Answer <apex:variable var="answerNumber" value="{!answerNumber+1}"/>{!answerNumber}.   {!ans.Answer__r.Answer_Text__c} <br/>
+                    </apex:repeat>
+                </td>
+                               
+ 
+            </tr>
+         </apex:repeat>
+     </apex:repeat>                          
+    
+                </tbody>
+            </table>
+            
+
+  
+
+
+            </div>
+</div>
+       
+       
+         
+        
+      </div>
+      <!-- #content--> 
+    </div>
+    <!-- #container-->
+  
+  </div>
+  </section>
+  <!-- #sideLeft --> 
+  <!-- #container main-->
+  
+         </apex:form>    
+  </c:myComponent>
+    <apex:stylesheet value="{!URLFOR($Resource.createevents,'createevents/css/jquery.datetimepicker.css')}"/>
+   <script type="text/javascript" src="{!URLFOR($Resource.createevents, 'createevents/js/jquery-1.9.1.js')}"></script> 
+ <script type="text/javascript" src="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery.datetimepicker.js')}"></script> 
+<script type="text/javascript">
+var $k = jQuery.noConflict();
+$k('.tdr').datetimepicker({
+timepicker:false,
+format:'m/d/y',
+formatDate: 'm/d/y',    
+
+});
+
+</script>
+</apex:page>

@@ -1,0 +1,1331 @@
+<apex:page controller="BLN_Email_Dashboardscon" standardStylesheets="false" showHeader="false" id="pageid"    action="{!displayPermissions}">
+
+      <!-- --------------------------- Basic Style sheets ---------------------------------- -->
+     <apex:stylesheet value="{!URLFOR($Resource.MyTickets, 'css/style.css')}"/>
+     <apex:stylesheet value="{!URLFOR($Resource.MyTickets, 'style-button.css')}"/>
+      <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/jquery.min.js')}"></script>
+       <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/zebra_accordion.src -att.js')}"></script>
+      <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/jquery-ui-1.8.16.custom.min.js')}"></script>
+    <!---- <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/functions.js')}"></script> -->
+      
+      <!-- --------------------------- SPRY MENU TABS ---------------------------------- -->
+      <script type="text/javascript" src="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabssss.js')}"></script>
+      <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabsss.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/tables.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/style-button.css')}"/>
+      <!-- --------------------------- SPRY MENU TABS ---------------------------------- -->
+ 
+    <c:myComponent BLN_UtillDisplayLinks="{!myemaildashboards}" id="comid">
+    <body id="body1">
+    
+  
+
+   <style type="text/css">
+input.styled {
+    display: none;
+}
+select.styled {
+    position: relative;
+    width: 190px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 5;
+}
+.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+#dialogoverlay3{
+
+position: fixed;
+top: 0px;
+left: 0px;
+background-color: #484848;
+width: 100%;
+z-index: 50;
+height: 100%;
+opacity: .9;    
+    }   
+#dialogbox6{position: fixed;top:0px;left:0px;right:0px;z-index:75;overflow:auto; width:36%; 
+          padding:1px; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
+          -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
+          font: 12px/24px "Lucida Grande",Arial,sans-serif;
+         -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
+         -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px; margin-left:32.5%;} 
+</style>
+ 
+    
+    <style>
+   #dashboard-cont{
+    width: 99%; 
+    text-align: center;
+    display: block;
+    height:auto;
+    margin: 0px auto;
+    margin-top:10px;
+    padding-bottom: 15px;
+    margin-left:1.2%;
+   }
+        #stat{ width:30%; height:100;margin-right:1.5%;
+         display:inline-block; border-radius:3px;box-shadow: 0 1px 3px 0 #ccc;
+    -moz-box-shadow: 0 1px 3px 0 #ccc;
+    -webkit-box-shadow: 0 1px 3px 0 #ccc;}  
+        #stat table {border-collapse:collapse; color:#ffffff; font-family:cuprum; font-size:22px;text-shadow: 1px 1px 1px rgba(255,255,255,0.5);}
+        
+        #stat table td{}    
+        #bottom-div{height:34px; width:100%;}
+        </style>
+        <!---------------popup start----------------------------------------------------->
+        <!--start of popup for send--------------------------------------->
+        <style>
+   
+ #close{
+ font-size: 25px;
+font-weight: bold;
+color: #fff;
+text-decoration: none;
+float: right;
+margin-right: .2%;
+margin-top:-9px;
+}
+
+#close:hover{font-size: 25px;
+text-decoration: underline;
+font-weight: bold;
+color: #fff;
+float: right;
+margin-right: .2%;
+margin-top:-9px;} 
+
+</style>
+ <style>
+         #headers-sub-wrap{ width:95%; margin:0px auto; margin-top:10px; padding:3px 3px;  display:block; background-color:#fff;}
+         
+         #headers-sub{ width:32.5%; vertical-align:top; display:inline-block; height:auto; background-color:; margin-right:.5%;}
+        #announcement-tile{ width:99%;  height:180px;background-color: #Fff; margin:0px auto; margin-bottom:15px;webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+box-shadow: 0 1px 4px rgba(0,0,0,0.2);}
+        
+        #announcement-tile table{ border-collapse:collapse; color:#59b15d; text-align:center; font-size:18px; font-family:cuprum;text-shadow: 0 1px 1px rgba(0,0,0,.25);}
+       .btn-green {
+    display: inline-block;
+    background-color: #edeff2;
+    cursor: pointer;
+    padding: 5px 10px 6px 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+}
+.btn-green:hover {
+    display: inline-block;
+    background-color: #59b15d;
+    color: #fff;
+    padding: 5px 10px 6px 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+}
+
+
+ .btn-blue {
+    display: inline-block;
+    background-color: #edeff2;
+    cursor: pointer;
+    padding: 5px 10px 6px 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+}
+.btn-blue:hover {
+    display: inline-block;
+    background-color: #338dcb;
+    color: #fff;
+    padding: 5px 10px 6px 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+}
+
+ .btn-orange {
+    display: inline-block;
+    background-color: #edeff2;
+    cursor: pointer;
+    padding: 5px 10px 6px 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+}
+.btn-orange:hover {
+    display: inline-block;
+    background-color:#e97d32;
+    color: #fff;
+    padding: 5px 10px 6px 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+}
+#duedate{border-bottom:1px solid #F4F4F4; font-size:16px;}
+
+#duedate td{text-align:left; text-indent:5px; color:#396FA3 ;}
+
+#duedate td span{}
+
+#camp-title{ background-color:#f4f4f4;}
+       
+        </style>
+<!-----------------------********************************************************-------------------------------------------------------------->
+<!---popups-- for edit--------------------->
+
+
+
+<!---------------------************************------------------------------->
+
+<style>
+
+  
+ .popupBackground{
+    opacity:.8;
+    position:fixed;
+    top:0px; 
+    left:0px;
+    background-color: #484848;
+    width:100%; 
+    z-index:50;
+    height:100%;    
+
+  } 
+
+   
+    
+    .custPopup{color:#000000;position: fixed;top:10px;left:0px;right:0px;z-index:75;height:570px;overflow:auto;
+          padding:5px; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
+          -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
+          font: 12px/24px "Lucida Grande",Arial,sans-serif;
+         -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
+         -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px;
+        
+    }
+        
+.popupBackground1{
+    opacity:.8;
+    position:fixed;
+    top:0px;
+    left:0px;
+    background-color: #fff;
+    width:100%; 
+    z-index:50;
+   height:100%;
+
+  } 
+
+    
+    .custPopup1{position: fixed;top:250px;left:0px;right:0px;z-index:75;overflow:auto; width:36%;background-color: #a6ca8a ; 
+          padding:1px; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
+          -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
+          font: 12px/24px "Lucida Grande",Arial,sans-serif;
+         -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
+         -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px; margin-left:32.5%;
+        
+    }        
+
+
+   
+ #close{font-size: 25px;
+font-weight: bold;
+color: #fff;
+text-decoration: none;
+float: right;
+margin-right: .2%;
+margin-top:-9px;}
+
+ 
+
+#close:hover{font-size: 25px;
+text-decoration: underline;
+font-weight: bold;
+color: #fff;
+float: right;
+margin-right: .2%;
+margin-top:-9px;} 
+#addpc-heading{width:98%; margin:0px auto; margin-bottom:5px; padding:5px; color:#fff; font-size:17px; font-family:cuprum; background-color:#9D9D9D;} 
+#setup1-form{ width:40%;margin:0px auto; margin-bottom:10px;}
+#setup1-form table{ border-collapse:collapse;}
+#setup1-form table td{ padding:7px;font-size:14px;}
+#recipient1-form{ width:100%;margin:0px auto; margin-bottom:10px;}
+#recipient1-form table{ border-collapse:collapse;}
+#recipient1-form table td{ padding:7px;font-size:14px;}
+#template1-form{ width:97%;margin:0px auto; margin-bottom:10px;}
+/*#template1-form table{ border-collapse:collapse;}
+#template1-form table td{ padding:7px;font-size:14px;}*/
+#confirm1-form{ width:40%;margin:0px auto; margin-bottom:10px;}
+#confirm1-form table{ border-collapse:collapse;}
+#confirm1-form table tr{ border-bottom:1px dotted solid #000;}
+#confirm1-form table td{ padding:7px;font-size:14px;}
+#bottom-nav{ width:98%; text-align:center; margin:0px auto; padding:10px 0px;background-color:#9D9D9D;border-radius: 3px;
+    -moz-border-radius: 3px;
+    /*box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);*/
+    -webkit-border-radius:3px;
+    /*-webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.5);}*/}
+    # bottom-nav ul{list-style-type:none;}
+    #bottom-nav ul li{ display:inline; margin-right:1%; color:#ffffff; font-size:22px; font-family:Arial, Helvetica, sans-serif;}
+  
+</style>
+
+
+<style>
+ #lefttemp-list{float:left; width:30%; height:500px;background:url(email/leftdivshadow.png) right repeat-y;background-color:#F7F7F7;}
+ #lefttempfixedheader{width:93%; padding:5px 0px; color:#247dba; background-color:#F7F7F7;box-shadow: 0 0 3px 1px #ccc;-webkit-box-shadow: 0 0 3px 1px #ccc;-moz-box-shadow: 0 0 3px 1px #ccc;border: 0px solid #ccc;text-align: center;text-shadow: 0 1px 1px rgba(0,0,0,.25);font-family: cuprum;font-size: 20px;}
+ #insidelefttemp{width:93%;height:464px; overflow:auto; }
+ #insidelefttemp table{ border-collapse:collapse; font-size:16px; font-family:cuprum;}
+ #insidelefttemp table td{ padding:5px;}
+ #insidelefttemp table tr{ border-bottom:1px dotted #CCCCCC;}
+ #insidelefttemp table td label{ margin-left:2%}
+ 
+
+ </style>
+
+
+
+   
+  
+    
+    <script>
+   
+    function  editcampaign(editcamid,eventid){
+       editcampaign(editcamid,eventid);
+       
+    }
+      
+
+    
+   
+    
+    </script>
+  
+  
+  
+  
+
+<script>
+
+     function showpackage(show,hide,text)
+    {
+       
+    
+       
+       if(show == 'confirmbox'){
+       
+        document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.scampname}').innerHTML =  document.getElementById('campname').value;
+        document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.scamptype}').innerHTML =  document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.camptype}').value;
+        document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.semailsub}').innerHTML = document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.emailsub}').value;
+        
+        document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.sfmname}').innerHTML =  document.getElementById('frmname').value;
+        document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.sfmemailid}').innerHTML = document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.fromemail}').value;
+         var selrec = '';
+
+  
+            $('tr td input[type="checkbox"]').each(function(){
+                  // alert($(this).val());
+                  // alert(result.ToList__c);
+                   if($(this).hasClass("contclass")){
+                   
+                       
+                       //alert($(this).attr('checked'));
+                        if($(this).attr('checked')== true){
+                        selrec += $(this).val() + ',';
+                        
+                        }
+
+
+                      }
+                   
+                  });
+        var newString = selrec.substr(0, selrec.length-1);
+        document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.semailreceipients}').innerHTML =  newString ;
+        
+        document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.semailtemp}').innerHTML =   document.getElementById('campname').value;
+
+
+       }
+       
+
+        if(show == 'emailbody-wrapper'){
+          if(text == 'save'){
+            
+              /*document.getElementById("dialogoverlay3").style.display="block";
+               document.getElementById("dialogbox6").style.display="block";*/
+               document.getElementById("emailbody").innerHTML= '';
+            document.getElementById("emailupdatebody").innerHTML = '';
+            document.getElementById("emailbody").innerHTML=$('iframe').contents().find('body').html();
+            
+            document.getElementById("emailupdatebody").innerHTML = document.getElementById("emailbody").innerHTML;
+           
+               
+           }
+       }
+       
+       
+     // alert(show);
+        
+               var selbol = '';
+               var els = $('.requiredInput');
+               els.each(function(index, el) {
+
+                   el = $(el);
+
+                   el = el.find("input,textarea,select");
+                   var fildname = el.attr('id');
+           
+                   
+                  
+                 
+                   if ($.trim(el.val()) == '') {
+                   
+                   
+                       selbol = true;
+                        
+                       el.css('border', '1px solid red');
+                   }
+                      else{
+                        el.css('border', '1px solid #E3E3E3');
+                   }
+          
+                  
+             });
+             
+             
+              if(selbol == true)
+              {
+                      alert('Required Fields Missing');
+                      return false;
+                          
+               } 
+           
+              else{
+              
+               document.getElementById(hide).style.display="none";
+                document.getElementById(show).style.display="";
+              }
+        
+       
+           
+    }
+</script>
+
+
+     <script>
+  
+  function getselvalues(val){
+               //  alert(val);  
+   Visualforce.remoting.Manager.invokeAction(
+         '{!$RemoteAction.BLN_Email_Dashboardscon.getemailtempopts}',
+        val,
+        function(result, event){
+            if (event.status) {
+
+            document.getElementById('emailbody').innerHTML= result.HtmlValue;
+            var divtext = document.getElementById('emailbody').innerHTML;
+            $('iframe').contents().find('body').append(divtext);
+                
+            
+         } else if (event.type === 'exception') {
+                // alert('111111111111' +event.type);
+            } else {
+               // alert('dfdgdfgh');
+            }
+        }, 
+        {escape: false}
+    ); 
+    
+  }
+  
+ 
+   
+</script> 
+  
+
+<apex:form id="displayformid" >
+
+<apex:outputPanel rendered="{!displaybool}" id="displayboolid">
+
+   <div id="TabbedPanels4" class="TabbedPanels" style=" width:97.7%; margin-left:1%; margin-top:10px;" >
+                <ul class="TabbedPanelsTabGroup">
+                  <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555; font-weight:300;">Booth Leads Campaigns</li>
+                  <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555;font-weight:300;">Logs</li>
+                </ul>
+        <!--------------------start of ist tab------------------>
+          <div class="TabbedPanelsContentGroup"> 
+            <!--Start of content of standard Templates--> 
+            <!-----start of Ist tab booth leads campaigns-------->
+            <div class="TabbedPanelsContent"> 
+              
+              <!-------------------------------------------------------------------------> 
+              <!--Start of Dashboard Container-->
+              
+              <div id="dashboard-cont" style="padding-bottom:0px; margin-top:0px;"> 
+                <!--start of stat1---------------->
+                
+                <div id="stat" style="background-color:#59b15d; border:1px solid #56aa5d;">
+                  <table width="101%" border="0">
+                    <tr>
+                      <td width="10%" style="padding:0px; text-align:left;"><img src="{!URLFOR($Resource.emailImages, 'emailimages/announcements.png')}" width="65" height="65"/></td>
+                      <td>Announcements </td>
+                    </tr>
+                  </table>
+                </div>
+                <!--close of stat--> 
+                <!---------end of stat1---------------------> 
+                
+                <!--start of stat2---------------->
+                <div id="stat" style="background-color:#338dcb; border:1px solid #67aac7;">
+                  <table width="101%" border="0">
+                    <tr>
+                      <td width="10%" style="padding:0px; text-align:left;"><img src="{!URLFOR($Resource.emailImages, 'emailimages/reminder.png')}" style="margin-left:9%" width="65" height="65"/></td>
+                      <td>Reminders</td>
+                    </tr>
+                  </table>
+                </div>
+                <!--close of stat--> 
+                <!---------end of stat2---------------------> 
+                
+                <!--start of stat4---------------->
+                <div id="stat" style="background-color:#e97d32; border:1px solid #e97d32;">
+                  <table width="101%" border="0">
+                    <tr>
+                      <td width="10%" style="padding:0px; text-align:left;"><img src="{!URLFOR($Resource.emailImages, 'emailimages/registration.png')}" style="margin-left:10%" width="65" height="65"/></td>
+                      <td style="font-size:20px;">Booth Leads System<br />
+                        Email Templates</td>
+                    </tr>
+                  </table>
+                </div>
+                <!--close of stat--> 
+                <!---------end of stat4---------------------> 
+              </div>
+              
+                <div class="clear"></div>
+               
+                
+                 <div id="headers-sub-wrap">
+       <!----------------start of predefined announcements----------------------->
+       <div id="headers-sub">
+       <!-----------1st------------------------->
+       <apex:repeat value="{!anouncecmaplist}" var="anou" id="anounid">
+       <div id="announcement-tile">
+       <table width="100%" height="100%" border="0">
+  <tr style="border-bottom:1px solid #F4F4F4;">
+    <td id="camp-title" colspan="4">
+  <!-- 
+    onClick="editcampaign('{!anou.id}' , '{!selectedeventid}');"
+     <a onClick="editcampaign('{!anou.id}' , '{!selectedeventid}');"  style="color:#59b15d; cursor:pointer; text-decoration:underline;" > {!anou.Name}</a>     ---> 
+  <apex:commandLink value="{!anou.Name}" onClick="editcampaign('{!anou.id}' , '{!selectedeventid}');"   style="color:#59b15d; cursor:pointer; text-decoration:underline;"  reRender="displayboolid" >  
+    <!--    <apex:param value="{!anou.id}" name="editcamid"/>
+     <apex:param value="{!selectedeventid}" name="eventid"/>--->
+     </apex:commandLink>
+     
+     
+       </td>
+  </tr>
+  <tr style="border-bottom:1px solid #F4F4F4;">
+    <td colspan="4" style="text-align:left; text-indent:5px; color:#396FA3 ;">Template:<span style="color:#000; margin-left:3%;"><apex:outputText value="{!anou.Template_Type__c}"/></span></td>
+
+  </tr>
+  <tr id="duedate" style="">
+    <td colspan="2" width="56%" style="">Date:
+ <apex:outputText value="{0,date, MMMM d, YYYY}" style="color:#000; margin-left:3%;"><apex:param value="{!anou.CreatedDate}"/></apex:outputText>
+ <!----   <span style="color:#000; margin-left:3%;">June 19, 2014</span>---></td>
+    <td colspan="2" style="">Status:<span style="color:#000; margin-left:3%;">Not Started</span></td>
+  </tr>
+  <tr>
+     <td colspan="4" valign="middle"><input type="button" class="btn-green" onclick="Alert.render()"   value="Send Now"/><span style=" margin-left:3%;"><input type="button" class="btn-green" onclick="Alert2.render()"    value="Auto Schedule"/></span></td>
+    
+  </tr>
+  <tr height="1px" style="border-bottom:3px solid #59b15d;">
+    <td colspan="4" ></td>
+   
+  </tr>
+</table>
+
+       
+    </div>
+   </apex:repeat>
+       <!--close of announcement-tile-->
+       
+        
+               </div>
+          
+          <!---- start of Reminders-tile-->
+           <div id="headers-sub">
+       
+ <apex:repeat value="{!remaindermaplist}" var="remainvar" id="remainvar">
+       <!-----------1st------------------------->
+       <div id="announcement-tile"  >
+       
+       <table width="100%" height="100%" border="0">
+  <tr  style="border-bottom:1px solid #F4F4F4;">
+    <td id="camp-title" colspan="4" style="color:#338dcb;cursor:pointer; text-decoration:underline;">
+   <!--- <a onClick="Alertedit.render()"  style="color:#e97d32;cursor:pointer; text-decoration:underline;">Event Registration Confirmed</a> --->
+   <apex:commandLink value="{!remainvar.Name}"  onClick="editcampaign('{!remainvar.id}' , '{!selectedeventid}');"  style="color:#338dcb;cursor:pointer; text-decoration:underline;"  reRender="displayboolid" >  
+     <!--- <apex:param value="{!remainvar.id}" name="editcamid"/>
+     <apex:param value="{!selectedeventid}" name="eventid"/>--->
+     </apex:commandLink>
+    
+    </td>
+    
+  </tr>
+
+ <tr style="border-bottom:1px solid #F4F4F4;">
+    <td colspan="4" style="text-align:left; text-indent:5px; color:#396FA3 ;">Template:<span style="color:#000; margin-left:3%;"><apex:outputText value="{!remainvar.Template_Type__c}"/></span></td>
+
+  </tr>
+  <tr id="duedate" style="">
+    <td colspan="2" width="56%" style="">Date:
+ <apex:outputText value="{0,date, MMMM d, YYYY}" style="color:#000; margin-left:3%;"><apex:param value="{!remainvar.CreatedDate}"/></apex:outputText>
+ <!----   <span style="color:#000; margin-left:3%;">June 19, 2014</span>---></td>
+    <td colspan="2" style="">Status:<span style="color:#000; margin-left:3%;">Not Started</span></td>
+  </tr>
+  <tr>
+     <td colspan="4" valign="middle"><input type="button" class="btn-blue" onclick="Alert.render()"   value="Send Now"/><span style=" margin-left:3%;"><input type="button" class="btn-blue" onclick="Alert2.render()"    value="Auto Schedule"/></span></td>
+    
+  </tr>
+  <tr height="1px" style="border-bottom:3px solid #338dcb;">
+    <td colspan="4" ></td>
+   
+  </tr>
+</table>
+       </div><!--close of announcement-tile-->
+        <!-----------1st end------------------------->      
+          </apex:repeat> 
+        </div>     
+          <!--close of Reminders-tile-->
+          <!-----------1st end------------------------->
+        
+        
+         <div id="headers-sub" style="margin-right:0px;">
+         <apex:repeat value="{!registermaplist}" var="remain" id="remainid">
+       <!-----------1st------------------------->
+       <div id="announcement-tile"  >
+       
+       <table width="100%" height="100%" border="0">
+  <tr style="border-bottom:1px solid #F4F4F4;height:42px;">
+    <td id="camp-title" colspan="4" style=" padding:5px;color:#338dcb;">
+   <!--- <a onClick="Alertedit.render()"  style="color:#e97d32;cursor:pointer; text-decoration:underline;">Event Registration Confirmed</a> --->
+   <apex:commandLink value="{!remain.Name}" onClick="editcampaign('{!remain.id}' , '{!selectedeventid}');"   style="color:#e97d32;cursor:pointer; text-decoration:underline;" reRender="displayboolid" >  
+    <!---   <apex:param value="{!remain.id}" name="editcamid"/>
+     <apex:param value="{!selectedeventid}" name="eventid"/> --->
+     </apex:commandLink>
+    
+   
+    </td>
+    
+  </tr>
+
+ <tr style="border-bottom:1px solid #F4F4F4;">
+    <td colspan="4" style="text-align:left; text-indent:5px; color:#396FA3 ;">Template:<span style="color:#000; margin-left:3%;"><apex:outputText value="{!remain.Template_Type__c}"/></span></td>
+
+  </tr>
+  <!--<tr id="duedate" style="">
+    <td colspan="2" width="56%" style="">Date:<span style="color:#000; margin-left:3%;">June 19, 2014</span></td>
+    <td colspan="2" style="">Status:<span style="color:#000; margin-left:3%;">Sent</span></td>
+  </tr>-->
+  <!--<tr>
+     <td colspan="4" valign="middle"><input type="button" class="btn-orange" onclick=""   value="Send Now"/><span style=" margin-left:3%;"><input type="button" class="btn-orange" onclick=""   value="Auto Schedule"/></span></td>
+    
+  </tr>-->
+  
+  <tr height="1px" style="border-bottom:3px solid #e97d32;">
+    <td colspan="4" ></td>
+   
+  </tr>
+</table>
+       </div><!--close of announcement-tile-->
+        <!-----------1st end------------------------->      
+          </apex:repeat>       
+               </div>   
+               
+                </div>  
+               </div>
+                </div>
+      </div>
+      </apex:outputPanel> 
+
+ <apex:actionFunction action="{!editcamp}" name="editcampaign" reRender="form1id,displayboolid">
+                  <apex:param value="" name="editcamid"/>
+                  <apex:param value="" name="eventid"/>
+        </apex:actionFunction>
+        
+
+<script type="text/javascript">
+var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
+var TabbedPanels2 = new Spry.Widget.TabbedPanels("TabbedPanels2");
+var TabbedPanels3 = new Spry.Widget.TabbedPanels("TabbedPanels3");
+var TabbedPanels4 = new Spry.Widget.TabbedPanels("TabbedPanels4");
+</script>  
+
+
+   
+</apex:form>
+ 
+ 
+ <!-----
+content for create announcements popup  ---->
+
+
+<apex:form id="form1id">
+
+
+<apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!editbool}" id="Popup2"/>
+    <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!editbool}"  id="guestForm2" >
+<!----<div id="dialogoverlayedit"></div>
+<!--close of dialogoverlay
+<div id="dialogboxedit">--->
+<script>
+
+
+$(document).ready(function(){
+
+ var tolist = '';
+
+ tolist = '{!emailcamp.ToList__c}';
+    $('tr td input[type="checkbox"]').each(function(){
+                  
+                   if($(this).hasClass("contclass")){
+                    var n =  '';
+                    n= tolist.search($(this).val());
+                       if(n != -1){
+                       //alert($(this).attr('checked'));
+                        $(this).attr('checked', true);
+
+                       }
+                      }
+                   
+                  });
+
+    });
+
+     var EmailTemplateid = '';
+ EmailTemplateid = '{!emailcamp.CampEmailTemplate__c}';
+    
+        $('tr td input[type="radio"]').each(function(){
+                   // alert($(this).val());
+                       if($(this).val() == EmailTemplateid){
+                       //alert($(this).attr('checked'));
+                        $(this).attr('checked', true);
+                        getselvalues($(this).val());
+                       }
+                  });
+   
+     var fromname = '';
+
+     if('{!emailcamp.CampFromName__c}' == null || '{!emailcamp.CampFromName__c}' == ''){
+       fromname = '{!emailcamp.Owner.Name}';
+     }
+     else{
+      fromname = '{!emailcamp.CampFromName__c}';
+     }
+    
+    document.getElementById('frmname').value = fromname;
+     document.getElementById('campname').value = '{!emailcamp.Name}';
+    document.getElementById("emailupdatebody").innerHTML = '';
+     
+    
+</script>
+<div style="float:right;">
+  <apex:commandLink action="{!cancelmethod}" value="X" Styleclass="close"  title="Close"    immediate="true" style="color:#ffffff;" />
+ </div><!--            <a href="" id="close" >×</a>  --->
+<div class="grid-1" style=" width:98%;margin-left:1%; padding-right:0px;">
+    <div class="title-grid">Edit Campaign</div>
+    <div class="content-gird" >
+    <!--------------------setup1--------------------------reRender="form1id,displayformid,savedd"------------>
+
+     <div id="setupbox">
+    <div id="setup1-form" style="">
+    
+    <table width="100%" border="0">
+  <tr>     
+    <td width="30%" style="text-align:right;">Campaign Name <label id="mandatory">*</label>:</td>
+    <td>
+
+    
+    <div class="requiredInput">
+        <div class="requiredBlock"></div>
+     
+      <apex:outputPanel rendered="{!(IF(emailcamp.CampType__c == 'Registration email',True,False))}">
+         <input type="text" id="campname"   style=" width:90%" class="medium"  disabled="disabled"/>
+      </apex:outputPanel>
+      <apex:outputPanel rendered="{!(IF(emailcamp.CampType__c != 'Registration email',True,False))}"> 
+         <input type="text" id="campname"   style=" width:90%" class="medium" />
+      </apex:outputPanel>
+        </div>
+    </td>
+  </tr>
+   <tr>
+    <td style="text-align:right;">Campaign Type <label id="mandatory">*</label>:</td>
+      <td>
+          <apex:inputText value="{!emailcamp.CampType__c}" disabled="true" id="camptype"  style=" width:90%" styleclass="medium"  />
+     </td>
+  </tr>
+
+  <tr>
+    <td style="text-align:right;">Email Subject <label id="mandatory">*</label>:</td>
+    <td> 
+     <apex:inputField value="{!emailcamp.CampSubject__c}" id="emailsub" style=" width:90%" styleclass="medium" required="true" />
+   </td>
+  </tr>
+   <tr>
+    <td style="text-align:right;">From Name <label id="mandatory">*</label>:</td>
+    <td><div class="requiredInput">
+        <div class="requiredBlock"></div>
+     <input type="text" id="frmname"   style=" width:90%" class="medium" /></div>
+    </td>
+   </tr>
+   <tr>
+    <td style="text-align:right;">From Email Id <label id="mandatory">*</label>:</td>
+    <td><apex:inputField value="{!emailcamp.CampFromEmailId__c}" required="true" id="fromemail" style=" width:90%" styleclass="medium" />
+    </td>
+  </tr>
+</table>
+
+     </div><!--close of setup1form-->
+     <div id="bottom-nav">
+    <table width="99%" height="100%" border="0" style="margin:0px auto;">
+    <tr>
+    <td width="21%" style="text-align:left;"></td>
+    <td>
+    <ul style="list-style-type:none;">
+    <li style="color: #6AF3FB;"><span id="nav-setup" >Setup</span></li>
+    <li><img src="{!URLFOR($Resource.emailImages, 'emailimages/arrow.png')}" style="margin-bottom:-8px;"/></li>
+    <li><span id="nav-recp">Recipients</span></li>
+    <li><img src="{!URLFOR($Resource.emailImages, 'emailimages/arrow.png')}" style="margin-bottom:-8px;"/></li>
+    <li><span id="nav-temp">Templates</span></li>
+    <li><img src="{!URLFOR($Resource.emailImages, 'emailimages/arrow.png')}" style="margin-bottom:-8px;"/></li>
+    <li><span id="nav-confirm">Confirm</span></li>
+     </ul>
+ </td>
+ <td width="21%" style="text-align:right;">
+ 
+ <apex:commandButton value="Next" styleClass="button-a blue" onclick="showpackage('recipientbox','setupbox');" reRender="aaa"  rendered="{!(IF(emailcamp.Name != 'Order Confirmation' ,True,False))}"/> 
+  <apex:commandButton value="Next" styleClass="button-a blue" onclick="showpackage('templatebox','setupbox')"  reRender="aaa"  rendered="{!(IF(emailcamp.Name == 'Order Confirmation',True,False))}"/> 
+ <!--- <button class="button-a blue" onclick="showpackage('recipientbox','setupbox')" >Next</button>-->
+ </td>
+ </tr></table>
+  </div><!--close of bottom nav-->
+  
+  </div><!--close of setupbox---> 
+   
+   
+ <!--start of recipient----------------->
+  <div id="recipientbox" style="display:none">
+   <div id="recipient1-form" >
+   <!---start of send tabs--------------------------------------------------->
+   <div id="TabbedPanels1" class="TabbedPanels" style="" >
+                <ul class="TabbedPanelsTabGroup">
+                  <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555; font-weight:300;">Event Contacts</li>
+                  <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555;font-weight:300;">Mail Chimp List</li>
+                </ul>
+                
+                <!--------------------start of ist tab------------------>
+                <div class="TabbedPanelsContentGroup">
+                
+                  <!--Start of content of standard Templates-->
+                  <div class="TabbedPanelsContent">
+                  
+                  <table width="100%" border="0">
+ 
+  <tr id="select-contacts">
+    <td style="">
+    
+    <apex:repeat value="{!reciepientslist}" var="tags"> 
+
+    <input id="sel-att" type="checkbox" class="contclass" value="{!tags}"/><label for="sel-att" style="margin-left:1%">{!tags}</label><br/><br/>
+    
+    </apex:repeat>
+
+    </td>
+   
+   </tr>
+ 
+</table>
+                  </div><!--close of tabbedpanelscontent-->
+                  <!--------------------end of ist tab-------------------------->
+                  
+                  <!-----------------2nd tab---------------------------->
+                  <div class="TabbedPanelsContent">
+                  
+                 <div style="text-align:center; margin-top:20px;">
+                 <span><input type="text"  style="width:20%;"/></span>
+                 <span><button  class="button-a blue" onclick="" style="margin-left:-.2%;"   >Import Mail Chimp List</button></span>
+                  </div>
+                  <div style="text-align:center; height:20px; margin-top:5px;">
+                 <label id="note-heading">Note:</label>
+                  <span id="note-content">Please Enter Your Mailchimp API Key.</span>
+                  </div><!--close of div -->
+                 
+                  </div><!--close of 2nd TabbedPanelsContent-->
+                  <!---------------------------------------------------------------->
+                  </div><!--close of TabbedPanelsContentGroup--->
+                  </div><!---close of TabbedPanels1------------------------------------> 
+                  
+   
+  <!------------------------------end of start tabs---------------------------->
+   
+</div><!--close of recipient1-form-->
+      
+     <div id="bottom-nav">
+    <table width="99%" height="100%" border="0" style="margin:0px auto;">
+    <tr>
+    <td width="21%" style="text-align:left;">
+     <apex:commandButton value="Previous" styleClass="button-a blue" onclick="showpackage('setupbox','recipientbox')"  reRender="aaa"/>
+    
+   </td>
+    <td>
+    <ul style="list-style-type:none;">
+    <li><span id="nav-setup" >Setup</span></li>
+    <li><img src="{!URLFOR($Resource.emailImages, 'emailimages/arrow.png')}" style="margin-bottom:-8px;"/></li>
+    <li style="color: #6AF3FB;"><span id="nav-recp">Recipients</span></li>
+    <li><img src="{!URLFOR($Resource.emailImages, 'emailimages/arrow.png')}" style="margin-bottom:-8px;"/></li>
+    <li><span id="nav-temp">Templates</span></li>
+    <li><img src="{!URLFOR($Resource.emailImages, 'emailimages/arrow.png')}" style="margin-bottom:-8px;"/></li>
+    <li><span id="nav-confirm">Confirm</span></li>
+     </ul>
+ </td>
+ <td width="21%" style="text-align:right;">
+  <apex:commandButton value="Next" styleClass="button-a blue" onclick="showpackage('templatebox','recipientbox')"  reRender="aaa"/> 
+  
+  </td>
+ </tr></table>
+  </div><!--close of bottom nav2-->
+   
+   </div><!--close of  recipientbox-->
+  <!--close of recipient-------------------->  
+  
+  
+  <!--start of template----------------->
+  <div id="templatebox" style="display:none;position:relative;width:100%;">
+   <div id="template1-form" >
+   
+   <div id="lefttemp-list" style=""><!--start of left templist-->
+   
+   <div id="lefttempfixedheader" style="width:96%;">
+   Email Templates
+   </div><!--close of lefttempfixedheader-->
+   
+   <div id="insidelefttemp"><!--start of insidelefttemp-->
+  
+   <table width="100%" border="0">
+ <apex:repeat value="{!Tempnames}" var="Tempnamesval" id="Tempnamesval"> 
+      <tr>
+                <td style="padding-left:25px;"><input type="radio" name="temp"  value="{!Tempnamesval.value}" class="chkticket"  onclick="getselvalues('{!Tempnamesval.value}');"> <span><label >{!Tempnamesval.label}</label></span></input>
+                 </td>
+      </tr>
+   </apex:repeat>
+
+</table>
+
+   </div><!--close of insidelefttemp-->
+   
+   
+   
+   </div><!--close of left templist-->
+   
+   
+   <div id="righttemp-box" style=" float:right; width:70%; height:500px;overflow:auto; background-color:#EFEFEF;">
+<div id="lefttempfixedheader" style="width:100%; padding:0px 0px">
+
+<table width="100%" border="0">
+  <tr>
+    
+    <td width="7%" style="text-align:left;">
+      <apex:commandButton value="Edit" styleClass="button-a blue" id="editbtn"  onclick="showpackage('email-edit', 'emailbody-wrapper');"  reRender="aaa"/> 
+ <!---   <button  class="button-a blue" onclick="showpackage('email-edit', 'emailbody-wrapper')"  id="editbtn" >Edit</button>--->
+    </td>
+    <td style="text-align:left;">
+    
+    <button  class="button-a blue" onclick=""  >Send Test Email</button></td>
+    <td width="45%" style="text-align:center;">Email Body</td>
+    <td width="" style="text-align:right;"  ><button  class="button-a blue" onclick="Alertbrwpre.render()" >Browser Preview</button></td>
+      <td width="" style="text-align:right;" ><button  class="button-a blue" onclick="Alertbrwmb.render()" >Mobile Preview</button></td>
+  </tr>
+</table>
+</div><!--close of lefttempfixedheader-->
+<div id="emailbody-wrapper" style="width:100%; background-color:#FFFFFF; height:464px; overflow:auto;"><!--start of emailbody-wrapper-->
+<div id="emailbody" style=" width:98%; margin:0px auto; height:460px;margin-top:5px; background-color:#FFF;" ><!--start of emailbody--->
+
+<style>
+#emailbody-temp{border-collapse:collapse; padding:10px; font-family: Arial, Helvetica, sans-serif;}
+
+#emailbody-temp td{padding:10px;}
+</style>
+   
+   </div><!--close of emailbody-->
+
+</div><!--close of email-body wrapper-->
+<div id="emailupdatebody" style="display:none;" ><!--Div to store updated template--->
+</div>
+
+<apex:stylesheet value="{!URLFOR($Resource.tinyeditor, 'tinyeditor/tinyeditor.css')}"/>
+<script type="text/javascript" src="{!URLFOR($Resource.tinyeditor, 'tinyeditor/tiny.editor.packed.js')}"></script>
+
+<div id="email-edit" style="display:none;">
+<textarea id="tinyeditor" style="width: 100%; height: 325px" ></textarea>
+<script>
+var editor = new TINY.editor.edit('editor', {
+    id: 'tinyeditor',
+    width: '100%',
+    height: 325,
+
+    cssclass: 'tinyeditor',
+    controlclass: 'tinyeditor-control',
+    rowclass: 'tinyeditor-header',
+    dividerclass: 'tinyeditor-divider',
+    controls: ['bold', 'italic', 'underline', 'strikethrough', '|', 'subscript', 'superscript', '|',
+        'orderedlist', 'unorderedlist', '|', 'outdent', 'indent', '|', 'leftalign',
+        'centeralign', 'rightalign', 'blockjustify', '|', 'unformat', '|', 'undo', 'redo', 'n',
+        'font', 'size', 'style', '|', 'image', 'hr', 'link', 'unlink', '|', 'print'],
+    footer: true,
+    fonts: ['Verdana','Arial','Georgia','Trebuchet MS'],
+    xhtml: true,
+    cssfile: 'custom.css',
+    bodyid: 'editor',
+    footerclass: 'tinyeditor-footer',
+    toggle: {text: 'source', activetext: 'wysiwyg', cssclass: 'toggle'},
+    resize: {cssclass: 'resize'}
+});
+</script>
+<div id="" style="width:100%; text-align:right;margin-top:5px; text-align:">
+
+ <apex:commandButton value="Save" onclick="showpackage('emailbody-wrapper','email-edit','save')" styleclass="button-a blue" reRender="aaa"/>
+ <apex:commandButton value="Cancel"  style="margin-left:3%;"  onclick="showpackage('emailbody-wrapper','email-edit')"  styleclass="button-a blue" reRender="aaa"/>
+</div>
+</div><!--close of emailedit-->
+
+
+<!-----------------start of emailedit-
+<div id="email-edit" style="display:none;">
+<apex:outputPanel id="emaileditpanlid">
+<apex:selectList value="{!viewopt}" size="1" style="width:100px;">   
+                                  <apex:selectOptions value="{!viewoptionList}" />
+                                  <apex:actionSupport event="onchange" reRender="varrid,emaileditpanlid,tempeditid,tempedithtid"/>
+                                </apex:selectList>
+'{!viewopt}'
+<apex:variable value="{!viewopt}" var="varrr" id="varrid"/>
+'{!varrr}'
+<apex:outputPanel rendered="{!(IF(varrr == 'Text',true,false))}">
+FGHHKLK
+ <apex:inputTextarea richText="true"  value="{!htmlbodyvalue}" id="tempeditid"  style="width:100%;height: 325px;" rows="20" cols="35" />
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!(IF(varrr != 'Text',true,false))}">
+sdsfsfds
+ <apex:inputTextarea richText="false"  value="{!htmlbodyvalue}" id="tempedithtid"  style="width:100%;height: 325px;" rows="20" cols="35" />
+</apex:outputPanel>
+
+
+
+<div id="" style="width:100%; text-align:right;margin-top:5px; text-align:">
+
+
+<apex:commandButton styleClass="button-a blue"  onclick="showpackage('emailbody-wrapper','email-edit')"   value="Save" reRender="aaa"/>
+<!---
+<button  class="button-a blue" onclick="showpackage('emailbody-wrapper','email-edit')"   >Save</button> ---
+<button  class="button-a blue" onclick="showpackage('emailbody-wrapper','email-edit')"   >Cancel</button>
+</div>
+</apex:outputPanel>
+</div><!--close of emailedit--
+----------->
+<!----------start of emailedit----------action="{!escapevalue}"----->
+
+</div><!--close of righttemp-box-->
+
+
+<div id="clear" style="clear:both;"></div>
+
+
+
+
+
+
+</div><!--close of template-form-->
+
+ <div id="bottom-nav">
+    <table width="99%" height="100%" border="0" style="margin:0px auto;">
+    <tr>
+    <td width="21%" style="text-align:left;">
+              <apex:commandButton value="Previous " styleClass="button-a blue"   onclick="showpackage('setupbox', 'templatebox')"  reRender="aaa"  rendered="{!(IF(emailcamp.Name == 'Order Confirmation' ,True,False))}"/> 
+          <apex:commandButton value="Previous " styleClass="button-a blue"   onclick="showpackage('recipientbox', 'templatebox')"  reRender="aaa"  rendered="{!(IF(emailcamp.Name != 'Order Confirmation' ,True,False))}"/> 
+   <!---- <button  class="button-a blue" onclick="showpackage('recipientbox', 'templatebox')"  >Previous </button>-------->
+    </td>
+    <td>
+    <ul style="list-style-type:none;">
+    <li><span id="nav-setup" >Setup</span></li>
+    <li><img src="{!URLFOR($Resource.emailImages, 'emailimages/arrow.png')}" style="margin-bottom:-8px;"/></li>
+    <li><span id="nav-recp">Recipients</span></li>
+    <li><img src="{!URLFOR($Resource.emailImages, 'emailimages/arrow.png')}" style="margin-bottom:-8px;"/></li>
+    <li style="color: #6AF3FB;"><span id="nav-temp">Templates</span></li>
+    <li><img src="{!URLFOR($Resource.emailImages, 'emailimages/arrow.png')}" style="margin-bottom:-8px;"/></li>
+    <li><span id="nav-confirm">Confirm</span></li>
+     </ul>
+ </td>
+ <td width="21%" style="text-align:right;">
+           <apex:commandButton value="Next" styleClass="button-a blue"   onclick="showpackage('confirmbox','templatebox')"  reRender="aaa"/> 
+ <!--- <button class="button-a blue" onclick="showpackage('confirmbox','templatebox')">Next</button>-------->
+ </td>
+ </tr></table>
+  </div><!--close of bottom nav2-->
+   
+   </div><!--close of  templatebox-->
+  <!--close of templates-------------------->
+  <style>
+   #highlight{ background-color:#F7F7F7;}
+  </style>
+   
+  
+ <!--start of Confirm----------------->
+  <div id="confirmbox" style="display:none">
+   <div id="confirm1-form">
+   
+    <table width="100%" bgcolor="#EEEEEE"  style="border:3px solid #F7F7F7" >
+    <tr id="highlight">
+    <td colspan="2" style="text-align:center;text-shadow: 0 1px 1px rgba(0,0,0,.25); font-family:cuprum; font-size:20px;">Save Campaign</td>
+  </tr>
+
+  <tr>
+    <td  style="text-align:right;">Campaign Name :</td>
+    <td >
+    <apex:outputText id="scampname" value="11111111111" > </apex:outputText>
+    </td>
+  </tr>
+   <tr id="highlight">
+    <td style="text-align:right;">Campaign Type :</td>
+    <td> <apex:outputText id="scamptype" value="" > </apex:outputText></td>
+  </tr>
+  <tr>
+    <td style="text-align:right;">Email Subject :</td>
+    <td><apex:outputText id="semailsub" value="" > </apex:outputText> </td>
+  </tr>
+   <tr id="highlight">
+    <td style="text-align:right;">From Name :</td>
+    <td><apex:outputText id="sfmname" value="" > </apex:outputText></td>
+  </tr>
+   <tr>
+    <td style="text-align:right;">From Email Id :</td>
+    <td><apex:outputText id="sfmemailid" value="" > </apex:outputText></td>
+  </tr>
+    <tr id="highlight">
+    <td style="text-align:right;">Recipients :</td>
+    <td><apex:outputText id="semailreceipients" value="" > </apex:outputText>
+
+
+    </td>
+  </tr>
+    <tr>
+    <td style="text-align:right;">Email Template :</td>
+    <td><apex:outputText id="semailtemp" value="" > </apex:outputText></td>
+  </tr>
+</table>
+   
+   
+   
+</div><!--close of confirm1-form-->
+ <div id="bottom-nav">
+    <table width="99%"  height="100%" border="0" style="margin:0px auto;">
+    <tr>
+    <td width="21%" style="text-align:left;">
+               <apex:commandButton value="Previous  " styleClass="button-a blue"   onclick="showpackage('templatebox' , 'confirmbox')"  reRender="aaa"/> 
+   <!--- <button  class="button-a blue" onclick="showpackage('templatebox' , 'confirmbox')"  >Previous  </button>--->
+    </td>
+    <td>
+    <ul style="list-style-type:none;">
+    <li><span id="nav-setup" >Setup</span></li>
+    <li><img src="{!URLFOR($Resource.emailImages, 'emailimages/arrow.png')}" style="margin-bottom:-8px;"/></li>
+    <li><span id="nav-recp">Recipients</span></li>
+    <li><img src="{!URLFOR($Resource.emailImages, 'emailimages/arrow.png')}" style="margin-bottom:-8px;"/></li>
+    <li ><span id="nav-temp">Templates</span></li>
+    <li><img src="{!URLFOR($Resource.emailImages, 'emailimages/arrow.png')}" style="margin-bottom:-8px;"/></li>
+    <li style="color: #6AF3FB;"><span id="nav-confirm">Confirm</span></li>
+     </ul>
+ </td>
+ <td width="21%" style="text-align:right;">
+
+ <apex:commandButton value="Save" onclick="updatetemplate();" reRender="aaa"  styleclass="button-a blue" />
+  </td>
+ </tr></table>
+ 
+ </div><!--close of bottom nav2-->
+   
+   </div><!--close of  confirmbox-->
+  <!--close of Confirm---------------savedd----> 
+  
+  
+ </div><!--close of content-grid-->
+  </div><!--close of grid-1-->
+<!--  </div>     close of dialogboxedit--> 
+
+<script type="text/javascript">
+var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
+var TabbedPanels2 = new Spry.Widget.TabbedPanels("TabbedPanels2");
+var TabbedPanels3 = new Spry.Widget.TabbedPanels("TabbedPanels3");
+var TabbedPanels4 = new Spry.Widget.TabbedPanels("TabbedPanels4");
+</script>
+
+
+
+
+
+<script>
+
+function updatetemplate(){
+
+      var campname =  document.getElementById('campname').value; 
+     var frmname =   document.getElementById('frmname').value;
+     var reciepients = document.getElementById('{!$Component.pageid.comid.commoncomponent.form1id.semailreceipients}').innerHTML;
+
+    
+     var updatestandardtemp = document.getElementById("emailupdatebody").innerHTML;
+     //alert(updatestandardtemp);
+     updatetempl(campname,frmname,reciepients,updatestandardtemp);
+      
+
+}
+</script>
+
+
+ 
+<apex:actionFunction action="{!updatetemp}" name="updatetempl"  reRender="displayformid,form1id,savedd">
+                   <apex:param value="" name="campname"/>
+                  <apex:param value="" name="frmname"/>
+                  <apex:param value="" name="reciepients"/>
+                    <apex:param value="" name="updatestandardtemp"/>
+</apex:actionFunction>
+</apex:outputPanel>
+
+<!---------------form1id,------------------------------,displayformid,form1id------------->
+     <!----popup for dialogbox on click of save-------->
+   <div id="dialogoverlay3" style="display:none"></div>
+   <div id="dialogbox6" style="display:none">
+   <a href="" id="close" title="cancel" onclick="return Cancel();">×</a>
+  
+  <div class="grid-1" style=" width:98%;margin-left:1%; padding-right:0px;">
+    <div class="title-grid" style="text-align:left;">Save</div>
+    <div class="content-gird" style="padding:8px 5px;" >
+    <table width="100%" border="0">
+  <tr>
+    <td>Template Name</td>
+    <td style="text-align:left;"><input type="text" id="savecustomtemp" name="nw-customizetemp"/></td>
+  </tr>
+  <tr >
+    <td colspan="2" style=" padding:5px;text-align:center;">
+    
+    <button  id="customsave" class="button-a blue">Save</button></td>
+
+  </tr>
+</table>
+
+    
+    </div><!--close of content-grid-->
+    </div><!--close of grid-1-->
+  
+  </div>
+ 
+ <!---------------------------------------------------------->
+<script>
+function Cancel(){
+
+                document.getElementById('dialogbox6').style.display ="none";
+                document.getElementById('dialogoverlay3').style.display ="none";
+}
+
+</script>
+<!-------<apex:actionPoller action="{!campaignslist}" reRender="displayformid" interval="10"/>---->
+
+
+ </apex:form>      
+<!----------------------******************************---------------------displayformid,form1id--------->
+
+<!---end of edit popups---------style="width:20%;height:20%;"
+ 
+ style="height:100px;"------------>
+
+
+<apex:form id="savedd"> 
+
+ 
+
+
+ 
+ 
+<apex:outputPanel styleClass="popupBackground1" layout="block" rendered="{!savebool}" id="Popup21"/>
+    <apex:outputPanel styleClass="custPopup1" layout="block" rendered="{!savebool}"  id="guestForm21" >
+  <div id="dialogboxhead" style="font-size:17px; padding:5px; color:#3ca641; background-color:#d4f7ba;"><span id='confirmtext'>Success</span></div>
+ 
+ <div id="dialogboxbody" style="background:#fff; padding:20px; color:#3ca641; font-size:14px; font-weight:300;">
+<apex:image url="{!$Resource.Success_Image}" width="25px" height="25px" style="margin-bottom:-7px;"/>
+<span style='margin-left:1%;'>Email Template is Updated Succesfully .</span>
+</div><!--close of dialogbody------>
+<div id="dialogboxfoot" style="background:#fff; width:100%; border:0px solid #F00; padding-bottom:5px; float:left; text-align:center;">
+   <!---  <a onClick="refreshlst();"  styleclass="button-a dark-blue"  reRender="aaa" > Ok </a>     ---> 
+
+ <apex:commandButton value="Ok" onclick="refreshlst();" reRender="aaa" styleclass="button-a blue"/>
+</div>
+
+    </apex:outputPanel> 
+<script>
+function refreshlst(){
+updatelist();
+
+}
+
+</script>
+<apex:actionFunction action="{!campaignslist}"  name="updatelist"  reRender="displayformid,savedd,form1id">
+                   <apex:param value="" name="refreshlst"/>
+                 
+</apex:actionFunction>
+</apex:form>
+
+<!-----------------------************************************************************---------------------------------------------------------------->
+
+
+<apex:form id="aaa"> 
+</apex:form>
+<!---------------------------------------------------------------------->
+</body>
+</c:myComponent>
+
+   
+</apex:page>

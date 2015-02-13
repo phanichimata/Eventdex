@@ -1,0 +1,67 @@
+<apex:page id="communitiesSelfRegPage" standardStylesheets="false" showHeader="false" controller="CommunitiesSelfRegController" title="{!$Label.site.user_registration}">
+   
+
+<html> 
+<!--<head> 
+    <title>My Page</title> 
+    <meta name="viewport" content="width=device-width, initial-scale=1"/> 
+    <apex:stylesheet value="{!URLFOR($Resource.FormultiEvent,"css/screen.css")}"/>  
+    <apex:stylesheet value="{!$Resource.jquerymobilecss}"/>
+    <apex:includeScript value="{!$Resource.jquerymobilejs}"/>
+     <apex:includeScript value="{!$Resource.minmobile}"/>
+</head> -->
+
+<body> 
+
+<div data-role="page">
+ <div data-role="header"  data-theme="b" style="text-align:center;padding:10px;width:100%;">
+     <apex:form >
+      <div style="width:100%;">
+        User signup-{!$user.firstname}
+      </div>
+  <div style="clear:both;"></div>
+       </apex:form>
+    </div><!-- /header -->
+ 
+  <div style="width:100%;border:0px solid red;float:left;margin-left:5%;"> 
+
+ </div>
+ <br /> 
+ <apex:form style="padding-top:10px;" id="frm" forceSSL="true">
+  <div style="width:100%;padding-bottom:5px;text-align: center;display: table; border:0px solid red;">
+             
+                    <apex:pageMessages id="error"/>
+                    {!successMSG}
+                    
+                    <apex:panelGrid columns="2" style="margin-top:1em;">
+                      <apex:outputLabel value="First Name" for="firstName"/>
+                      <apex:inputText required="true" id="firstName" value="{!firstName}" label="First Name"/>
+                      <apex:outputLabel value="Last Name" for="lastName"/>
+                      <apex:inputText required="true" id="lastName" value="{!lastName}" label="Last Name"/>
+                     <!-- <apex:outputLabel value="{!$Label.site.community_nickname}" for="communityNickname"/> -->
+                     <apex:outputLabel value="Company" for="Company"/>
+                      <apex:inputText required="true" id="communityNickname" value="{!ASCompanyName}" label="Company"/>
+                      <apex:outputLabel value="{!$Label.site.email}" for="email"/>
+                      <apex:inputText required="true" id="email" value="{!email}" label="{!$Label.site.email}"/>
+                      <apex:outputLabel value="{!$Label.site.password}" for="password"/>
+                      <apex:inputSecret id="password" value="{!password}"/>                    
+                      
+                      
+                      <!-- <apex:outputLabel value="{!$Label.site.confirm_password}" for="confirmPassword"/> -->
+                      <!--<apex:inputSecret id="confirmPassword" value="{!confirmPassword}"/>-->
+                     
+                      <apex:commandButton action="{!registerUser}" value="{!$Label.site.submit}" id="submit"/>
+                    </apex:panelGrid> 
+                  <br/>
+
+    
+   </div>
+ </apex:form>
+</div>
+
+</body>
+ </html>
+ 
+ 
+ 
+</apex:page>

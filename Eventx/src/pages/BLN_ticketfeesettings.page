@@ -1,0 +1,251 @@
+<apex:page controller="BLN_ticketfeesettingsCon" showHeader="false" standardStylesheets="false">
+<c:myComponent BLN_UtillDisplayLinks="{!mytickets}" id="comp">
+   <!-- -------------------------------------- Start --------------------------------------------------- -->
+   
+   <style>
+   
+   #titleheadings {
+width: 100%;
+margin-bottom: 5px;
+height: 30px;
+font-size: 22px;
+text-shadow: 0 1px 1px rgba(0,0,0,.25);
+color: #247dba;
+font-family: cuprum;
+border-bottom: 1px solid #E4E4E4;
+}
+  </style>   
+   <style type="text/css">
+  dl.Zebra_Accordion { width: 100%; font-family: Arial, sans-serif;  }
+dl.Zebra_Accordion dt { background: #A3A8A8;cursor:pointer; font-size: 13px; border-bottom:1px #ccc dotted; color: #FFF; font-weight: bold; padding: 5px }
+dl.Zebra_Accordion dd { background: #EFEFEF; height:auto; padding: 15px; margin: 1px 0;  }
+
+dl.Zebra_Accordion dt.Zebra_Accordion_Expanded { background:#bdc3c7;}
+#titleheadings{width:100%; margin-bottom:5px; height:30px; font-size:22px;text-shadow: 0 1px 1px rgba(0,0,0,.25); color:#247dba; font-family:cuprum; border-bottom:1px solid #E4E4E4; }
+#attendee-settings-box{width:99%; background-color:#F7F7F7;margin:0px auto;margin-top:5px;}
+#leftpanel-td{width:23%;background: transparent url(registrationsettings/leftdivshadow.png)repeat-y;}
+#tickets-left{ margin-top:5px;}  
+#ticketssettings-right{}
+#ticketsname{ border-collapse:collapse; margin-top:0px;}
+#ticketsname tr{ cursor:pointer;}
+#ticketsname td{ padding:10px;border-bottom:0px solid #E4E4E4;/*  background: url(registrationsettings/onclickarrow.png) no-repeat 100% 50% ;*/ text-indent:3.5%;text-shadow: 0 1px 1px rgba(0,0,0,.25); font-size:15px; font-family: Arial, Helvetica, sans-serif;color:#247dba; text-decoration:underline;}
+#line{width:94%; height:1px; border-bottom:1px solid #E4E4E4;}  
+
+#attendee-settings-box{box-shadow: 0 1px 3px 0 #ccc;
+-moz-box-shadow: 0 1px 3px 0 #ccc;
+-webkit-box-shadow: 0 1px 3px 0 #ccc;}
+  </style>
+  
+  <script>
+var myString;
+function conformchange(){
+
+myString =confirm("Do you want to apply the change to every Ticket");
+ if(myString == true){
+ changeval();
+ }
+    }
+ function changeval(){
+ //alert('hhhhhhhhhh');
+ changevaluetics();
+ }
+
+</script>
+  
+<script>
+var arrayadd = [];
+var arrayinclude = [];
+
+
+
+function addprice(e){
+      
+      if(e.checked){
+        arrayadd.push(e.id);
+     }
+      for(var i = arrayinclude.length; i--;) {
+          if(arrayinclude[i] === e.id) {         
+              // delete arrayinclude[i];
+              arrayinclude.splice(i, 1);
+          }         
+      }
+  //alert('array Exclude '+arrayadd);     
+  //alert('arrayinclude '+arrayinclude);
+}
+
+function includeprice(e){
+
+    if(e.checked){
+       arrayinclude.push(e.id);
+    } 
+      for(var i = arrayadd.length; i--;) {
+          if(arrayadd[i] === e.id) {
+            //  delete arrayadd[i];
+              arrayadd.splice(i, 1);
+          }
+      }
+      
+     //alert('array Exclude '+arrayadd);     
+  //alert('arrayinclude '+arrayinclude);
+  }
+
+
+
+ function SaveTobackend(){
+  //alert('1111111111 '+ arrayadd);
+  //alert('222222222222 '+arrayinclude);
+  
+  var addvar1='';
+  var includevar='';
+  var val=true;
+  
+  if(arrayadd.length>0){
+     for(var i = 0; i< arrayadd.length; i++){
+             addvar1 +=arrayadd[i]+',';
+        } 
+  }
+  //alert('QQQQQQQQ '+addvar1);
+ // alert(arrayinclude.length);
+  if(arrayinclude.length>0){
+     for(var z = 0; z< arrayinclude.length; z++){
+        includevar+=arrayinclude[z]+',';
+     } 
+  }
+ 
+  
+//  alert('RRRRRRRRRRRRRRRRRRRRRR '+includevar);
+
+              alert('Ticket Fee settings saved successfully.');
+ sendvals(addvar1,includevar);
+ return false;
+}
+</script>
+
+  
+   <apex:form id="myfrm">
+   <apex:actionFunction name="changevaluetics" action="{!savetickchange}"/>
+    <apex:actionFunction name="sendvals" action="{!saveItemfeesettings}" reRender="myfrm">
+        <apex:param value="" assignTo="{!addstring}" name="addstring"/>
+        <apex:param value="" assignTo="{!includestring}" name="includestring"/>
+
+
+    </apex:actionFunction>
+  <div id="attendee-settings-box"><!--start of attendee-settings-box-->
+      
+         <table width="100%" border="0">  <!--start of settings tabel inside box-->
+ 
+<tr>
+    
+        
+       <!--start of tickets-settings-left--> 
+        <td style=" width:100%;" >
+               
+         <table width="100%" border="0">
+         <tr>
+       
+         <td width="35%"> 
+          <div id="titleheadings" style=" border-bottom:0px;">
+         Set Default Setting Mode </div><!--close of titleheadings-->
+         </td>
+         <td width="100%"  style="color: #e97d32;font-size: 12px;font-weight: 700;">
+         <apex:selectRadio value="{!selectedoption}">
+            <apex:selectOptions value="{!options}"></apex:selectoptions>
+        </apex:selectRadio>
+       </td>
+         <td style="color: #e97d32;font-size: 12px;font-weight: 700;">
+     
+       <apex:commandButton value="Save" oncomplete=" conformchange();"  action="{!saveinventsetting}" style="height:32px;width:52px;marging-right:5px; " styleClass="button-a blue" reRender="myfrm"/>
+       </td>
+         </tr>
+       
+         </table>
+        
+      
+
+         
+        <div id="ticketssettings-right" style="" >
+         <dl class="Zebra_Accordion">
+             <!--start of business information-->
+    <dt><span style="margin-right:5px;"></span>Apply Settings</dt>
+      <dd style="padding-bottom:20px;">
+      <style>
+      #businessinformation tr td{ padding:5px; font-size:13px;text-align:center;}
+     
+      #addressinformation tr td{ padding:5px; font-size:13px; text-align:center;}
+     #highlight{ background-color:#F7F7F7;}
+      </style>
+      
+    <table id="businessinformation" width="100%"  style=" border:3px solid #F7F7F7;  border-collapse:collapse;">
+
+ 
+ <tr>
+    <td style="color:#338dcb; font-size:15px; font-weight:700; text-align:left; vertical-align:top;" width="32%">Tickets</td>
+    <td style="color:#338dcb; font-size:15px; font-weight:700;">Add Eventdex fee on top of the total ticket price</td>
+    <td style="color:#e97d32;font-size:15px; font-weight:700;">Include the Eventdex fee in to the total ticket price</td>
+    
+   <!--  <td>Buyer Only</td>
+      <td>Each Ticket Holder</td>-->
+  </tr>
+   <apex:variable var="call" value="{!0}" />
+  
+  <apex:repeat value="{!innerlist}" var="x">
+  
+  <apex:variable var="call" value="{!call+1}"/>
+    <tr id="highlight">
+
+    <td style="text-align:left;"><apex:outputText value="{!x.Itemvals.item_name__c}"/></td>
+    <apex:outputText rendered="{!IF(x.adds == 'checked',TRUE,FALSE)}" id="addchk">
+     <td style="text-align:center;">   
+      <input type="Radio" id="{!x.Itemvals.id}" onchange="addprice(this);" value="{!x.Itemvals.id}" name="{!call}" checked="{!x.adds}"/> &nbsp;&nbsp;
+        </td><td style="text-align:center;"> 
+        <input type="Radio" id="{!x.Itemvals.id}" onchange="includeprice(this);" value="{!x.Itemvals.id}" name="{!call}" />
+      </td>
+    </apex:outputText>
+  
+        <apex:outputText rendered="{!IF(x.inserts == 'checked',TRUE,FALSE)}" id="inchk">
+    <td style="text-align:center;"> 
+          <input type="Radio" id="{!x.Itemvals.id}" onchange="addprice(this);" value="{!x.Itemvals.id}" name="{!call}"/> &nbsp;&nbsp;
+        </td><td style="text-align:center;"> 
+        <input type="Radio" id="{!x.Itemvals.id}" onchange="includeprice(this);" value="{!x.Itemvals.id}" name="{!call}" checked="{!x.inserts}"/>
+      </td>
+    </apex:outputText>
+
+  </tr>
+  <tr height="20px">
+    <td colspan="3" style="text-align:left;"></td>
+ 
+  </tr>
+   </apex:repeat>
+</table>
+      </dd>
+      <!--end of business information-->  
+    </dl>
+         </div><!--close of attendee-settings-left-->      
+  </td>
+  </tr>
+</table><!--close of settings tabel inside box-->   
+</div><!--close of attendee-settings-box-->
+     
+            
+          <!--------------------------------------------------------------------------------->
+
+    <div class="clear"></div>
+         
+     <div class="grid-1" style="border:0px solid #4f91cd; margin-top:8px; margin-left:1%; padding-bottom:30px; ">
+        <div class="content-gird"  style="background-color:#EFEFEF; padding:0px; border:none;  width:90.4%; margin:0px auto; text-align:left; ">
+          <div style=" width:25%;  height:32px;  float:right; margin-top:10px;">
+           
+             <apex:commandButton value="Save" action="{!saveItemfeesettings}" onclick="return SaveTobackend();" styleClass="button-a blue" style="width:35%;height:32px; " reRender="myfrm"/>
+            &nbsp;&nbsp;
+            
+            <apex:commandButton value="Cancel" styleClass="button-a dark-blue" style="width:35%; height:32px;" action="{!Itemvals}"/>
+          </div>
+        </div>
+      </div>
+        
+     
+ <!-- ------------------------------------------ End ------------------------------------------------ -->
+ 
+ </apex:form>
+  </c:myComponent>
+</apex:page>

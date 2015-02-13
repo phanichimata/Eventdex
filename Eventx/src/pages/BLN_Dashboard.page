@@ -1,0 +1,415 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_DashboardCon" action="{!hideEventsTab}">
+  
+
+   <c:myComponent BLN_UtillDisplayLinks="{!myticket}" >
+   
+
+<!--------------------------------------------------------script for drag and drop for graphs------------------------------------------------->
+ <script>
+  $(function() {
+    $( ".column" ).sortable({
+      connectWith: ".column",
+      handle: ".portlet-header",
+      cancel: ".portlet-toggle",
+      placeholder: "portlet-placeholder ui-corner-all"
+    });
+ 
+ /*   $( ".portlet" )
+      .addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+      .find( ".portlet-header" )
+        .addClass( "ui-widget-header ui-corner-all" )
+        .prepend( "<span class='ui-icon ui-icon-minusthick portlet-toggle'></span>");*/
+ 
+  /*  $( ".portlet-toggle" ).click(function() {
+      var icon = $( this );
+      icon.toggleClass( "ui-icon-minusthick ui-icon-plusthick" );
+      icon.closest( ".portlet" ).find( ".portlet-content" ).toggle();
+    });*/
+  });
+  </script>
+
+<!-------------------------------------------------------------------------------------------------------------------------------------------->
+
+
+   
+<!--------------------------------------------------------------STATISTICS--------------------->   
+
+
+<apex:form id="form1">
+<!-- Overview Table Start -->
+<apex:outputPanel id="overviewpanel">
+
+          <div class="grid-1" style=" width:101%;   margin-left:0.2%;padding-right:0px; float:none">
+          <div class="title-grid">Overview</div>
+          <div class="content-gird" style=" border:1px solid #e3e3e3;"> 
+ 
+           <style>
+           .statblock{ 
+          width: 31%;
+height: 135px;
+margin-right: 1%;
+margin-bottom:7px;
+display: inline-block;
+border-radius: 3px;
+box-shadow: 0 1px 3px 0 #ccc;
+-moz-box-shadow: 0 1px 3px 0 #ccc;
+-webkit-box-shadow: 0 1px 3px 0 #ccc;
+background-color: #93969f;
+border: 1px solid #8b8e96;
+} 
+.stat-titles{
+    height:20%;
+/*  background-color:#CCC;*/
+    width:100%;
+    display:inherit;
+     margin:0px auto;
+     color:#edebee;
+     text-align:left;
+     padding:5px;
+     font-family: cuprum;
+font-size: 22px;
+text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+-moz-box-text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+-webkit-box-text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+margin-bottom:2px;
+
+    
+    
+    }          
+    .stat-numbers{
+        width:60%; 
+        float:left;
+        height:71%;
+        /*background-color:#FFF;*/
+        border:0px solid #f00;
+        
+        
+        }   
+        .stat-numbers p{
+            font-size:55px; 
+        font-family:cuprum;
+        text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+-moz-box-text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+-webkit-box-text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+color:#eaeaec;
+line-height:0px;
+margin-top:48px;
+text-indent:1%;
+text-align:center;
+            
+            
+            }
+        
+        
+        .stat-img{
+            width:39%; 
+            float:right;
+                height:71%;
+        /*background-color:#ddd;*/
+        border:0px solid #f00;
+            }   
+           .clear{ clear:both;}
+           .bottom-border-div{
+                 width: 95%;
+margin: 0px auto;
+margin-left: 1%;
+height: 1px;
+background-color: #a5a8b1;
+margin-top: 3px;
+               }
+           </style>
+            <!---------statistic blocks------------>
+          
+          <!----------------Ist Block-------------------->
+           <div class="statblock" style="margin-left:1.8%;">
+       
+           <div class="stat-titles">
+Total Tickets
+ <div class="bottom-border-div" ></div>
+           </div><!--close of stat titles-->
+         
+               <div class="stat-numbers">
+            <p style="color:#e03c32;"><apex:outputText value="{!totalticsNo}"/></p>
+           </div><!--close of stat numbers-->
+             <div class="stat-img" style="text-align:right; margin-top:0px;">
+           <img  src="{!URLFOR($Resource.dashboardIcons, 'dashboardicons/tickets.png')}" width="75px"/>
+           
+           </div><!--close of stat image-->
+           <div class="clear"></div><!--close of clear-->
+           </div><!--close of statblock--->
+            <!-------------------------------------->
+          
+            
+              <!----------------2nd Block-------------------->
+           <div class="statblock">
+           <div class="stat-titles">
+           Total Tickets Sold
+           <div class="bottom-border-div" ></div>
+           </div><!--close of stat titles-->
+              <div class="stat-numbers">
+            <p style="color:#facd32;"><apex:outputText value="{!soldtics}"/></p>
+           </div><!--close of stat numbers-->
+             <div class="stat-img" style="text-align:right; margin-top:8px;">
+           <img  src="{!URLFOR($Resource.dashboardIcons, 'dashboardicons/ticsold.png')}" width="90px"/>
+           
+           </div><!--close of stat image-->
+           <div class="clear"></div><!--close of clear-->
+           </div><!--close of statblock--->
+            <!-------------------------------------->
+            
+            
+              <!----------------3rd Block-------------------->
+           <div class="statblock">
+           <div class="stat-titles">
+            Revenue Generated
+           <div class="bottom-border-div" ></div>
+           </div><!--close of stat titles-->
+              <div class="stat-numbers">
+            <p style="color:#3098fb;"><span style="font-family:Arial, Helvetica, sans-serif; font-size:55px;">$</span><apex:outputText value="{!generated} "/></p>
+           </div><!--close of stat numbers-->
+             <div class="stat-img" style="text-align:right; margin-top:5px;">
+           <img  src="{!URLFOR($Resource.dashboardIcons, 'dashboardicons/regvn2.png')}" width="90px"/>
+           </div><!--close of stat image-->
+           <div class="clear"></div><!--close of clear-->
+           </div><!--close of statblock--->
+            <!-------------------------------------->
+            
+             <!----------------4th Block-------------------->
+           <div class="statblock" style="margin-left:1.8%;">
+           <div class="stat-titles">
+           Total Orders
+            <div class="bottom-border-div" ></div>
+           </div><!--close of stat titles-->
+           <div class="stat-numbers">
+            <p style="color:#6ace30;"><apex:outputText value="{!registeredatt}"/></p>
+           </div><!--close of stat numbers-->
+             <div class="stat-img" style="text-align:right; margin-top:3px;">
+           <img  src="{!URLFOR($Resource.dashboardIcons, 'dashboardicons/order.png')}" width="90px"/>
+           </div><!--close of stat image-->
+           <div class="clear"></div><!--close of clear-->
+           </div><!--close of statblock--->
+            <!-------------------------------------->
+            
+            
+              <!----------------5th Block-------------------->
+           <div class="statblock">
+           <div class="stat-titles">
+           Total Attendees Registered
+            <div class="bottom-border-div" ></div>
+           </div><!--close of stat titles-->
+               <div class="stat-numbers" >
+               <p style="color:#7f6084;"><apex:outputText value="{!attendeesreig}"/></p>
+               </div><!--close of stat numbers-->
+           <div class="stat-img" style="text-align:right; margin-top:13px;">
+           
+           <img src="{!URLFOR($Resource.dashboardIcons, 'dashboardicons/attendee.png')}" width="90px" />
+           </div><!--close of stat image-->
+           <div class="clear"></div><!--close of clear-->
+           </div><!--close of statblock--->
+            <!-------------------------------------->
+            
+            
+              <!----------------6th Block-------------------->
+           <div class="statblock">
+           <div class="stat-titles">
+        Percentage Of Revenue 
+ <div class="bottom-border-div" ></div>
+           </div><!--close of stat titles-->
+               <div class="stat-numbers" >
+                  <p style="color:#23bfaa;"><apex:outputText value="{!revenuepercent}"/><span style="font-family:Arial, Helvetica, sans-serif; font-size:55px;">% </span></p>
+               </div><!--close of stat numbers-->
+           <div class="stat-img" style="text-align:right; margin-top:25px;">
+          
+           <img  src="{!URLFOR($Resource.dashboardIcons, 'dashboardicons/regven.png')}" width="90px"/>
+           </div><!--close of stat image-->
+           <div class="clear"></div><!--close of clear-->
+           </div><!--close of statblock--->
+            <!-------------------------------------->
+            
+           <!---------statistic blocks------------>
+     
+          
+            
+            
+            <div class="clear"></div>
+           </div><!--close of contentgrid-->
+       
+     
+     
+        
+            <!--------------------------------------------------------------------------------->
+
+        
+  <!--------------------------------------------------------------------------------->
+        </div>
+         <div class="clear"></div>
+
+
+</apex:outputPanel>
+
+</apex:form>
+ <!-------------------------------------------------------STATISTICS End --------------------------->  
+ <!------------------------------------------------------START DASHBOARDS--------------------------->
+  <div class="column" style=" cursor:all-scroll;">  
+   <!-----------------Revenue Generated Vs Payment Category report---------------------------------------------------------------->
+   
+    <div class="grid-1 portlet" style="width:48%;  padding-right:0px; float:left">
+          <div class="title-grid  portlet-header">Revenue Generated Vs Payment Category</div>
+          <div class="content-gird portlet-content" style=" border: 1px solid #e3e3e3;height:300px; "> 
+         <div id="chartContainer2" style="height: 260px; width: 100%; margin-top:0px;">
+         <div style="margin-top:40px;">
+          
+           <apex:outputPanel >
+                    <apex:chart data="{!payinn}" width="80%" height="200" >               
+                        
+                        <apex:pieSeries dataField="amount" labelField="paytype" colorSet="#e9b200,#57ab35,#329dbd,#e86026" > 
+                            
+                            <apex:chartTips width="200"/>
+                            <apex:chartLabel display="middle" field="amount"/>
+                           
+                        </apex:pieSeries>
+                        
+                            <apex:legend position="right"/>
+                        
+                        
+                    </apex:chart> 
+                                  
+                </apex:outputPanel> 
+       </div>
+       
+  </div><!--close of chartcontainer2-->  
+            
+            
+            <div class="clear"></div>
+           </div><!--close of contentgrid-->
+        </div><!--close of grid-->
+   
+   
+   
+   <!--------------------------------------------------------------------------------------------------------------------------------->
+   <!-----------------Revenue generated Vs Ticket types report---------------------------------------------------------------->
+      <div class="grid-1 portlet" style="width:48%;  padding-right:0px; float:left">
+          <div class="title-grid portlet-header">Revenue Generated Vs Ticket Types</div>
+          <div class="content-gird portlet-content"> 
+  <div id="chartContainer" style="height: 300px; width: 100%; margin-top:0px;">
+ <apex:outputPanel rendered="{!if(ticpayinn.size != 0,true,false)}"> 
+                 <!-- Modified by Thirupathi -->    
+                <apex:chart data="{!ticpayinn}" width="100%" height="300" resizable="true">
+                <apex:axis type="Category" position="bottom" fields="tictype" title="Ticket Types" minimum="0"><apex:chartLabel rotate="90"/></apex:axis>
+                
+                <apex:axis type="Numeric" position="left" fields="payment" title="Revenue generated ($)" minimum="0" steps="0"/>
+                <apex:barSeries gutter="200" orientation="vertical" axis="bottom" xField="tictype" yField="payment" stacked="false" colorSet="#369ead,#c24642,#7f6084,#86b402,#a2d1cf" colorsProgressWithinSeries="true" >
+                <apex:chartLabel display="outside" field="payment"/><apex:chartTips height="20" width="120"/></apex:barseries>
+                
+                </apex:chart>        
+              
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!if(ticpayinn.size == 0,true,false)}">
+                <h1>No Tickets are sold out</h1>
+                 </apex:outputPanel>
+  </div><!--close of chartcontainer-->
+
+
+
+             <div class="clear"></div>
+          </div><!--close of contentgrid-->
+        </div><!--close of grid-->
+   <!---------------------------------------------------------------------------------------------------------------------------->
+ 
+ 
+  <!-----------------Sold Tickets Vs Available Tickets report---------------------------------------------------------------->
+       
+
+       
+       
+        <!--Sold Tickets Vs Available Tickets---------------->
+        <div class="grid-1 portlet" style="width:48%;  padding-right:0px; float:left">
+          <div class="title-grid portlet-header">Sold Tickets Vs Available Tickets</div>
+          <div class="content-gird portlet-content"> 
+
+
+
+  <div id="chartContainer3" style="height: 300px; width: 100%; margin-top:0px;">
+  
+  <apex:outputPanel > 
+                    <!-- Modified by Thirupathi -->  
+                    <apex:chart data="{!soldinn}" width="100%" height="300">
+                        <apex:axis type="Category" position="bottom" fields="TIC" title="Ticket Types" minimum="0">
+                          <apex:chartLabel rotate="90"/>
+                          </apex:axis>
+                        <apex:axis type="Numeric" position="left" fields="Sold" title="Total No.Of Tickets" minimum="0" steps="1">
+                        </apex:axis>
+                        <apex:barSeries orientation="vertical" axis="bottom" xField="TIC" yField="Sold,Available" colorSet="#369ead,#F0F0F0" colorsProgressWithinSeries="false" stacked="true" showInLegend="true" >
+                        <apex:chartLabel display="outside" field="Sold"/> 
+                        <apex:chartLabel display="outside" field="Available"/> 
+                       
+        <apex:chartTips height="20" width="120"/> 
+                        </apex:barseries>
+                        <apex:legend position="right"/>
+                    </apex:chart>        
+             
+                </apex:outputPanel>
+
+
+  </div><!--close of chartcontainer-->
+          
+            <!--------------------------------------------------------------------------------->
+            
+            <div class="clear"></div>
+          </div><!--close of contentgrid-->
+        </div><!--close of grid-->
+        <!------------------------------------------------------>
+        
+               <!-----------------Expected Revenue Vs Generated Revenuereport---------------------------------------------------------------->
+       
+
+       
+       
+        <!--Expected Revenue Vs Generated Revenue Tickets---------------->
+        <div class="grid-1 portlet" style="width:48%;  padding-right:0px; float:left">
+          <div class="title-grid portlet-header">Expected Revenue Vs Generated Revenue (Exclude BoothLead Fee)</div>
+          <div class="content-gird portlet-content"> 
+
+
+
+  <div id="chartContainer4" style="height: 260px; width: 100%; margin-top:0px;">
+ <div style="margin-top:40px;">
+ <apex:outputPanel >
+            
+         
+            
+             <apex:chart data="{!exinner}" width="80%" height="200"  theme="Category2">               
+                <apex:pieSeries dataField="geamount" labelField="type" donut="50"  colorSet="#4f81bc,#c0504e" > 
+                <apex:chartTips width="200"  />
+               <apex:chartLabel display="middle" field="geamount"/>               
+                </apex:pieSeries>
+                <apex:legend position="right"/>
+                </apex:chart>   
+            
+            
+            </apex:outputPanel>  
+            </div>   
+  </div><!--close of chartcontainer-->
+          
+            <!--------------------------------------------------------------------------------->
+            
+            <div class="clear"></div>
+          </div><!--close of contentgrid-->
+        </div><!--close of grid-->
+        <!------------------------------------------------------>
+        </div><!--close of coloumn--->
+        
+        
+ <!--------------------------------------------END OF DASHBOARDS-------------------------------------------->      
+ 
+  </c:myComponent>
+   
+ 
+</apex:page>
+
+<!-- 
+
+<apex:outputText value="{0, number, $###,###,##0.00}">  
+             <apex:param value="" />
+         </apex:outputText>
+-->

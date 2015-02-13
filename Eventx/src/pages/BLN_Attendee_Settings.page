@@ -1,0 +1,890 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" id="thePage" controller="BLN_Attendee_SettingsCon">
+ 
+  
+  <c:myComponent BLN_UtillDisplayLinks="{!myticket}" id="cmp">
+  <c:AjaxLoader LoaderImage="{!$Resource.AjaxLoaderImage}"/>
+
+  <!-- ----------------------------------------- Accordian --------------------------------------------- -->
+   <style>
+ 
+ .TabbedPanelsTabSelected {
+background-color: #ffffff;
+border-bottom: 1px solid #fff;
+-moz-box-shadow: inset 0 2px #2a90d3;
+-webkit-box-shadow: inset 0 2px #2a90d3;
+box-shadow: inset 0 2px #2a90d3;
+}
+ 
+ 
+ 
+ input.styled {
+    display: none;
+}
+select.styled {
+    position: relative;
+    width: 190px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 5;
+}
+.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+   .login-content1nav {
+          position: relative;
+         
+          right: 0;
+          z-index: 999; background-color:#7f8c8d; opacity:3;
+         
+        }
+ nav .login-trigger1 {
+            border-top: 1px solid #fff;
+            border-bottom: 1px solid #D0D0D0;
+            border-radius: 0px;
+             height: 33px;
+            display:block;
+            cursor:pointer;
+        }
+   
+  .login-triggers1{
+         display: inline-block;
+          *display: inline;
+          *zoom: 1;
+          height: 13px;
+          width:200px;
+          font-family:cuprum;
+          font-size:15px;
+          line-height: 18px;
+          padding: 0 18px;
+          text-decoration: none;
+          color:#000;
+          cursor:pointer;
+          padding-top:8px;
+          padding-bottom:8px;
+        
+          -webkit-border-radius: 0px;
+          -moz-border-radius: 0px;
+          border-radius: 0px;
+          // background-color:#F5f5f5;
+         background: url({!URLFOR($Resource.MyTickets, 'images/ul_playlist_li.png')}) repeat-x center bottom #F5F5F5;
+          border: 0px solid #292f34; 
+       
+        
+       
+       }
+       .login-content1 li div  {
+            color:#FFF;
+            text-decoration:none;
+            font-size:16px;
+            font-family:cuprum;
+                padding:10px;
+                cursor:pointer; 
+                
+            display:block;
+        
+        }
+         .login-content1 li img  {
+            padding-right:2px;
+            padding-top:1px;
+            float:left;
+        }
+        
+        nav li .login-content1 {
+          right: 0;
+          width:auto;  
+          
+        }
+        
+        .login-content1 li:hover {
+            background-color:#247dba;
+        }
+  
+.button-a.blue {
+background-image: url({!URLFOR($Resource.MyTickets, 'images/button.png')});
+background-position: 0px -60px;
+border: 1px solid #438ac2;
+}
+     
+.selected { background-color: #E0EFF7;font-weight:normal; } 
+// -------------------------------------------------  FOR REGPAGE --------------------------------------------------- 
+dl.Zebra_Accordion { width: 100%; font-family: Arial, sans-serif;  }
+dl.Zebra_Accordion dt { background: #A3A8A8;cursor:pointer; font-size: 13px; border-bottom:1px #ccc dotted; color: #FFF; font-weight: bold; padding: 5px }
+dl.Zebra_Accordion dd { background: #EFEFEF; height:auto; padding: 15px; margin: 1px 0;  }
+
+dl.Zebra_Accordion dt.Zebra_Accordion_Expanded { background:#bdc3c7;}
+#titleheadings{width:100%; margin-bottom:5px; height:30px; font-size:22px;text-shadow: 0 1px 1px rgba(0,0,0,.25); color:#247dba; font-family:cuprum; border-bottom:1px 
+
+solid #E4E4E4; }
+#attendee-settings-box{width:99%; background-color:#F7F7F7;margin:0px auto;margin-top:5px;}
+#leftpanel-td{width:23%;background: transparent url(registrationsettings/leftdivshadow.png)repeat-y;}
+#tickets-left{ margin-top:5px;}  
+#ticketssettings-right{}
+#ticketsname{ border-collapse:collapse; margin-top:0px;}
+#ticketsname tr{ cursor:pointer;}
+#ticketsname td{ padding:0px;border-bottom:0px solid #E4E4E4;/*  background: url(images/onclickarrow.png) no-repeat 100% 50% ;*/ 
+text-indent:0%;text-shadow: 0 1px 1px rgba(0,0,0,.25); font-size:15px; font-family: Arial, Helvetica, sans-serif;color:#247dba; text-decoration:underline;line-height:30px;}
+
+#line{width:94%; height:1px; border-bottom:1px solid #E4E4E4;}  
+
+a, a:hover, a:visited, a:link {
+color: none;
+}
+
+   dl.Zebra_Accordion { width: 100%; font-family: Arial, sans-serif;  }
+    dl.Zebra_Accordion dt { background: #A3A8A8;cursor:pointer; font-size: 13px; border-bottom:1px #ccc dotted; color: #FFF; font-weight: bold; padding: 5px }
+    dl.Zebra_Accordion dd { background: #EFEFEF; height:auto; padding: 15px; margin: 1px 0;  }
+    
+    dl.Zebra_Accordion dt.Zebra_Accordion_Expanded { background:#bdc3c7;}
+    #titleheadings{width:100%; margin-bottom:5px; height:30px; font-size:22px;text-shadow: 0 1px 1px rgba(0,0,0,.25); color:#247dba; font-family:cuprum; border-
+
+bottom:1px solid #E4E4E4; }
+    #attendee-settings-box{width:99%; background-color:#F7F7F7;margin:0px auto;margin-top:5px;}
+    #leftpanel-td{width:23%;background: transparent url({!URLFOR($Resource.MyTickets, 'images/leftdivshadow.png')})repeat-y;}
+    #tickets-left{ margin-top:5px;}  
+    #ticketssettings-right{}
+    #ticketsname{ border-collapse:collapse; margin-top:0px;}
+    #ticketsname tr{ cursor:pointer;}
+    #ticketsname td{ padding:0px;border-bottom:0px solid #E4E4E4;/*  background: url(images/onclickarrow.png) no-repeat 100% 50% ;*/ text-indent:3.5%;text-shadow: 0 
+
+1px 1px rgba(0,0,0,.25); font-size:15px; font-family: Arial, Helvetica, sans-serif;color:#247dba; text-decoration:underline;}
+    #line{width:94%; height:1px; border-bottom:1px solid #E4E4E4;}  
+
+     .selected {
+       font-size:12px;
+       background:url({!URLFOR($Resource.MyTickets, 'images/onclickarrow.png')}) no-repeat 0% 50%;
+       text-shadow:none;
+       text-decoration:none;
+      }
+     
+     .Buyer{
+       font-weight:bold;
+       font-size:12px;
+       color:#1abc9c;
+        text-shadow:none;
+         text-decoration:none;
+        }
+     
+     .allAttendee{
+       font-weight:bold;
+       font-size:12px;
+       color:#e54d26;
+        text-shadow:none;
+         text-decoration:none;
+     }
+     
+      .selecetdcls{
+        color:#ff0000;     
+      }
+     
+      .nonselected{
+        color:#000000;  
+      }
+    
+    
+    
+   .groupName{
+   background: #A3A8A8;
+cursor: pointer;
+font-size: 13px;
+border-bottom: 1px #ccc dotted;
+color: #FFF;
+font-weight: bold;
+padding: 5px;
+   
+   } 
+    
+  </style>  
+   
+   <script>
+     var selectedTicketValjs;
+     var selecteditempoolValjs;
+     </script>
+   <!-- ------------------------------------------------- accordian end ------------------------------------------- -->
+ <apex:form id="frm" >
+   
+    <!--<script type="text/javascript" src="{!URLFOR($Resource.Zebra, 'js/zebra_accordion.srcatt.js')}"></script>-->
+     <script type="text/javascript" src="{!URLFOR($Resource.Zebra, 'js/zebra_accordion.srcatt.js')}"></script>
+      <script >
+       $(document).ready(function() {
+        var myAccordion = new $.Zebra_Accordion($('.Zebra_Accordion'));
+      });
+      </script>
+      <script type="text/javascript" src="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabssss.js')}"></script>
+       <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabsss.css')}"/>
+  
+   <script>
+      
+         
+         var defaults= document.getElementsByClassName("clsanch"); 
+          for(var r=0;r < defaults.length ;r++){
+           if(selectedTicketValjs != null && selectedTicketValjs !=""){
+           
+                 if(selectedTicketValjs==defaults[r].id){
+                  display(defaults[r]);
+               }
+          }else{
+           
+              if(selecteditempoolValjs != null){
+                 var anch3 = document.getElementsByClassName("poolIdscls"); // getting ticket id for heighlight the package
+                  for(var e=0; e < anch3.length; e++){
+                 
+                     if(selecteditempoolValjs==anch3[e].id ){
+                     // downloadalert('111 ' +selecteditempoolValjs +'222 '+anch3[e].name);
+                        if(defaults[r].id=== anch3[e].name){
+                             display(defaults[r]);
+                         }
+                     } 
+                  }
+              }else{        
+                 display(defaults[0]);
+                 break ;
+              }
+            }
+        }
+   
+   
+   /*if(selecteditempoolValjs !=null ){ 
+     var anch3 = document.getElementsByClassName("poolIdscls");
+       for(var e=0; e < anch3.length; e++){
+         if(selecteditempoolValjs===anch3[e].id ){
+            displayPool(anch3[e]);
+            document.getElementById(anch3[e].id).style.color='#000000'
+           } 
+        }
+     }
+   */
+   
+   
+   
+ // Default highlet ticket
+    window.onload=function() { 
+       var defaults= document.getElementsByClassName("clsanch"); 
+          for(var r=0;r < defaults.length ;r++){
+           if(r==0){
+               display(defaults[r]);
+               }
+          }
+        
+      var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
+      document.getElementById(TabbedPanels1).defaultTab=1;
+   }
+   
+     
+   // Action click on ticket Name
+   
+      function display(vax){
+         document.getElementById('ForitemDisplay').style.display='block';
+         document.getElementById('ForitemPoolDisplay').style.display='none';
+        
+       
+         selectedTicketValjs = vax.id;
+         var divs = document.getElementsByClassName("setcls");    // hiding all the checkbox divs 
+          for(var i = 0; i < divs.length; i++){
+             document.getElementById(divs[i].id).style.display='none';
+          }
+          ucheckCheckboxes();
+          
+         var x = vax.id+'reg';
+         document.getElementById(x).style.display='block'; // Showing selected checkboxs div
+       
+       document.getElementById('{!$Component.thePage:cmp:commoncomponent:frm:selecetedTic}').value=vax.id;
+          var y = vax.id+'chk';
+          var checkboxvalue= document.getElementsByClassName(y);
+          
+           for(var i = 0; i < checkboxvalue.length; i++){
+            if(y ===checkboxvalue[i].className){
+             document.getElementById(checkboxvalue[i].id).checked =true;
+           }
+        }
+        
+        var anch = document.getElementsByClassName("clsanch");
+           for(var e=0; e < anch.length; e++){
+            if(e>0){
+             if(document.getElementById(anch[e].id+'type').innerHTML=='Package'){
+                 document.getElementById(anch[e].id+'pool').style.display='none';//a0tc0000002Qzq4AACpool
+             }
+           }
+              
+           if(anch[e].id===vax.id){
+             document.getElementById(anch[e].id+'cls').className = 'selected';
+           } else{
+                 document.getElementById(anch[e].id+'cls').className = '';
+           }
+         }  
+         
+        // Make checkbox true for selected ticket 
+           var ra = vax.id+'radio';
+            
+             var radioEn= document.getElementById(ra).innerHTML;
+           
+           
+           if(radioEn==='Collect info from All Attendees'){
+             var chkRadio =  document.getElementById('allAtt');
+             chkRadio.checked =true;
+           }else{
+             var chkRadio =  document.getElementById('colbuyer');
+             chkRadio.checked =true;
+           }
+           document.getElementById('defaultId').checked=false;
+         
+         // Display and hide itemPools
+        
+         if(document.getElementById(vax.id+'type').innerHTML==='Package' && document.getElementById(vax.id+'radio').innerHTML !='Collect info from Buyers only'){
+              document.getElementById(vax.id+'pool').style.display='block';
+         }
+      
+      
+          var anch3 = document.getElementsByClassName("poolIdscls");
+           for(var e=0; e < anch3.length; e++){
+              document.getElementById(anch3[e].id).style.color='#000000';//a0tc0000002Qzq4AACpool
+            }
+      
+      }
+      
+      
+      // Uncheck after select other ticket
+         function ucheckCheckboxes(){
+            var inputCheckBox1 = document.getElementsByTagName("input");                  
+            for(var i=0; i<inputCheckBox1.length; i++){    
+                if(inputCheckBox1[i].className.indexOf('chk')!=-1){ 
+                  document.getElementById(inputCheckBox1[i].id).checked =false;                
+                 }
+              }
+          }
+      
+     
+    function show(){
+     var e = document.getElementById("dis");
+       if(e.style.display == 'block')
+          e.style.display = 'none';
+       else
+          e.style.display = 'block';
+  }     
+      
+     function Save(){
+       var allAnchors = document.getElementsByName("imgsel");
+       var selectedStrVal ;
+        for (var i = 0; i < allAnchors.length; i++) {
+        var button = allAnchors[i];
+           if (button.checked) {
+              selectedStrVal  = document.getElementById(allAnchors[i].id).value;
+           }
+       }  
+      saveValues(selectedStrVal);
+     
+
+    } 
+    
+    // Accordian related 
+        function addAccor(vg,vab){
+          var tf= document.getElementById(vg.id);
+           if(tf.checked){
+             Addacc(vab);
+          }else{
+            Delacc(vab);
+          }
+            
+       }
+       
+       // Check include automatically while we select required
+        function checkAll(cb) {   
+     var inputElem = document.getElementsByTagName("input");  
+     var nai = cb.id;
+          for(var i=0; i<inputElem.length; i++){
+              if(inputElem[i].id==nai ) {                           
+                inputElem[i-1].checked = true;
+              }
+           }
+    }
+    
+    function check(cb){
+       var inputElem = document.getElementsByTagName("input");  
+       var nai = cb.id;
+          for(var i=0; i<inputElem.length; i++){  
+           if(inputElem[i].id==nai){                 
+              inputElem[i+1].checked = false;
+           }
+         }
+    }
+    
+       
+     function selectAll(vf){
+       if(vf.checked){
+           var inputCheckBox2 = document.getElementsByTagName("input");                  
+               for(var i=0; i<inputCheckBox2.length; i++){    
+                if(inputCheckBox2[i].className.indexOf('chk')!=-1){ 
+                   document.getElementById(inputCheckBox2[i].id).checked =true;                
+                
+                 }
+              }
+       }else{
+              var inputCheckBox2 = document.getElementsByTagName("input");                  
+               for(var i=0; i<inputCheckBox2.length; i++){    
+                  if(inputCheckBox2[i].className.indexOf('chk')!=-1){ 
+                      if(selectedTicketValjs+'chk' != inputCheckBox2[i].className){
+                        document.getElementById(inputCheckBox2[i].id).checked =false;  
+                    }        
+                 }
+              }
+          }    
+     }
+       
+       
+      //Show and hide pools according to setting
+        function poolHandle(vol){
+          if(selectedTicketValjs!=""){
+           if(document.getElementById(selectedTicketValjs+'type').innerHTML==='Package' && vol.value==='Collect info from All Attendees'){
+                document.getElementById(selectedTicketValjs+'pool').style.display='block';
+               // alert('For package you can not apply "Collect info from All Attendees"');
+                
+                 //document.getElementById("colbuyer").checked= true;
+               
+           }else{
+             // document.getElementById(selectedTicketValjs+'pool').style.display='none';
+           
+           }
+          }
+      }
+        
+       
+       
+       
+    function displayPool(vap){
+       
+          var anch2 = document.getElementsByClassName("setclsPool");
+           for(var e=0; e < anch2.length; e++){
+              document.getElementById(anch2[e].id).style.display='none';//a0tc0000002Qzq4AACpool
+           }
+           
+          var anch3 = document.getElementsByClassName("poolIdscls");
+           for(var e=0; e < anch3.length; e++){
+             if(anch3[e].id == vap.id){
+                 document.getElementById(anch3[e].id).style.color='#FF0000';//a0tc0000002Qzq4AACpool
+             }else{
+                document.getElementById(anch3[e].id).style.color='#000000';//a0tc0000002Qzq4AACpool
+             }
+           } 
+            
+            
+        var bg = vap.id+'reg';
+        document.getElementById(bg).style.display='block';
+        
+        
+        document.getElementById('ForitemDisplay').style.display='none';
+        document.getElementById('ForitemPoolDisplay').style.display='block';
+        selectedTicketValjs = "";
+        
+        
+        // Apply setting to Pool 
+         var radioEnpool = document.getElementById(vap.id+'radio').innerHTML;
+         if(radioEnpool ==='Collect info from All Attendees'){
+             var chkRadio =  document.getElementById('allAtt');
+             chkRadio.checked =true;
+           }else{
+             var chkRadio =  document.getElementById('colbuyer');
+             chkRadio.checked =true;
+           }
+          selecteditempoolValjs = vap.id;
+       }   
+     
+     
+     function SavePool(){
+      var allAnchors1 = document.getElementsByName("imgsel");
+       var evetp;
+        for (var i = 0; i < allAnchors1.length; i++) {
+        var button = allAnchors1[i];
+        if (button.checked) {
+          evetp= document.getElementById(allAnchors1[i].id).value;
+        }
+      }
+      
+      savePool(selecteditempoolValjs,evetp);
+     
+   }  
+     
+    </script>
+    
+    
+    
+    
+  <script >
+      /* $(document).ready(function() {
+        var myAccordion = new $.Zebra_Accordion($('.Zebra_Accordion'));
+      });*/
+      
+      
+     function shoeHideDivs(vf){
+       var dfs = vf;
+     
+       if(dfs =='topdiv'){
+        
+          document.getElementById('defaultDiv').style.display='none';
+          document.getElementById('topdiv').style.display='block';
+          
+       }else{
+      
+          document.getElementById('defaultDiv').style.display='block';
+          document.getElementById('topdiv').style.display='none';
+       } 
+        
+     } 
+      
+      
+    </script>
+      <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/functions.js')}"></script>
+   
+   <apex:inputHidden value="{!selectedTicket}" id="selecetedTic"/>
+    <apex:actionFunction name="saveValues" action="{!Save}" reRender="frm" status="AjaxLoader">
+      <apex:param value="" name="eveType" assignTo="{!eveType}"/>
+    </apex:actionFunction>
+   
+     
+     <apex:actionFunction name="Addacc" action="{!AddAccordian}" reRender="frm" status="AjaxLoader">
+      <apex:param value="" name="gn"/>
+    </apex:actionFunction>
+  
+  
+    <apex:actionFunction name="Delacc" action="{!deleteAccordian}" reRender="frm" status="AjaxLoader">
+      <apex:param value="" name="gn"/>
+    </apex:actionFunction>
+  
+  
+  <apex:actionFunction name="savePool" action="{!savePool}" reRender="frm" status="AjaxLoader">
+      <apex:param value="" name="gnp"/>
+      <apex:param value="" name="eveTypePool"/>
+    </apex:actionFunction>
+  
+  <!-- -------------------------------------------- Additional Settings Start------------------------------------------- -->
+  
+      <div  style="border:0px solid red;width:100%;">
+         <table cellpadding="0" cellspacing="0" id="titleheadings" border="0" style="background-color:#F7F7F7"> 
+           <tr> <td style="width:80%">Ticket Settings 
+          </td><td style="font-size:16px;text-align:right;width:30%">
+         
+          <div style="height:26px; border-bottom:0px solid #E4E4E4;float:right;text-align:left;">
+             <span class="login-trigger2" onclick="show();"> <span class="login-triggers1" style="background: url({!URLFOR($Resource.MyTickets,'images/ul_playlist_li.png')}) repeat-x center bottom #F5F5F5; "> 
+               <span id="user-panel-check" style="background-image:url({!URLFOR($Resource.MyTickets, 'images/checkBlack.png')});margin-left:50px;"></span>
+                 <span id="user-panel-title ">Additional Settings</span> 
+                   </span> </span>
+                  <div class="login-content1nav" id="dis" style="width:100%;display:none;color:#ffffff;">
+                  <span>
+                  
+                   
+                   <table style="width:100%;" cellpadding="0" cellspacing="0">
+                    
+                   
+                   <apex:repeat value="{!inngp}" var="gpval" id="chk" >
+                      <tr>
+                        <td> 
+                         <apex:inputCheckbox value="{!gpval.selectChe}" id="checkboxid" disabled="{!IF(gpval.groupNa=='Basic Information',true,false)}"  onchange="addAccor(this,'{!gpval.groupNa}');" />
+                        </td> <td> {!gpval.groupNa} </td>
+                      </tr>
+                     </apex:repeat>   
+                     </table>
+                 </span>
+                   </div>
+                 
+         </div>
+          </td></tr>
+          
+          
+      
+          
+          </table>
+     
+
+        </div><!--close of titleheadings--><br/>
+  
+  
+  <!-- -------------------------------------------- Additional Settings End------------------------------------------- -->
+  
+  <!-- ------------------------------------- radio Buttons Start------------------------------------------ -->
+  
+   <div id="topdiv"  style="font-size:18px;text-shadow: 0 1px 1px rgba(0,0,0,.25);color: #247dba;font-family: cuprum; border:0px #000000 solid;margin-top:10px;">
+   <table width="99%" border="0">
+  <tr>
+   <td id="titleheadings"  style="float:left; float:none; text-indent:1%; width:15%; border-bottom:0px;  color:#000;">&nbsp;</td>
+    
+     <td width="85%" style="font-size:16px;float:left;" > 
+         <input type="radio" name="imgsel"  value="Collect info from All Attendees" id="allAtt" onclick="poolHandle(this);">Collect info from All Attendees</input> 
+         <input type="radio" name="imgsel"  value="Collect info from Buyers only" id="colbuyer" onclick="poolHandle(this);" >Collect info from Buyers only </input>
+      </td>
+   
+  </tr>
+</table>
+  </div> <!--close of topdiv-->
+  
+  
+   <div id="defaultDiv"  style="font-size:18px;text-shadow: 0 1px 1px rgba(0,0,0,.25);color: #247dba;font-family: cuprum; border:0px #000000 solid;margin-top:10px;display:none">
+   <table width="99%" border="0">
+  <tr>
+   <td id="titleheadings"  style="float:left; float:none; text-indent:1%; width:15%; border-bottom:0px;  color:#000;">&nbsp;</td>
+    
+     <td width="85%" style="font-size:16px;float:left;"  > 
+        <apex:selectRadio id="chooseColor" value="{!selectedOPtion}"  layout="lineDirection">
+            <apex:selectOption itemValue="Collect info from All Attendees" itemLabel="Collect info from All Attendees"/>
+            <apex:selectOption itemValue="Collect info from Buyers only" itemLabel="Collect info from Buyers only"/>
+            
+        </apex:selectRadio>
+     </td>
+   
+  </tr>
+</table>
+  </div> <!--close of topdiv-->
+  
+  <BR />
+    
+  
+  <!-- ------------------------------------- radio Buttons End------------------------------------------ -->
+  <div id="TabbedPanels1" class="TabbedPanels" style="" >
+                    <ul class="TabbedPanelsTabGroup">
+                      <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555; font-weight:300;" onclick="shoeHideDivs('topdiv')">Current Ticket Settings</li>
+                      <li class="TabbedPanelsTab  " tabindex="0" style="outline:none; focus:none;color: #555;font-weight:300;" onclick="shoeHideDivs('defaultDiv')">Default Ticket Settings</li>
+                   </ul>
+              
+                 <div class="TabbedPanelsContentGroup">
+                
+                  <div class="TabbedPanelsContent" style="min-height:110px;">
+               
+               
+                  <div id="tickets table" style="width:97%; margin-left:2%; padding-bottom:90px; padding-top:0px;">
+                          
+                         
+ <div id="attendee-settings-box"> 
+   <table style="width:100%;" cellpadding="0" cellspacing="0">
+   <tr>
+    <!-- ------------------------------------------------ Left side View ------------------------------------------------- --> 
+        <td style="width:23%;" id="leftpanel-td" valign="top">
+          <div id="titleheadings" style=" width:95.2%;">
+                 <span style="margin-left:3.5%;">Tickets</span>
+                 </div><!--close of titleheadings-->  
+          <div id="tickets-left">
+              <table id="ticketsname" width="100%" border="0" cellpadding="0" cellspacing="0" style="line-height:10px;padding:0px;margin:0px;width:100%;">
+             <tr>
+               <td id="t1"><input type="checkbox" id="defaultId" onclick="selectAll(this);" />&nbsp; Select All </td>
+            </tr>
+                 <tr>
+                       <td style="padding:0px;" colspan="2">
+                       <div id="line" ></div>
+                       </td>
+                       </tr>
+                
+              <apex:repeat value="{!Items}" var="item">
+               <tr style="display:{!IF(item.iteminn.item_name__c=='Default Ticket Setttings','none','')}">
+                 <td valign="top">
+                  <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
+                  
+                  <tr id="{!item.iteminn}cls">
+                   <td style="width:2%;"><apex:inputCheckbox value="{!item.selecetdValueInn}" styleClass="{!item.iteminn}chk" id="inp"/>  </td>
+                    <td valign="top" style="width:97%;">
+                     <a href="#" id="{!item.iteminn.id}" class="clsanch" onclick="display(this);">{!item.iteminn.item_name__c}</a> 
+                      <div id="{!item.iteminn.id}radio" style="display:none">{!item.iteminn.Ticket_Settings__c}</div>  
+                      <div id="{!item.iteminn.id}type" style="display:none">{!item.iteminn.item_type__r.Name}</div>  
+                    </td> </tr>
+                    
+                      <tr>
+                       <td style="padding:0px;" colspan="2">
+                       <div id="line" ></div>
+                       </td>
+                       </tr>
+                       
+                     <tr > 
+                      <td colspan="2"> 
+                         <table ><tr><td>
+                           <div style="display:none;" id="{!item.iteminn.id}pool" >   
+                             <apex:repeat value="{!item.itemPoolsInn}" var="pools">
+                                <a href="" onclick="displayPool(this)"  id="{!pools.id}" name="{!item.iteminn.id}"  class="poolIdscls">
+                                    {!pools.Item_Pool_Name__c}   </a><br />
+                                    <div id="{!pools.id}radio" style="display:none">{!pools.Ticket_Settings__c}</div> 
+                               </apex:repeat> </div>
+                           </td> </tr> </table>    
+                       </td> </tr> 
+                   
+                     </table>
+                  </td>
+                  
+                  
+                  </tr>
+               
+            </apex:repeat> </table>
+           </div><!--close ofattendee-settings-left--> 
+          </td>
+  
+  <!-- ------------------------------------------------ Right side View ------------------------------------------------- --> 
+  <td style="width:73%">
+      
+        
+   <div id="ForitemDisplay" class="abcd" style="display:none;">
+    <apex:repeat value="{!Items}" var="tc">
+    
+       <apex:outputText rendered="{!IF(tc.iteminn.item_name__c=='Default Ticket Setttings',false,true)}" >
+       <div id="{!tc.iteminn.id}reg" class="setcls" style="display:none;">
+       
+           <dt class="groupName"><span style="margin-right:5px;text-align:center;">
+           {!tc.iteminn.item_name__c}</span>
+           </dt>
+     
+    <!-- <dl class="Zebra_Accordion">     -->
+      <apex:repeat value="{!tc.gpinnList}" var="re">
+       <dt class="groupName"><span style="margin-right:5px;">
+           <apex:image url="{!URLFOR($Resource.MyTickets, 'images/general.png')}" style=" margin-bottom:-4px;"/>{!re.groupName}  </span> </dt>
+        
+            <dd style="padding-bottom:20px;">  <table style="width:100%;">  
+             <tr> <td style="width:40%;"> &nbsp; </td> 
+              <td style="width:30%;" >Include Field </td>  <td style="width:30%;"> Required Field </td>    </tr> 
+                 <apex:repeat value="{!re.regList}" var="reg">
+                  <tr >
+                    <td>{!reg.Label_Name__c} </td>
+                   <td>
+                   <apex:inputField value="{!reg.Included__c}"  id="rec" onclick="check(this)" rendered="{!If(reg.Label_Name__c!='First Name' && reg.Label_Name__c!='Last Name' && reg.Label_Name__c!='Email' ,true,false)}"/>
+                  <apex:outputField value="{!reg.Included__c}"  id="rec1"  rendered="{!If(reg.Label_Name__c=='First Name' || reg.Label_Name__c=='Last Name' || reg.Label_Name__c=='Email' ,true,false)}"/>
+                  
+                   </td>
+                  <td><apex:inputField value="{!reg.Required__c}" id="hii" onclick="checkAll(this)" rendered="{!If(reg.Label_Name__c!='First Name' && reg.Label_Name__c!='Last Name' && reg.Label_Name__c!='Email',true,false)}"/> 
+                  <apex:outputField value="{!reg.Required__c}" id="hii1" rendered="{!If(reg.Label_Name__c=='First Name' || reg.Label_Name__c=='Last Name' || reg.Label_Name__c=='Email',true,false)}"/> 
+               
+                  </td>
+                </tr>
+             </apex:repeat>
+             
+             
+             </table></dd>
+         
+       </apex:repeat><!-- </dl>-->
+    
+       </div>
+      </apex:outputText>   
+    </apex:repeat>
+    <div style="width:100%;float:right;">
+     <button type="button"  onclick="Save();"  style="float:right;" id="buto">Save</button>
+     </div>
+    
+    
+      </div > 
+    
+  <!-- -------------------------------- Dispaly Ticket Settings End-------------------------------------------- -->  
+   
+  
+    <div id="ForitemPoolDisplay" class="abcd" >
+     <apex:repeat value="{!ItemPools}" var="tcpo">
+        <div id="{!tcpo.itpool.id}reg" class="setclsPool" style="display:none;">
+        <dt class="groupName"><span style="margin-right:5px;text-align:center;">
+           {!tcpo.itpool.Item_Pool_Name__c}  </span> </dt>
+     
+        
+          <apex:repeat value="{!tcpo.gpinnList}" var="rep">
+           <dt class="groupName"><span style="margin-right:5px;">
+           <apex:image url="{!URLFOR($Resource.MyTickets, 'images/general.png')}" style=" margin-bottom:-4px;"/>{!rep.groupName}  </span> </dt>
+     
+             <!-- <tr> <td colspan="3" style="background-color:#CCCCCC;"> {!re.groupName} </td></tr> -->
+            <table style="width:100%;">
+             <tr> <td style="width:40%;"> &nbsp; </td> 
+              <td style="width:30%;" >Include Field </td>  <td style="width:30%;"> Required Field </td>    </tr> 
+                 <apex:repeat value="{!rep.regList}" var="reg">
+                  <tr >
+                    <td>{!reg.Label_Name__c} </td>
+                   <td>
+                   <apex:inputField value="{!reg.Included__c}"  id="rec" onclick="check(this)" rendered="{!If(reg.Label_Name__c!='First Name' && reg.Label_Name__c!='Last Name' && reg.Label_Name__c!='Email' ,true,false)}"/>
+                  <apex:outputField value="{!reg.Included__c}"  id="rec1"  rendered="{!If(reg.Label_Name__c=='First Name' || reg.Label_Name__c=='Last Name' || reg.Label_Name__c=='Email' ,true,false)}"/>
+                  
+                   </td>
+                  <td><apex:inputField value="{!reg.Required__c}" id="hii" onclick="checkAll(this)" rendered="{!If(reg.Label_Name__c!='First Name' && reg.Label_Name__c!='Last Name' && reg.Label_Name__c!='Email',true,false)}"/> 
+                  <apex:outputField value="{!reg.Required__c}" id="hii1" rendered="{!If(reg.Label_Name__c=='First Name' || reg.Label_Name__c=='Last Name' || reg.Label_Name__c=='Email',true,false)}"/> 
+                </td>
+                </tr>
+             </apex:repeat></table>
+        </apex:repeat> 
+    </div>
+    
+    </apex:repeat>
+      
+   <div style="width:100%;float:right;"> 
+     <button type="button"  onclick="SavePool();" style="float:right;">Save</button></div > 
+   </div > 
+    
+     
+  <!-- -------------------------------------- Display Itempool End ----------------------------------------------- -->      
+  </td>  
+  </tr>
+ </table></div> 
+   </div> 
+              
+   </div> 
+   
+   
+    <!-- ------------------------------------------------ Tab 2 ------------------------------------------------- -->  
+  <div class="TabbedPanelsContent" style="min-height:110px;">
+   <div id="tickets table" style="width:97%; margin-left:2%; padding-bottom:90px; padding-top:0px;">
+   <div id="attendee-settings-box"> 
+    <table style="width:100%;" cellpadding="0" cellspacing="0">
+   <tr>
+   
+  <td style="width:100%">
+       
+   <div id="ForitemDisplay" class="abcd" >
+   
+    
+   
+    <apex:repeat value="{!innFordefaultTc}" var="tcp">
+    
+       <apex:outputText rendered="{!IF(tcp.iteminn.item_name__c=='Default Ticket Setttings',true,false)}" >
+        
+       <div id="{!tcp.iteminn.id}reg" class="setcls11" >
+       
+           <dt class="groupName"><span style="margin-right:5px;text-align:center;">
+           {!tcp.iteminn.item_name__c} -<span style="color:yellow;"> Any changes to default settings will affect only future tickets.</span> </span>
+           </dt>
+          
+       <apex:repeat value="{!tcp.gpinnList}" var="re">
+            
+       <dt class="groupName"><span style="margin-right:5px;">
+           <apex:image url="{!URLFOR($Resource.MyTickets, 'images/general.png')}" style=" margin-bottom:-4px;"/>{!re.groupName}  </span> </dt>
+        
+          
+         <table style="width:100%;">  
+             <tr> <td style="width:40%;"> &nbsp; </td> 
+              <td style="width:30%;" >Include Field </td>  <td style="width:30%;"> Required Field </td>    </tr> 
+                 <apex:repeat value="{!re.regList}" var="reg">
+                  <tr >
+                    <td>{!reg.Label_Name__c} </td>
+                   <td>
+                   <apex:inputField value="{!reg.Included__c}"  id="rec" onclick="check(this)" rendered="{!If(reg.Label_Name__c!='First Name' && reg.Label_Name__c!='Last Name' && reg.Label_Name__c!='Email' ,true,false)}"/>
+                  <apex:outputField value="{!reg.Included__c}"  id="rec1"  rendered="{!If(reg.Label_Name__c=='First Name' || reg.Label_Name__c=='Last Name' || reg.Label_Name__c=='Email' ,true,false)}"/>
+                  
+                   </td>
+                  <td><apex:inputField value="{!reg.Required__c}" id="hii" onclick="checkAll(this)" rendered="{!If(reg.Label_Name__c!='First Name' && reg.Label_Name__c!='Last Name' && reg.Label_Name__c!='Email',true,false)}"/> 
+                  <apex:outputField value="{!reg.Required__c}" id="hii1" rendered="{!If(reg.Label_Name__c=='First Name' || reg.Label_Name__c=='Last Name' || reg.Label_Name__c=='Email',true,false)}"/> 
+                </td>
+                </tr>
+             </apex:repeat></table>
+         
+       </apex:repeat>
+    
+       </div>
+      </apex:outputText>   
+    </apex:repeat>
+    
+    <div style="width:100%;float:right;">
+    <apex:commandButton value="Save" action="{!saveDefultTicketSet}" style="float:right;" status="AjaxLoader"/>
+     
+     </div>
+    
+      </div > 
+    
+   
+  </td>  
+  </tr>
+ </table></div>
+              </div>   </div>  </div>
+      </div>
+     
+ <script>
+   var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
+      document.getElementById(TabbedPanels1).defaultTab=1;
+  </script> 
+  
+  </apex:form>
+      </c:myComponent> 
+</apex:page>

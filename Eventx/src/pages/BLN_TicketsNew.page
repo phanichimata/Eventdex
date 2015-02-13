@@ -1,0 +1,263 @@
+<apex:page standardController="BLN_Event__c" extensions="BLN_ReUse_EventsEditCon" showHeader="false"  standardStylesheets="false" >
+   <apex:stylesheet value="{!URLFOR($Resource.createevents,'createevents/css/tables.css')}"/>
+   <apex:stylesheet value="{!URLFOR($Resource.createevents,'createevents/css/style-button.css')}"/>   
+     
+    <c:myComponent BLN_UtillDisplayLinks="{!Ticket}">
+   
+
+            
+   
+<!--start of ticket dynamic table-->
+         <div id="dynamictickets">
+         
+          <!--create package button-->
+            <div id="package" style=" float:right; margin:0px; padding:0px; margin-right:.8%; margin-top:0px; margin-bottom:10px; ">
+        <input type="button" class="button-a blue"   onClick="showpackage('package1','dynamictickets','true')"   value="Create Package" style=""  />
+          
+        
+    
+              </div><!--close of createpackagebutton-->
+                <!----------------------------------------->
+             <!-- <div id="boothleadsprodcontents" style="display:none; margin-bottom:10px;">
+              <table width="75%" border="0" >
+  <tr style=" background-color:#EFEFEF;">
+  <apex:variable var="i" value="{!1}"/>
+  <apex:repeat value="{!eventSelectOptions}" var="eveOpt">
+    <td width="2%"><input type="checkbox" id="chk{!i}" onClick="lrrow(this.id,'{!eveOpt.eventOptionItemType.Item_Type_Number__c}','{!eveOpt.eventOptionItemType.Id}')" /></td>
+      <td width="3%"><span><img src="/servlet/servlet.ImageServer?id={!eveOpt.eventOptionItemType.Event_Options_Image_URL__c}&oid={!$Organization.Id}"/></span></td>
+    <td  width="15%"><h1 style="color: #55585d; font-size:16px; "> {!eveOpt.eventOptionItemType.Event_Option_Desc__c}</h1></td>
+        <apex:variable var="i" value="{!i+1}"/>
+  </apex:repeat>
+    
+  </tr>
+  
+</table>
+
+              
+              </div>--><!--close of boothleadsproductscontent-->
+              
+              <!----------------------------------------------------------------->
+         <!--Statistic-->
+        <div class="grid-1"  >
+                   <table class="display dynamic" id="tickettable" style="width:100%; margin:0px auto;"> <!--    -->
+            <thead>
+              <tr>
+                <!-- <th width="2%"></th>  --> 
+                <th width="32%" style="padding:3px 0px 3px 7px; text-indent:5px;margin-left:5px;">Ticket Name</th>
+                <th width="24%" style="padding:3px 0px 3px 2px;text-indent:5px;">Ticket Pay Type</th>
+                <th width="12%" style="padding:3px 0px 3px 2px;text-indent:5px;">Qty</th>
+                 <!--  <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px;">Min-Qty</th>-->
+                     <!-- <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px;">Max-Qty</th>-->
+                  <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px;">Price</th>
+<!--                <th width="19%" style="padding:3px 0px 3px 2px;text-indent:5px;">Ticket Category</th>-->
+                <th width="9%" style="padding:3px 0px 3px 2px;text-indent:5px; ">More Info</th>
+                <!--<th width="7%" style="padding:3px 0px 3px 2px;text-indent:5px; ">Add Tag</th>-->
+                <th > <a class="add" title="Add new ticket" style="color:#807f7f; text-decoration:none;">
+                <img src="{!URLFOR($Resource.createevents,'createevents/images/addrow.png')}" width="18" height="18" style="margin-right:5px; margin-bottom:-5px;"/>Add Ticket</a>
+                </th>
+              </tr>
+            </thead>
+             <tbody> 
+             
+            
+            <tr>
+              <!-- <td  width="2%" > <apex:image url="{!$Resource.DragButton}"  style="margin-left:-5px;"/> </td> --> 
+              <td><input type="text"   id="one" class="tickfield" name="input_box_one[]" /></td>
+              <td><select class="selectlist" style="outline:none;" >
+                  <apex:variable var="listcou" value="{!0}" id="listcountid"/>
+                  <apex:repeat value="{!paymentSelectOptions}" var="paytype">
+                  <apex:variable var="listcou" value="{!listcou+1}"/>
+                  <option value='{!paytype.value}'>{!paytype.label}</option>
+                  </apex:repeat>
+                </select></td>
+              <td><input type='text' class="tickfield" style="width:70%;"  name='input_box_two[]' /></td>
+              
+               <td><input type="text" class="tickfield" id="three" name="input_box_three[]" /></td>
+              
+                   <td style="text-align:center;">
+                   <a onClick="Alert3.render(this.parentNode.parentNode.rowIndex,this.parentNode.parentNode.children[0].children[1].value,this.parentNode.parentNode.children[1].children[0].value,this.parentNode.parentNode.children[2].children[0].value,this.parentNode.parentNode.children[3].children[0].value)"><div id='nwmoreinfodiv' style='margin-right:32%;'><apex:image url="{!URLFOR($Resource.createevents,'createevents/images/addmore.png')}" width="25px" height="25px"/></div></a>
+                  </td>
+                   
+                   
+              <td>
+              <input type="button" class='del' title='Delete Ticket' value='' /></td>
+     
+            </tr>
+            </tbody>
+          
+            
+            
+            
+          </table>
+          </div>
+          <div style="margin-top:20px; margin-right:.5%; margin-bottom:5px; text-align:right;">
+
+<button class="button-a blue" onclick="ticketvalid()" >Save</button>
+&nbsp;&nbsp;
+<button class="button-a dark-blue" >Cancel</button>
+</div>
+<div id="ticketloader" style=" display:none; margin-left:-1%; margin-top:0px;margin-bottom:40px; text-align:center;">
+<img src="{!URLFOR($Resource.createevents,'createevents/images/ajaxloader.gif')}"/>
+
+</div>
+
+          </div>
+          
+
+          <!--End Of Ticket Div-->
+
+          <script>
+          
+   var defaultendtime;
+   var eventmand={};
+   eventmand.EventID='{!selectedEvent}';
+          window.onload = function () { 
+          //Load the Event data
+Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getEvents}',
+            '{!selectedEvent}',
+           function(result, event){
+           
+           Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getTimeZoneValue}',
+            result.End_Date__c,
+           function(resultsd, eventd){
+           defaultendtime=resultsd+' '+result.End_Time__c;
+           });
+           
+           },
+            {escape: true}
+        );
+          mask1();
+          getEventTags();
+   }
+   
+  
+   
+   
+   
+   
+  </script>
+
+    
+    <!--<c:TicketCommonComponent eventids="{!selectedEvent}"/>-->
+    <apex:include pageName="BLN_TicketCommonPage"/>
+    <apex:include pageName="BLN_TicketCommonPageBUTTON" /> 
+    
+   <c:ticketdragdrop />
+</c:myComponent>
+
+<!------------------popups code------------------------------->
+                 <style>
+                   #dialogoverlay{
+    display:none;
+    /*opacity: .8;*/
+position: fixed;
+top: 0px;
+left: 0px;
+background-color: #484848;
+width: 100%;
+z-index: 999999999999;
+height: 100%;
+
+    
+    }
+ #dialogoverlay2{
+    display:none;
+    opacity: .8;
+position: fixed;
+top: 0px;
+left: 0px;
+background-color: #484848;
+width: 100%;
+z-index:99;
+height: 100%;
+    
+    }
+#dialogbox{ display:none; position:fixed;padding:5px;;
+ width:40%; margin-left:29%; z-index:99999999999; height:530px; padding-bottom:30px;  overflow:auto; border-radius:3px;
+  -webkit-border-radius: 3px;-moz-border-radius: 3px;}
+  
+  #dialogbox3{ display:none; position:fixed;padding:5px;;
+ width:90%; margin-left:-15.3%; z-index:100; height:630px; padding-bottom:30px;  overflow:auto; border-radius:3px;
+  -webkit-border-radius: 3px;-moz-border-radius: 3px;}
+  
+    #dialogbox4{ display:none; position:fixed;padding:5px;;
+ width:90%; margin-left:-15.3%; z-index:100; height:630px; padding-bottom:30px;  overflow:auto; border-radius:3px;
+  -webkit-border-radius: 3px;-moz-border-radius: 3px;}
+  
+   #dialogbox5{ display:none; position:fixed;padding:5px;;
+ width:90%; margin-left:4.8%; z-index:100;padding-bottom:30px;  overflow:auto; border-radius:3px;
+  -webkit-border-radius: 3px;-moz-border-radius: 3px;}
+ 
+  #dialogbox2{ display:none; position:fixed;padding:5px;
+ width:20%; margin-left:40%; z-index:100; height:630px; padding-bottom:30px;  overflow:auto; border-radius:3px;
+  -webkit-border-radius: 3px;-moz-border-radius: 3px;}
+   
+ #close{font-size: 25px;
+font-weight: bold;
+color: #fff;
+text-decoration: none;
+float: right;
+margin-right: .2%;
+margin-top:-9px;
+cursor:pointer;}
+
+#close:hover{font-size: 25px;
+text-decoration: underline;
+font-weight: bold;
+color: #fff;
+float: right;
+margin-right: .2%;
+margin-top:-9px; cursor:pointer;} 
+
+#managetagpopup tr td{
+    height: 27px;
+border-bottom: 1px solid #e3e3e3;
+border-right: 1px solid #e3e3e3;
+padding-left: 10px;
+color: #807f7f;
+    
+    }
+
+</style>
+
+    <style>
+  #nwmoreinfodiv{
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(253,253,253,1)), color-stop(100%,rgba(227,227,227,1)));
+background: -webkit-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -o-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -ms-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#e3e3e3',GradientType=0 );
+border: 1px solid #e3e3e3;
+padding: 5px;
+padding-bottom:1px;
+border-radius: 3px;
+/* padding-top: 5px; */
+padding-left:6px;
+float: right;
+margin-right:10%;
+cursor:pointer;
+}
+  
+  </style> 
+  <apex:stylesheet value="{!URLFOR($Resource.createevents,'createevents/css/jquery.datetimepicker.css')}"/>
+  <script type="text/javascript" src="{!URLFOR($Resource.createevents, 'createevents/js/jquery-1.9.1.js')}"></script>  
+    <script type="text/javascript" src="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery.datetimepicker.js')}"></script>           
+         <script>
+
+
+$m=jQuery.noConflict();
+$m(document).on('focus',".datetimepickers", function(){
+  
+    $m(this).datetimepicker({value:'',step:15});
+});
+
+
+</script>
+<!------------------scripts------------------------------------------>
+
+ <!--<script type="text/javascript" src="{!URLFOR($Resource.createevents, 'createevents/js/jquery.min.js')}"></script> -->
+
+</apex:page>

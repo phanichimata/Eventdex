@@ -1,0 +1,267 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_TicketSalesReportCon" action="{!hideEventsTab}">
+               
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.dataTables.js')}"></script>
+
+<apex:stylesheet value="{!URLFOR($Resource.createevents,'createevents/css/style-button.css')}"/>
+        
+ <apex:stylesheet value="{!URLFOR($Resource.nwdatatable, 'nwdatatable/css/jquery.dataTables.css')}"/> 
+
+<script type="text/javascript" language="javascript" class="init">
+var $j = jQuery.noConflict();
+$j(document).ready(function() {
+$j('#example').dataTable( {
+"pagingType": "full_numbers",
+"iDisplayLength" : 10,
+"bLengthChange": true,
+"bInfo": true,
+
+"bSort": false,
+
+
+/*default orderid in asc sorting*/
+/* "order": [[ 0, "asc" ]],*/
+/*sorting coloumn disable*/
+/* "aoColumnDefs": [
+{ 'bSortable': false, 'aTargets': [ 0 ] },
+
+]*/
+
+} );
+/*$('#example_filter').hide();*/
+} );
+
+</script>
+ <c:myComponentForTable BLN_UtillDisplayLinks="{!myticket}" >  
+        <apex:form >  
+
+
+
+  <table width="100%" border="0">
+  <tr>
+    <td width="10%" id="labeltext">From Date:</td>
+    <td width="15%"><c:noDateLink ><apex:inputField value="{!EventDates.Start_Date__c}" style="width:75%;" styleClass="ed" /></c:noDateLink></td>
+    <td width="8%" id="labeltext" >To Date:</td>
+    <td width="15%"><c:noDateLink ><apex:inputField value="{!EventDates.End_Date__c}" style="width:75%;" styleClass="ed"/></c:noDateLink> </td>
+    <td width="15%" style="padding-left:0px;"><apex:commandButton value="Go" action="{!displayTicketSalesRepor}"  styleClass="button-a blue" style=""/></td>
+    <!--<td width="15%" id="labeltext">Search</td>
+    <td width="15%">
+    <apex:inputText value="{!SearchString}" style="width:150px;">
+    <apex:actionSupport event="onkeyup" action="{!ticketSalesReport}"/>
+    </apex:inputText>
+    </td>-->
+    <td align="right" width="37%">   
+    <apex:commandButton action="{!exportTicketSales}" title="Export" image="{!URLFOR($Resource.Export)}" style="width:25px;height:25px;" />
+         
+    </td>
+     <td align="right" width="">
+             <apex:commandLink action="{!printTicketSales}" target="_blank" >
+                 <apex:commandButton action="{!printTicketSales}" title="Print" image="{!URLFOR($Resource.Print)}" style="width:25px;height:25px;" />
+             </apex:commandLink>
+    </td>
+  </tr>
+  <tr><td height="10" colspan="10"></td></tr>
+</table>
+
+       
+
+        <div style=" width:101.5%; margin:0px auto; margin-top:0px;"> 
+        
+         <style>
+                #statisticstbl { border-collapse:collapse;}
+                #statisticstbl tr td{ padding:5px; font-size:12px; font-weight:700;}
+                 .labeltitles{ color:#247dba; font-size:14px;}
+                </style>
+                  <style>
+        #tablemenubar{
+            width:99.7%; height:50px;
+             background-color:#ccc; 
+            padding-top:10px;
+             margin-bottom:-60px;
+             background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8faf9), color-stop(100%,#d1d2d5));
+background: -webkit-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+background: -o-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+background: -ms-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+background: linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8faf9', endColorstr='#d1d2d5',GradientType=0 );
+background: -moz-linear-gradient(center top , #F8FAF9 0%, #D1D2D5 100%) repeat scroll 0% 0% transparent;
+
+
+
+border: 1px solid #CCC;
+            
+            }
+            
+            #labeltext{
+            font-weight: 100;
+font-family:  Arial, sans-serif;
+font-size: 15px;
+color: #247dba;
+text-shadow: 0 1px 1px rgba(0,0,0,.25);
+            }
+        
+        </style>
+
+          
+                <!----------------end of statistics-------------->  
+                
+        <div id="tablemenubar" style="">
+        
+        </div><!--close of tablemenubar-->
+        
+   
+      <table id="example" class="display" cellspacing="0"  border="0" bordercolor="#F7F7F7" width="100%">
+         <thead>
+           <tr>                   
+             <th>Ticket Name</th>
+             <th>Tag</th>
+             <th>Payment Type</th>
+             <th>Quantity</th>
+             <th>Price</th>
+             <th>Discount</th>
+             <th>Fee</th>
+             <th>Amount</th>            
+          </tr>
+        </thead>
+      <tbody>
+      
+      
+      <apex:repeat value="{!TicketsInnerList}" var="ticket">
+
+          <tr>
+            <td style="">{!ticket.ticketData.item_name__c}<apex:outputText rendered="{!IF(ticket.ticketData.item_name__c == NULL, TRUE, FALSE)}" value="Total Sales" style="font-weight:bold;"/></td>
+            <td>{!ticket.ticketData.item_type__r.Name}</td>
+            <td></td>
+            <td>{!ticket.usedTickets}</td>
+            <td><apex:outputText rendered="{!IF(ticket.ticketData.price__c != NULL, TRUE, FALSE)}" value="${!ticket.ticketData.price__c}"/></td>
+            <td>${!ticket.totalDiscount}</td>
+            <td>${!ticket.totalFee}</td>
+            <td><apex:outputText value="${0, number, ###,##0.00}">
+      <apex:param value="{!ticket.totalAmount}"/>
+    </apex:outputText></td>
+            
+          </tr>
+
+    <apex:repeat value="{!ticket.paymentTypeInnerList}" var="payment">
+      <tr >
+        <td></td>
+        <td></td>
+        <td><font size="1">{!payment.paymentType.Name}</font></td>
+        <td><font size="1">{!payment.typeCount}</font></td>
+        <td></td>
+        <td><font size="1">${!payment.typeDiscount}</font></td>
+        <td><font size="1">${!payment.typeFee}</font></td>
+        <td><font size="1"><apex:outputText value="${0, number, ###,##0.00}">
+  <apex:param value="{!payment.typeAmount}"/>
+</apex:outputText></font></td>
+        
+      </tr>
+</apex:repeat>
+      
+      </apex:repeat>
+      
+      <!--
+      <apex:repeat value="{!TicketsInnerList}" var="ticket">
+      <apex:outputLabel rendered="{!IF(ticket.usedTickets != 0, TRUE, FALSE)}">
+          <tr>
+            <td style="">{!ticket.ticketData.item_name__c}<apex:outputText rendered="{!IF(ticket.ticketData.item_name__c == NULL, TRUE, FALSE)}" value="Total Sales" style="font-weight:bold;"/></td>
+            <td>{!ticket.ticketData.item_type__r.Name}</td>
+            <td></td>
+            <td>{!ticket.usedTickets}</td>
+            <td><apex:outputText rendered="{!IF(ticket.ticketData.price__c != NULL, TRUE, FALSE)}" value="${!ticket.ticketData.price__c}"/></td>
+            <td>${!ticket.totalDiscount}</td>
+            <td>${!ticket.TotalFeeAmountValue }</td>
+            <td><apex:outputText value="${0, number, ###,##0.00}">
+      <apex:param value="{!ticket.totalAmount}"/>
+    </apex:outputText></td>
+            
+          </tr>
+  </apex:outputLabel>     
+      <apex:outputLabel rendered="{!IF(ticket.cashTicketCount != 0, TRUE, FALSE)}">
+      <tr >
+        <td></td>
+        <td></td>
+        <td><font size="1">Cash</font></td>
+        <td><font size="1">{!ticket.cashTicketCount}</font></td>
+        <td></td>
+        <td><font size="1">${!ticket.cashDiscountAmount}</font></td>
+        <td><font size="1">${!ticket.cashFee}</font></td>
+        <td><font size="1"><apex:outputText value="${0, number, ###,##0.00}">
+  <apex:param value="{!ticket.cashTotalAmount}"/>
+</apex:outputText></font></td>
+        
+      </tr>
+      </apex:outputLabel> 
+      
+      <apex:outputLabel rendered="{!IF(ticket.checkTicketCount != 0, TRUE, FALSE)}">
+      
+      <tr>
+        <td></td>
+        <td></td>
+        <td><font size="1">Check</font></td>
+        <td><font size="1">{!ticket.checkTicketCount}</font></td>
+        <td></td>
+        <td><font size="1">${!ticket.checkDiscountAmount}</font></td>
+        <td><font size="1">${!ticket.checkFee}</font></td>
+        <td ><font size="1"><apex:outputText value="${0, number, ###,##0.00}">
+  <apex:param value="{!ticket.checkTotalAmount}"/>
+</apex:outputText></font></td>
+        
+      </tr>
+      </apex:outputLabel> 
+      
+      <apex:outputLabel rendered="{!IF(ticket.creditCardTicketCount!= 0, TRUE, FALSE)}">
+      <tr>
+        <td></td>
+        <td></td>
+        <td><font size="1"><B>Credit</B></font></td>
+        <td><font size="1"><B>{!ticket.creditCardTicketCount}</B></font></td>
+        <td></td>
+        <td><font size="1"><B>${!ticket.creditCardDiscountAmount}</B></font></td>
+        <td><font size="1"><B>${!ticket.creditFee}</B></font></td>
+        <td><font size="1"><B><apex:outputText value="${0, number, ###,##0.00}">
+  <apex:param value="{!ticket.creditCardTotalAmount}"/>
+</apex:outputText></B></font></td>
+        
+      </tr>
+      </apex:outputLabel> 
+      
+      <apex:outputLabel rendered="{!IF(ticket.extPayTicketCount!= 0, TRUE, FALSE)}">
+      <tr>
+        <td></td>
+        <td></td>
+        <td><font size="1"><B>External Pay</B></font></td>
+        <td><font size="1"><B>{!ticket.extPayTicketCount}</B></font></td>
+        <td></td>
+        <td><font size="1"><B>${!ticket.extPayDiscountAmount}</B></font></td>
+        <td><font size="1"><B>${!ticket.extPayFee}</B></font></td>
+        <td><font size="1"><B><apex:outputText value="${0, number, ###,##0.00}"  >
+  <apex:param value="{!ticket.extPayTotalAmount}"/>
+</apex:outputText></B></font></td>
+        
+      </tr>
+      </apex:outputLabel> 
+      
+      
+      </apex:repeat>
+      -->
+                       
+                </tbody>
+            </table>
+           
+        
+       </div>
+         
+    </apex:form>
+    </c:myComponentForTable>
+    <apex:stylesheet value="{!URLFOR($Resource.createevents,'createevents/css/jquery.datetimepicker.css')}"/>
+ 
+ <script type="text/javascript" src="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery.datetimepicker.js')}"></script> 
+<script type="text/javascript">
+$('.ed').datetimepicker({
+timepicker:false,
+format:'m/d/Y',
+formatDate: 'm/d/Y',
+});
+</script>
+</apex:page>

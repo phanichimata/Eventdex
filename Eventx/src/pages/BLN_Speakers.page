@@ -1,0 +1,321 @@
+<apex:page controller="BLN_SpeakersCon" showHeader="false" id="thePage" standardStylesheets="false"> 
+    
+    <head>
+        <title>Boothleads-Speakers</title>
+    </head>
+    
+    <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/style.css')}"/> 
+    <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/nwbuttons.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/tables.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/chosen.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/responsive.css')}"/>  
+    
+    <c:myComponent BLN_UtillDisplayLinks="{!speakerComponents}" id="comp"> 
+    
+    <apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/chosen.css')}"/> 
+    
+    <script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery.min.js')}"></script>  
+    <script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/jquery-ui-1.8.16.custom.min.js')}"></script>
+    
+    <script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/chosen.jquery.min.js')}"></script>
+    <script type="text/javascript" src="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/js/autoresize.jquery.min.js')}"></script>
+    
+    <style>
+        #speakertable{ border-collapse:collapse;}
+        #speakertable tr td{ padding:5px;}
+        #speakersbox{width:95%; margin:0px auto;}
+        #left-speaker-box{width:48%; border-radius:2px; 
+        float:left; 
+        border:3px solid #C7C7C7; 
+        height:auto;
+        background-color:#fff;
+        box-shadow: 0 1px 3px 0 #b5b5b5;
+        -moz-box-shadow: 0 1px 3px 0 #b5b5b5;
+        -webkit-box-shadow: 0 1px 3px 0 #b5b5b5;}
+        
+        #right-speaker-box{width:48%; 
+        border-radius:2px; 
+        float:right; border:3px solid #C7C7C7;
+        height:auto;
+        background-color:#fff;
+        background-color:#fff;
+        box-shadow: 0 1px 3px 0 #b5b5b5;
+        -moz-box-shadow: 0 1px 3px 0 #b5b5b5;
+        -webkit-box-shadow: 0 1px 3px 0 #b5b5b5;
+        }
+        
+        .content-gird1{background-color: #f2efef;margin-bottom:10px;  height:140px; padding-bottom:10px;}
+    </style>
+    
+    <script>
+    
+        $(document).ready(function() {
+        showExistingSpeakers();
+        
+        });
+        
+        function showExistingSpeakers(){
+        document.getElementById('AddSpeakers').style.display = 'none';
+        document.getElementById('showSpeakers').style.display = 'block';
+        }
+        
+        function showCodeForNewSpeaker(){
+        
+        document.getElementById('AddSpeakers').style.display = 'block';
+        document.getElementById('HellodisplayExisting').style.display = 'block';
+        document.getElementById('showSpeakers').style.display = 'none';
+        
+        }
+        
+        function showExisting(){
+        document.getElementById('HellodisplayExisting').style.display = 'block';
+        document.getElementById('HellodisplayetryForNewRecord').style.display = 'none';
+        }
+        
+        function showNewRecordEntry(){
+        document.getElementById('HellodisplayExisting').style.display = 'none';
+        document.getElementById('HellodisplayetryForNewRecord').style.display = 'block';
+        }
+        
+        $(document).ready(function() {
+        
+        $(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});  
+        });
+        
+        function choosenForPopUp(){
+        
+        $(".chzn-select-deselect").chosen({allow_single_deselect:true});   
+        $(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});  
+        
+        }
+        
+        function getValue(){
+        var x=document.getElementById("clientGNUsers");
+        var xyz = document.getElementById('{!$Component.thePage:comp:commoncomponent:theForm:selectedRole}') ;
+        
+        
+        var selectedVas = '';
+        
+        for (var i = 0; i < x.options.length; i++) {
+        if(x.options[i].selected ==true){
+        if(selectedVas != ''){
+        selectedVas += (',' + x.options[i].value);
+        }else{
+        selectedVas +=  x.options[i].value;
+        }
+        }
+        }
+        
+        if(selectedVas  == ''){
+        alert(' Please Select atleast one Attendee   ');
+        x.focus();
+        
+        }
+        
+        if( xyz.value == ''){
+        alert(' Please Select Role    ');
+        xyz.focus();
+        }
+     
+            if(selectedVas != "" && xyz.value != ""){
+              updateSpeakersList(selectedVas, xyz.value);
+               document.getElementById('AddSpeakers').style.display='none'; 
+                document.getElementById('HellodisplayExisting').style.display = 'none';     
+            }else{
+                return false;
+            }
+        }
+        
+        
+       
+        
+    </script>
+  
+ 
+  
+  
+ <apex:form id="showSpeakersForm"> 
+ 
+    <script>
+      function deleteItem(vac){
+       var x =confirm('Are you sure, do you want delete speaker?');   
+          if(x==true){
+               var xyz = document.getElementById('{!$Component.thePage:comp:commoncomponent:showSpeakersForm:delPat}') ;  
+               xyz.value =vac;
+               delval();
+             return true;
+          }else{
+          
+           return false;
+          }
+       
+     }
+     
+     function displayEdit(vap){
+       document.getElementById(vap+'Role').style.display='none';      
+       document.getElementById(vap).style.display='';
+       
+     }
+     
+     
+     function updateValue(vf){
+      var va =  document.getElementsByClassName(vf+'roles');   
+       for(var d=0;d< va.length;d++){
+        if(va[d].className == vf+'roles'){
+          partopt(vf,document.getElementById(va[d].id).value);
+        }
+      
+      }
+        
+         //updateSpeakersList();
+     }
+     
+     
+     </script>    
+        
+        
+        
+         <apex:actionFunction action="{!ParticepentMoreOptions}" name="partopt" reRender="showSpeakersForm,theForm">
+            <apex:param value="" name="selectedUsers" assignTo="{!selectedUsers}"/>
+            <apex:param value="" name="selectedRole"/>
+        </apex:actionFunction>    
+  
+   
+        
+    <apex:actionFunction action="{!updateAsSpeakers}" name="updateSpeakersList" reRender="showSpeakersForm,theForm">
+            <apex:param value="" name="selectedUsers" assignTo="{!selectedUsers}"/>
+            <apex:param value="" name="selectedRole"/>
+        </apex:actionFunction>    
+  
+   
+       <apex:actionFunction action="{!deleteParticepent}" name="delval" reRender="showSpeakersForm,theForm,xyx"/>
+        <apex:inputHidden value="{!idforDelete}" id="delPat"/>     
+       <apex:inputHidden value="{!roleid}" id="rlid"/>
+    
+ <div id="showSpeakers">
+       <div class="title-grid-selectevent"></div>
+      <div class="content-gird content-gird1">
+          &nbsp;
+          <input type="button" value="Add Speaker" onclick="showCodeForNewSpeaker();" class="button-a blue" style="height:32px; float:right; margin-top:-10px; margin-bottom:3px; margin-right:-1%; width:150px; color:#FFFFFF;" />
+
+        <div id="speakersbox">      
+           <apex:variable value="{!0}" var="evenOdd"/>
+           <apex:outputPanel rendered="{!IF(Speakers.size>0,True,false)}">   
+           <apex:repeat value="{!Speakers}" var="p" id="patListRepeat">
+               <div id="{!IF(MOD(evenOdd,2) = 0, 'left-speaker-box', 'right-speaker-box')}">
+                    <table id="speakertable" width="100%" border="0" style="margin-bottom:20px;">
+                      <tr>
+                        <td width="35%" rowspan="3">  
+                        <apex:image url="/servlet/servlet.ImageServer?id={!p.GN_User__r.User__r.User_Pic__c }&oid={!$Organization.Id}" style="margin-left:3px;"  width="100%" height="120px" rendered="{!NOT(ISBLANK(p.GN_User__r.User__r.User_Pic__c))}"/>  </td>
+                        <td width="40%" style=" font-size:16px; font-weight:bold;"> {!p.GN_User__r.First_Name__c} {!p.GN_User__r.Last_Name__c}</td>
+                        <td>&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td style="font-size:18px; font-family:cuprum; color:#247dba;">&nbsp;
+                        
+                          <div id="{!p.id}Role"> {!p.Participant_Role__c} </div>   
+                          <div id="{!p.id}" style="display:none"> <apex:inputField value="{!p.Participant_Role__c}" id="in" styleClass="{!p.id}roles" /> &nbsp; 
+                           <a style="border:none; height:17px; width:17px;cursor:pointer;color:#FFFFFF;" onclick="updateValue('{!p.id}');" class="button-a blue"> Update </a>
+                           
+                           
+                          
+                          <!--<apex:commandButton value="save"/>--> </div>   
+                        
+                        </td>
+                        <td style="font-size:18px; font-family:cuprum; color:#247dba;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td style="font-size:18px; font-family:cuprum; color:#247dba;"> &nbsp;<!-----{!p.Participant_Role__c} ------> </td>
+                        <td style="text-align:right;">
+                        <span> 
+                         <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/edit-1.png')}" style="border:none; height:20px; width:20px;" onclick="displayEdit('{!p.id}');"/>
+                          <!--  <apex:commandLink action="{!ParticepentMoreOptions}"   style="border:none; height:17px; width:17px;">
+                               <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/edit-1.png')}" style="border:none; height:20px; width:20px;"/>
+                                  <apex:param value="{!p.id}" name="moreTic"/>
+                           </apex:commandLink>  -->
+                        </span>  &nbsp;
+                        <span>
+                         
+                         <a href="#" title="delete"   onclick="return deleteItem('{!p.id}');"><img src="{!URLFOR($Resource.CreateEventsSteps, 'images/removerow.png')}" style="border:none; height:17px; width:17px;" /></a>
+                           <!-- <apex:commandButton image="{!URLFOR($Resource.CreateEventsSteps, 'images/removerow.png')}" style="border:none; height:17px; width:17px;"   onclick="return deleteItem('{!p.id}');">  
+                            </apex:commandButton>--> 
+                             
+                        </span>
+                        </td>
+                      </tr>
+                    </table>
+              </div><!--close of left-speaker-box-->
+             <apex:variable value="{!evenOdd+1}" var="evenOdd"/>
+           </apex:repeat>
+         </apex:outputPanel>
+           <apex:outputPanel rendered="{!IF(Speakers.size>0,false,true)}">   
+                 You did not add speakers yet.
+            </apex:outputPanel>
+      </div>
+    </div>
+  </div>
+ </apex:form> 
+  
+  
+  
+  
+        <div id="AddSpeakers" style="display:none"> 
+          <!--  <span>
+            <div id="displayExisting" onclick="showExisting();">  
+               <u><apex:outputText value="Select from Registrants" style="font-size:18px; font-family:Arial, Helvetica, sans-serif;font-weight:bold;color:blue;cursor: pointer; cursor: hand;"></apex:outputText></u>
+            </div>
+            </span>
+            <span>
+            <div id="displayetryForNewRecord" onclick="showNewRecordEntry();">  
+                <u><apex:outputText value="Create New Speaker" style="font-size:18px; font-family:Arial, Helvetica, sans-serif;font-weight:bold;color:blue;cursor: pointer; cursor: hand;"></apex:outputText></u>
+            </div>
+            </span> -->
+            
+            <div id="HellodisplayExisting" style="display:none">  
+            <apex:form id="theForm">
+                <script>
+                    choosenForPopUp();
+                </script>
+                
+                
+                <div class="grid-1" style="width:70%;align:center;">
+        
+                    <div class="content-gird" style="border:none;">
+        
+                        <div class="elem">
+                            <label><apex:outputText value="Search Attendee :"></apex:outputText></label>    
+                            <div class="indent" style="margin-left:100px;">   
+                                <select name="TicketsList" class="chzn-select medium-select select" id="clientGNUsers" multiple="multiple" style="width:350px; line-height: 100px;">
+                                    <apex:repeat value="{!allAdminTickets}" var="ad">
+                                        <option value="{!ad.Client_GN_User__c}"> {!ad.Client_GN_User__r.First_Name__c} {!ad.Client_GN_User__r.Last_Name__c} </option>
+                                    </apex:repeat>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="elem">
+                            <label><apex:outputText value="Select Role :"></apex:outputText></label>    
+                            <div class="indent" style="margin-left:100px;">   
+                               <apex:inputField value="{!participant.Participant_Role__c}" id="selectedRole" styleClass="medium" style="width:350px;height:30px;box-shadow: #F4F4F4 1px 4px 10px 0px;background-color: #ffffff;color: #727373;border: 1px solid #e3e3e3;"/>
+                            </div>
+                        </div>
+                    
+                    </div>
+                
+                </div>
+                <div style="flaot:left;margin-left:150px;">
+                    <input type="button" value="Save" onclick="getValue();" class="button-a blue" style="width:80px;color:#FFFFFF;height:30px;"/>&nbsp; &nbsp;
+                    <input type="button" value="Cancel" onclick="showExistingSpeakers();"  class="button-a blue" style="width:80px;color:#FFFFFF;height:30px;margin-left:5px;"/>
+                </div>
+            </apex:form>      
+            </div>
+            <div id="HellodisplayetryForNewRecord" style="display:none">  
+                Code for New Attendee
+            </div>
+        </div>  
+ 
+ 
+    </c:myComponent>
+   
+</apex:page>

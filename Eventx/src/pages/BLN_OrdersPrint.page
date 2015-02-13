@@ -1,0 +1,236 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_ReportsCon" renderAs="pdf">
+<apex:pageBlock > 
+
+<apex:stylesheet value="{!URLFOR($Resource.pdfstyles, 'pdfstyles.css')}"/>
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+ 
+</head>
+<!--header-->
+
+<h3 style="text-align:center; padding:0px; margin:0px;font-family: Arial,Helvetica,sans-serif;"> Order Sales Report</h3>
+ <div style="width:99.6%; margin-left:.1%; background-color: #F4F4F4; padding:0px 0px 5px 0px;box-shadow: 0 1px 3px 0 #b5b5b5;-moz-box-shadow: 0 1px 3px 0 #b5b5b5;-webkit-box-shadow: 0 2px 5px 0 #b5b5b5;">
+  
+  <table id="statisticstbl" width="100%" border="1" cellpadding="0" cellspacing="0">
+   <tr>
+       <td colspan="12">
+           <c:EventDetails BLN_EventDetails="{!eventInfo}"></c:EventDetails>
+       </td>
+   
+   </tr>
+  
+  <tr>
+    <td  class="labeltitles" style="padding-right:0px;font-size:12px; width:16%;font-family: Arial,Helvetica,sans-serif;padding:5px;">Total no. of transactions:&nbsp;{!TotalTransactions} </td>
+    
+    <td class="labeltitles" style=" text-align:left; padding-right:0px;font-size:12px; width:23%;font-family: Arial,Helvetica,sans-serif;padding:5px;">Total no. of attendees registered:&nbsp;{!TotalAttendeesRegistered}</td>
+    
+    <td class="labeltitles" style=" padding-right:0px;font-size:12px; width:15%;font-family: Arial,Helvetica,sans-serif;padding:5px;">Check:&nbsp;${!AmountThroughCheck}</td>
+    
+    <td class="labeltitles" style=" padding-right:0px;font-size:12px; width:15%;font-family: Arial,Helvetica,sans-serif;padding:5px;">Card :&nbsp;${!AmountThroughCredit}</td>
+    
+    <td class="labeltitles" style=" padding-right:0px;font-size:12px; width:15%;font-family: Arial,Helvetica,sans-serif;padding:5px;">Cash :&nbsp;${!AmountThroughCash}</td>
+      
+    <td class="labeltitles" style="font-size:12px; width:16%;font-family: Arial,Helvetica,sans-serif;padding:5px;">Total Amount:&nbsp;${!TotalAmount}</td>
+         
+  </tr>
+  
+</table>   
+</div>  
+
+
+
+
+<div style="text-align:center;padding:0px; margin:0px;font-family: Arial,Helvetica,sans-serif;color:#04408c;">
+
+
+ <apex:variable var="OrderNumber" value="{!0}"/> 
+  <apex:variable var="AttendeeNumber" value="{!0}"/> 
+       
+<!-- <br/>  <br/>  <br/>  <br/>  <br/>  -->
+
+</div>  
+<!-- header -->
+
+<!--table-->
+<body>
+<div style="">
+  
+<table width="100%" cellspacing="0" cellpadding="5" border="1">
+    <TBODY>  
+    
+    
+    <tr>
+        <td colspan="3" style="background-color:#d6e3f2;">
+        
+        
+        
+            <table width="100%" cellspacing="0" cellpadding="0">
+                                                                                                                                                                                                               
+        <tr>
+            <th style="width:3%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>S.No</b></th>
+            <th style="width:30%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Transaction Details </b></th>
+            
+            <th style="width:67%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">     
+                <table width="100%" cellspacing="0" cellpadding="5" border="0">
+                 
+                    <tr>
+                        <th style="width:5%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>S No</b></th>
+                        <th style="width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Attendee Name</b></th>
+                        <th style="width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Email Id</b></th>
+                        <th style="width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Company</b></th> 
+                        <th style="width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Ticket</b></th>          
+                    </tr>
+                
+                </table>
+            </th>
+            
+            
+        </tr>
+        </table>
+        
+        
+        
+        
+        
+        </td>
+    </tr>
+    
+    
+         <apex:repeat value="{!ListOfListOrders}" var="orders">
+         
+                <apex:repeat value="{!orders}" var="order">
+                
+            
+            <tr style="border-top:1px solid #000000;page-break-after:auto;">
+              <td class="tableContent" style="width:3%;font-family: Arial,Helvetica,sans-serif;font-size:10px;vertical-align:top;"><apex:variable var="OrderNumber" value="{!OrderNumber+1}"/>{!OrderNumber}.</td>
+              <td class="tableContent" style="text-align:left;width:30%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;vertical-align:top;"><span class="labeltitles">Order Id:&nbsp;</span><span>{!order.Name}&nbsp;&nbsp;&nbsp;</span><span class="labeltitles">Amount Paid:&nbsp;</span><span>${!order.Amount_Paid__c}</span><br/>
+                  <span class="labeltitles">Ordered By:&nbsp;</span><span>{!order.Client_GN_User__r.Email__c}</span><br/>
+                  <span class="labeltitles">Ordered Date:&nbsp;</span><span><apex:outputText value="{0,date,M/d/yyyy hh:mm a}">
+                                <apex:param value="{!order.CreatedDate}"/>
+                            </apex:outputText> </span>
+                  
+                    <apex:repeat value="{!order.Payments__r}" var="payment">
+                           <span class="labeltitles">Payment Type:&nbsp;</span><span>{!payment.Payment_Mode__c}&nbsp;&nbsp;&nbsp;</span><br/>
+                           <span class="labeltitles">Payment Status:&nbsp;</span><span>{!order.Order_Status__c}&nbsp;&nbsp;&nbsp;</span><br/>
+                           <apex:outputPanel rendered="{!IF(payment.Payment_Mode__c != 'Check', TRUE, FALSE)}"><span class="labeltitles">Transaction Key:&nbsp;</span><span>&nbsp;&nbsp;&nbsp;</span> </apex:outputPanel><br/>
+                         </apex:repeat>
+                    </td>
+              <td class="tableContent" style="text-align:left;width:67%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">
+                  <table width="100%" cellspacing="0" cellpadding="5" border="1">
+                      <apex:repeat value="{!order.Tickets__r}" var="attendee">
+                      <tr>
+                           <td class="tableContent" style="text-align:left;width:3%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;text-align:right;"><apex:variable var="AttendeeNumber" value="{!AttendeeNumber+1}"/>{!AttendeeNumber}.</td>
+                           <td class="tableContent" style="text-align:left;width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;text-align:right;">{!attendee.Client_GN_User__r.First_Name__c} {!attendee.Client_GN_User__r.Last_Name__c}</td>
+                           <td class="tableContent" style="text-align:left;width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;text-align:right;">{!attendee.Client_GN_User__r.Email__c}</td>
+                           <td class="tableContent" style="text-align:left;width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;text-align:right;">{!attendee.Company__c}</td>
+                           <td class="tableContent" style="text-align:left;width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;text-align:right;">{!attendee.Item__r.item_name__c}</td>
+                      </tr>
+                      </apex:repeat>
+                  </table>
+              </td>
+              
+           </tr>
+           
+           
+         
+        </apex:repeat>
+        
+        </apex:repeat> 
+          
+    </TBODY>
+    
+    <TFOOT>
+      <tr>      
+          <td colspan="11" style="font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;text-align:right;">
+         <apex:outputText value="{!NOW()}"> </apex:outputText>
+          </td>
+      </tr>
+    </TFOOT>
+    
+</table> 
+</div>
+</body>
+
+<!--
+
+    <apex:variable var="OrderNumber" value="{!0}"/> 
+            <apex:variable var="AttendeeNumber" value="{!0}"/> 
+            
+            <table style="width:100%;line-height:20px;border:0px solid blue;" border="1" cellpadding="0" cellspacing="0">
+            
+                <tr>
+                    <th style="width:3%;background-color:#2486c3;color:#FFFFFF;"  valign="top">S.No </th> 
+                    <th style="width:20%;background-color:#2486c3;color:#FFFFFF;"  valign="top">Transaction Details </th> 
+                    <th style="width:76%;background-color:#2486c3;" valign="top"> 
+                    <table style="width:100%;border:0px;line-height:20px;vertical-align:top;" cellpadding="0" cellspacing="0" border="1" >
+                        <tr>
+                             <th style="width:3%;border:0px;background-color:#2486c3;color:#FFFFFF;">S No</th> 
+                             <th style="width:22%;border:0px;background-color:#2486c3;color:#FFFFFF;">Attendee Name</th> 
+                             <th style="width:22%;border:0px;background-color:#2486c3;color:#FFFFFF;">Email Id</th>
+                             <th style="width:22%;border:0px;background-color:#2486c3;color:#FFFFFF;">Company</th> 
+                             <th style="width:22%;border:0px;background-color:#2486c3;color:#FFFFFF;">Ticket</th> 
+                        </tr>
+                        
+                    </table>
+               </th>
+
+                </tr>
+                
+                <apex:repeat value="{!ListOfListOrders}" var="orders">
+                <apex:repeat value="{!orders}" var="order">
+                    <tr>
+                        <td>
+                            <apex:variable var="OrderNumber" value="{!OrderNumber+1}"/>  
+                            {!OrderNumber}.
+                        </td>
+                        
+                        <td>
+                           Order Id : {!order.Name} Amount Paid : {!order.Amount_Paid__c}<br/>
+                           Ordered By : {!order.Client_GN_User__r.Email__c}<br/>
+                           Ordered Date:
+                            <apex:outputText value="{0,date,M/d/yyyy hh:mm a}">
+                                <apex:param value="{!order.CreatedDate}"/>
+                            </apex:outputText>   
+                            <br/>
+                            <apex:repeat value="{!order.Payments__r}" var="payment">
+                                Payment Type : {!payment.Payment_Mode__c}  <br/>       
+                                Payment Status {!order.Order_Status__c}<br/>  <br/>  
+                            </apex:repeat>                      
+                        </td>
+                            
+                        <td>
+                            <table style="width:100%;border:0px;line-height:20px;background-color:#FFFFFF" cellpadding="0" cellspacing="0" border="0" >
+                                <apex:repeat value="{!order.Tickets__r}" var="attendee">
+                                
+                                <tr style="background-color:#FFFFFF">
+                                    <td>
+                                    <apex:variable var="AttendeeNumber" value="{!AttendeeNumber+1}"/>  
+                                    {!AttendeeNumber}.
+                                    </td>
+                                    <td style="width:22%;border:0px;">{!attendee.Client_GN_User__r.First_Name__c} {!attendee.Client_GN_User__r.Last_Name__c}</td>
+                                    <td style="width:22%;border:0px;">{!attendee.Client_GN_User__r.Email__c}</td> 
+                                    <td style="width:22%;border:0px;">{!attendee.Client_GN_User__r.Company_Name__c}</td>
+                                    <td style="width:22%;border:0px;">{!attendee.Item__r.item_name__c}</td>
+                                </tr>
+                                
+                                </apex:repeat>  
+                            </table>                            
+                            
+                        </td>
+                        
+                        <td>
+                           
+                        </td>
+                    </tr>
+                   
+                </apex:repeat> 
+            
+            </apex:repeat>
+            </table>  
+            --> 
+            </html>
+        
+  </apex:pageblock>
+</apex:page>

@@ -1,0 +1,6 @@
+<apex:page controller="samplePhanicon" showHeader="false">
+ <apex:form >
+ <apex:repeat value="{!ListOfUserLicences}" var="usl"> <apex:outputText value="{!usl}"/> <br/> </apex:repeat> 
+  <!-- <apex:inputField value="{!u.Profile.UserLicense}"/> -->
+ </apex:form>
+</apex:page>

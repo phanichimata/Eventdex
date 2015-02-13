@@ -1,0 +1,130 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_AttendeeDetailReportCon" renderAs="pdf"><apex:pageBlock > 
+   
+
+<apex:stylesheet value="{!URLFOR($Resource.pdfstyles, 'pdfstyles.css')}"/>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+</head>
+<!--header-->
+
+<div class="header" style="text-align:center;padding:0px; margin:0px;font-family: Arial,Helvetica,sans-serif;color:#04408c;">
+<h3>Attendee Detail Report</h3>
+ <table width="100%" cellspacing="0" cellpadding="5" style="border:1px solid #CCCCCC;">
+<tr>
+       <td>
+           <c:EventDetails BLN_EventDetails="{!eventInfo}"></c:EventDetails>
+       </td>
+   
+   </tr>
+                                                                                                                                                                                                               
+        <tr>
+
+          <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Prefix</th>
+          <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">First Name</th>
+          <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Last Name</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Suffix</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Email Id</th>
+<!--            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Company</th>-->
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Designation</th>                        
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Mobile Number</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Ticket Name</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Tag name</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Home Address1</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Home Address2</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Home City</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Home State</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Home Country</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Home Zip</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Primary Business Category</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Secondary Business Category</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Business Established Date</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Business Duns Number</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Business Revenue</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Business Tax Id</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Blog URL</th>
+<!--            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Website URL</th>-->
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Business Description</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Work Phone</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Business Address1</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Business Address2</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Business City</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Business State</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Business Country</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Business Zip Code</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">NAICS Code 1</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">NAICS Code 2</th>
+            <th class="tableHeader" style="width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;">Diversity Type</th>
+             
+        </tr>
+        </table>
+</div>  
+<!-- header -->
+
+<!--table-->
+<body>
+<div style="padding-top:10px;">
+
+<table width="100%" cellspacing="0" cellpadding="5" border="1">
+    <TBODY>  
+  <apex:repeat value="{!listOfListTickets}" var="tickets">
+         <apex:repeat value="{!tickets}" var="ticket">   
+          
+            <tr style="page-break-after:auto;">                                                                                                                                     
+
+             <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.Prefix__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.First_Name__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.Last_Name__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.Suffix__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.Email__c}</td>
+<!--                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.Company_Name__c}</td>-->
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.TKT_Job_Title__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.Phone__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.item__r.item_name__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Badge_Label__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.Address1__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.Address2__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.City__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.State__r.Long_Name__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.Country__r.Long_Name__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.Zip_Code__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Primary_Business_Category__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Secondary_Business_Category__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Established_Date__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Duns_Number__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">${!ticket.companyExtData.Revenue__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Tax_Id__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Blog_URL__c}</td>
+              <!--  <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.ticketData.Client_GN_User__r.User_Website__c}</td>-->
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Keywords__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Work_Phone__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Business_Address1__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Business_Address2__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Business_City__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.BLN_Business_State__r.Long_Name__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.BLN_Business_Country__r.Long_Name__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Business_Zipcode__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Primary_NAICS_Code__r.Description__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!ticket.companyExtData.Secondary_NAICS_Code__r.Description__c}</td>
+                <td class="tableContent" style="text-align:left;width:2%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;"><apex:repeat value="{!ticket.companyDiversityData}" var="diversity">
+                    {!diversity.Diversity__r.Name},
+                    </apex:repeat>
+                </td>  
+           </tr>
+
+        </apex:repeat> </apex:repeat> 
+    </TBODY>
+    <TFOOT>
+     
+    </TFOOT>
+    
+</table> 
+</div>
+</body>
+
+
+</html>
+
+
+      </apex:pageBlock>  
+</apex:page>

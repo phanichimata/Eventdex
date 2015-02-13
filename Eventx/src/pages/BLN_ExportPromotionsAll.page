@@ -1,0 +1,41 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_PromoCodeReportCon" contentType="application/vnd.ms-excel#AllPromocodesExport.xls"><apex:pageBlock >  
+ <table border="1" cellpadding="0" cellspacing="0">
+            
+                <tr>
+                     <th>Ticket Name</th>
+                        <th>Tag</th>
+                        <th>Quantity Used</th>
+                        <th>Discount Amount</th>
+                        <th>Total Discounted Amount</th>
+
+                </tr>
+                
+                  <apex:repeat value="{!promoCodeInnerList}" var="promocode">
+                     
+                   <apex:repeat value="{!promocode.itemPromotionList}" var="itemPromotion">
+                    <tr>
+                    <td colspan="5"><span style="color:#247dba;"><b>Promotion Name:</b></span><span style="color:#000; margin-left:.2%;font-weight:700;">{!promocode.promotionData.Name}</span>
+                        <span style="color:#247dba; margin-left:1%;"><b>Promotion Code:</b></span><span style="color:#000; margin-left:.2%;font-weight:700;">{!promocode.promotionData.Promo_Code__c}</span>
+                        <span style="color:#247dba; margin-left:1%;"><b>Promocode Type:</b></span><span style="color:#000; margin-left:.2%;font-weight:700;">{!promocode.promotionData.Promotion_Type__c}</span>
+                        <span style="color:#247dba; margin-left:1%;"><b>Discount:</b></span><span style="color:#000; margin-left:.2%;font-weight:700;">{!promocode.promotionData.Discount_Value__c}</span>
+                        <span style="color:#247dba; margin-left:1%;"><b>Used/Available:</b></span><span style="color:#000; font-weight:700; margin-left:.2%;">{!promocode.promotionData.T_Used_Count__c}</span>
+                        </td>
+                    </tr>
+     <tr>  
+
+                        <td>{!itemPromotion.itemPromotionData.Buy_Item__r.item_name__c}</td>
+                        <td>{!itemPromotion.itemPromotionData.Buy_Item__r.item_type__r.Name}</td>
+                       
+                        <td>{!itemPromotion.itemPromotionData.Buy_Item_Quantity__c}</td>
+                        <td><apex:outputText rendered="{!IF(itemPromotion.itemPromotionData.Item_Discount_Type__c == 'Amount', TRUE, FALSE)}" value="$"/> {!itemPromotion.itemPromotionData.Item_Discount_Value__c}<apex:outputText rendered="{!IF(itemPromotion.itemPromotionData.Item_Discount_Type__c == 'Percent', TRUE, FALSE)}" value="%"/></td>
+                        <td>${!itemPromotion.discountedPrice}</td>
+                       
+                                           </tr>
+               </apex:repeat> 
+                        </apex:repeat>
+
+            </table>  
+
+
+</apex:pageBlock>  
+</apex:page>

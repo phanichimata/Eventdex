@@ -1,0 +1,3297 @@
+<apex:page standardController="BLN_Event__c" extensions="BLN_ReUse_EventsEditCon" showHeader="false"  standardStylesheets="false" >
+<!------------------------------------
+Page reusability:
+This Page contains all the codes related to popupmanage ticket/package,popup tags,render ticket/package,
+scripts for loading of tickets,save tickets and Ticket Validations
+
+Used in Modules:BLN_TicketsNew(Manage Tickets),BLN_EventNew(Create&edit event).
+
+
+
+--------------------->
+ 
+ <!---------------------------------------popup for managetags------------------------------------------------------>        
+     <div id="dialogoverlay"></div>
+<!--close of dialogoverlay-->
+<div id="dialogbox"><a  id="close" onclick="Alert.Cancel()">×</a>
+<div class="grid-1" style=" width:98%;margin-left:1%; padding-right:0px;">
+    <div class="title-grid">Manage Tag</div>
+    <div class="content-gird" >
+    
+    <!--<button id="btnAdicionar">Novo</button>-->
+        <table id="managetagpopup" style="width:100%;">         
+            <thead>
+                <tr style="background-color:#BCBCBC; ">
+                    <td colspan="3" style="color:#ffffff;">Edit or Delete your Tags</td>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td width="85%">Attendee</td>
+                
+                    <td><img src=" {!URLFOR($Resource.createevents,'createevents/images/delete1.png')}" class="btnExcluir" style="margin-right:20%;"/><img src="{!URLFOR($Resource.createevents,'createevents/images/pencil.png')}" width="20" height="20" class="btnEditar"/></td>
+                </tr>
+               
+                <tr>
+                    <td width="85%">Exhibitor</td>
+                    
+                    <td><img src="{!URLFOR($Resource.createevents,'createevents/images/delete1.png')}" class="btnExcluir" style="margin-right:20%"/><img src="{!URLFOR($Resource.createevents,'createevents/images/pencil.png')}" width="20" height="20" class="btnEditar"/></td>
+                </tr>
+                
+                 <tr>
+                    <td width="85%">Sponsor</td>
+                    
+                    <td><img src="{!URLFOR($Resource.createevents,'createevents/images/delete1.png')}" class="btnExcluir" style="margin-right:20%"/><img src="{!URLFOR($Resource.createevents,'createevents/images/pencil.png')}" width="20" height="20" class="btnEditar"/></td>
+                </tr>
+            
+            </tbody>
+        </table>
+    
+    
+    </div><!--close of content-grid-->
+    </div><!--close of grid1-->
+</div>  <!--close of dialogbox-->
+
+
+
+<!-------------------------------------------------->    
+<!------------------------------ticket more --info content popup------------->
+        <div id="dialogoverlay2"></div>
+          <div id="dialogbox3">
+          <a  id="close" onclick="Alert3.Cancel()">×</a>
+        
+              <div class="grid-1" style="text-align:left;"  >
+             
+                <div class="title-grid">More Information</div>
+                <div class="content-gird" style="">
+     
+
+                
+                  <div class="form">
+                    <div id="left-form" style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:left">
+                   
+                    
+                   
+                      <div class="elem">
+                        <label>Ticket Name: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                          <input type="text"  id="tminfoname" name="tminfoname" class="medium" disabled="disabled"/>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>
+                        
+                         Type: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                        <apex:repeat value="{!paymentSelectOptions}" var="paytype">
+                        <input type="radio"  style="outline:none;" checked="checked" onchange="validfreetick()"   name="payradio" value="{!paytype.value}"/><span style="margin-left:5px; ">{!paytype.label}</span><br/>
+                        </apex:repeat>
+                        <script>
+                        Visualforce.remoting.timeout = 120000; // Set timeout at page level
+                        function validfreetick()
+                        {
+                            var tmtable = document.getElementById("mytab1");
+       for (var p = 1,row; row = tmtable.rows[p]; p++) {
+        if(document.querySelector('input[name="payradio"]:checked').value=='Free'){
+       row.cells[6].children[0].value=0;
+       row.cells[6].children[0].disabled="disabled";
+       }
+       else{
+       row.cells[6].children[0].disabled=false;
+       }
+       }
+       
+                        }
+                        </script>
+
+                        </div>
+                      </div>
+                      
+                        <div class="elem">
+                        <label>Ticket Type:</label>
+                        <div class="indent">
+                         <apex:outputpanel id="itemtypeblock">
+                         <select id="itemtype" style="width:76%" class="selectlist" onchange="editticketbadgelabel(this.value)">
+                           <optgroup label="Tickets">
+                            <apex:repeat value="{!individualTicketsSelectOptions}" var="indittype">
+                            <option value="{!indittype.value}">{!indittype.label}</option>
+                            </apex:repeat> 
+                            </optgroup>
+                             <optgroup label="BL Products">
+
+                            <apex:repeat value="{!BLPRODTicketsSelectOptions}" var="indittype">
+                            <option value="{!indittype.value}">{!indittype.label}</option>
+                            </apex:repeat>
+                            </optgroup>                         
+                          </select>
+                          </apex:outputpanel>
+                        </div>
+                      </div>
+                      
+                      <script>
+                          function editticketbadgelabel(titemtype)
+                         {
+                            
+                            
+                            Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getbadgeinfo}',
+            titemtype,
+            1,
+           function(result, event){
+           
+           
+           if(result.badgable!='B - Badge')
+                            {
+                                document.getElementById('tbdglabel').value="";
+                                document.getElementById('tbdglabel').disabled="disabled";
+                             }
+                           else{
+                             document.getElementById('tbdglabel').disabled=false; 
+                             document.getElementById('tbdglabel').value=result.badgelabel;
+                         }
+             });
+             }
+             
+             function editticketbadgelabelmoreinfo(titemtype)
+                         {
+                            
+                            
+                            Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getbadgeinfo}',
+            titemtype,
+            1,
+           function(result, event){
+           
+           
+           if(result.badgable!='B - Badge')
+                            {
+                               
+                                document.getElementById('tbdglabel').disabled="disabled";
+                             }
+                           else{
+                             document.getElementById('tbdglabel').disabled=false; 
+                             
+                         }
+             });
+             }
+                            
+                      </script>
+                     
+                    
+                        
+                      
+                         <div class="elem">
+                        <label for="ch_effects">Ticket visibility: </label>
+                        
+                     
+                        <div class="indent">
+                        <input type="checkbox"  style="outline:none;" checked="checked"   id="tvisib" value="" />
+                        </div>
+             
+                                   
+                      </div>
+                     
+                        
+                     <div class="elem">
+                        <label for="ch_effects">Tax Rate: </label>
+                        
+                     
+                        <div class="indent">
+                        <input type="checkbox"  style="outline:none;" id="ttaxrate" value="" />
+                        </div>
+             
+                                   
+                      </div>
+                    
+                     
+                    </div>
+                    <!--close of left-form-->
+
+
+<!--script for add tags flag------------------->
+                    
+                <script>
+                  var flagexppp=0;
+                function showet1(){
+                if(flagexppp==0)
+                        { 
+                        flagexppp=1;
+                        /*alert("block");*/
+                            document.getElementById("tagcontentblock").style.display="";
+                            
+                        }
+                        else if (flagexppp==1)
+                        {
+                            /*alert("hide");*/
+                            flagexppp=0;
+                            document.getElementById("tagcontentblock").style.display="none";
+                             
+                        
+                        }
+                        
+            }
+            
+   var TagMap = {};  
+   
+   
+   function getEventTags()
+   {
+        //code for adding existing event tags
+   
+    Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getEventTag}',
+            eventmand.EventID,
+           function(result, event){
+           
+           if (event.status){
+                    var appendTxt = '';
+                    $.each(result, function(i, resulteach){
+                    TagMap[resulteach.Id]=resulteach.Tag_Text__c;
+                   
+                     $('#abc').append('<table class="results">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+resulteach.Tag_Text__c+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                      
+                       $('#abcpk').append('<table class="resultspk">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+resulteach.Tag_Text__c+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                        $('#abcpkitems').append('<table class="resultspl">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+resulteach.Tag_Text__c+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                   
+                       
+                   
+                    console.log(TagMap);
+                    });
+                     $('#addtextlabel').val(''); //clearing textbox value
+                      $('#addtextlabelpk').val(''); //clearing textbox value
+                       $('#addtextlabelpkitems').val(''); //clearing textbox value
+                    }
+                    }
+                    );
+   }     
+                
+                </script>    
+                   <!--------close of script---------------> 
+                    <script type="text/javascript">//<![CDATA[ 
+                    
+$(window).load(function(){
+
+                    
+$(function() {
+   $('#btn_s').click(function(e) {
+     e.preventDefault();
+     var name  = $('input[name="addtagtext"]').val()
+if(name !==''){
+//code for saving event tag
+Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.createEventTag}',
+            eventmand.EventID,
+            name,
+           function(result, event){
+            if (event.status){
+            if(result!=''){
+             $('#abc').append('<table class="results">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+name+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                    $('#addtextlabel').val(''); //clearing textbox value
+                    $('#abcpk').append('<table class="resultspk">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+name+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                    $('#addtextlabelpk').val(''); //clearing textbox value
+                    $('#abcpkitems').append('<table class="resultspl">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+name+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                    $('#addtextlabelpkitems').val(''); //clearing textbox value
+                    TagMap[result] = name;
+                    console.log(TagMap);
+                    }
+                    else
+                    {
+                       alert('Duplicate value');
+                    }
+            }
+           });
+//
+        /*alert('no value for addtagtext');*/
+   //if($('.results').length < 1) {
+      
+
+ //  }
+    }
+   }
+    );
+    $('#btn_i').click(function() {
+      $('.results').remove();  
+    });
+});
+});//]]>  
+
+
+ function addtagsshow(){
+     document.getElementById("addtagtext").style.display="";
+     document.getElementById("addtagsshow").style.display="none";
+     
+     }
+</script>
+                    <!------------------------->
+               <style> 
+              
+    #tagwrapper {
+        width:20%; height:auto; background-color:#ffffff; margin-left:13%; border-radius:3px;  position:absolute;margin-top: -2px;
+        }               
+     #tagtitleblock{
+        width:100%; border:1px solid #D0D0D0; height:auto; border-radius:3px; padding:5px 0px;background :url({!URLFOR($Resource.createevents,'createevents/images/ul_playlist_li.png')} ) repeat-x center bottom #F5F5F5; 
+         }             
+          #tagtitleblock p{  
+          font-size:13px; color: #424242; text-align:center;
+           } 
+           
+           #addtagsdiv{width:100%; height:auto; padding-bottom:0px; background-color:#ffffff; padding-top:5px;}      
+           /* Styles for results table */
+.results {
+  /*  width: 600px;*/
+    width:95%; 
+    margin:0px auto;
+    margin-top: 0px;
+    text-align:left;
+    border: 0px solid #999;
+    padding:3px;
+    display:block; margin-bottom:5px;
+    background-color:#F5F5F5;
+    overflow:hidden;
+}
+
+.results td{ padding:0px 2px;}
+
+
+.resultspl {
+  /*  width: 600px;*/
+    width:95%; 
+    margin:0px auto;
+    margin-top: 0px;
+    text-align:left;
+    border: 0px solid #999;
+    padding:3px;
+    display:block; margin-bottom:5px;
+    background-color:#F5F5F5;
+    overflow:hidden;
+}
+
+.resultspl td{ padding:0px 2px;}
+
+        </style>                
+                    <div class="right-form"  style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:right">
+                       <!--start of tags--->
+                       <div style="float:left;">Tags:</div>
+                       <div id="tagwrapper" style="">
+                       
+                       <div id="tagtitleblock" onClick="showet1()" style="">
+                       
+                       <p ><span><img src="  {!URLFOR($Resource.createevents,'createevents/images/check_black.png')}"  style="margin-right:5%;"/></span>Tags</p>
+                       </div><!--close of tagtitleblock-->
+         
+          <div id="tagcontentblock" style="width:100%;height:auto; display:none; z-index:999999; border:1px solid #D0D0D0; border-top:0px; position:relative; background-color:#ffffff; ">
+          
+          
+          <div id="addtagsdiv" style="">
+          
+           <!----------------------------------------------------->
+            <div id="abc" style="width:100%;">
+
+
+</div>
+
+  <!--------------------------------------->
+  <div style="display:block; border-top: 1px #E5E5E5 solid;border-bottom: 1px #E5E5E5 solid; background-color:#F7F7F7; text-align:center;font-size:18px; font-family:cuprum; color:#5283cc;">
+    <div id="addtagsshow" onClick="addtagsshow()" >
+     <span style="margin-right:10%;"><img src=" {!URLFOR($Resource.createevents,'createevents/images/addtag.png')}" width="18px" height="18px" style="margin-right:2%; margin-bottom:-3px;"/>Add Tags</span>
+    </div>
+    <table id="addtagtext" border="0" width="95%" style="margin:0px auto; margin-top:5px; margin-bottom:5px; display:none;">
+    <tbody>
+        <tr>
+      <!--<td style="text-align:left">Tag Name</td>-->
+      <td><input id="addtextlabel" type="text" name="addtagtext" placeholder="" style="width:80%;"/></td>
+      <td>
+       <div class="buttonHolder">   
+    <input class="button-a blue"  type="button" name="submit" value="Save" onclick="" id="btn_s" />
+    <!--<input class="button-a blue"  value="clear" type="button" id="btn_i">--> 
+  </div></td>
+      <!--<td><input type="checkbox" name="check"></td>-->
+    
+    </tr>
+    
+  </tbody></table>
+  </div>
+ 
+ 
+             <!-------------------------------------------------------->
+          </div><!--close of addtagsdiv-->
+           
+           <div id="managetagbtn" onclick="Alert.render()"  style="width:100%; cursor:pointer; text-align:center; background-color:#F7F7F7; padding:5px 0px; font-size:18px; font-family:cuprum; color:#5283cc;">
+           
+           <img src=" {!URLFOR($Resource.createevents,'createevents/images/manage.png')}" width="20px" height="20px" style="margin-right:2%; margin-bottom:-3px;"/>Manage Tags
+           
+           </div><!--close of managetagbutton-->
+          
+          <!--------------------------------------------------------------------->
+            </div><!--close of tagcontentblock-->
+          
+          </div><!--close of tagwrapper-->
+                        <!--End of tags--->
+                     
+                      <div class="elem" style="margin-top:25px;">
+                        <label>Ticket Description:</label>
+                        <div class="indent">
+                          <textarea class="medium" id="tdesc" name="tdesc" rows="5" style="width:75%"></textarea>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Ticket Image:</label>
+                        <div class="indent">
+                          <div>
+<input type="file" id="ticketlogo" onchange="checkticketlogo()" accept="image/jpeg,image/png" style="width:95px;color:transparent;"/>
+<img  width="50" height="50" id="savedticketimage"/>
+                          </div>
+                        </div>
+                      </div>
+                        
+                        <div class="elem">
+                        <label> Badge Label:</label>
+                        <div class="indent">
+                          <input type="text" id="tbdglabel" value=""/>
+                        </div>
+                      </div>
+                      <!------------------------------------->
+                       <br/>
+                       </div> <!--close of right-form-->
+                    <script>
+                 var ticketlogourl='';
+function showet()
+{
+
+$(".dynamic3").find("tr:gt(0)").remove();
+var appendTxt = "<tr><td><input type='text' id='one' name='input_box_one[]' placeholder='' value='"+earlybudname+" Early'/></td><td>  <input type='text' style='width:75%' class='datetimepickers' value='"+new Date().today()+" " + new Date().timeNow()+"'/></td><td><input type='text' style='width:75%' class='datetimepickers' id='elate1'/></td><td><input type='text' id='three' name='input_box_three[]'  value='"+earlybudqty+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='{!itemdefaultminqty}'/></td><td><input type='text' id='three' name='input_box_three[]'  value='{!itemdefaultmaxqty}'/></td><td><input type='text' id='three' name='input_box_three[]'  value='"+earlybudprice+"'/></td><td id='regticket' style='display:none;'><input type='button' class='del2' title='Delete Ticket' value='' /></td></tr>";
+appendTxt += "<tr><td><input type='text' id='one' name='input_box_one[]' placeholder='' value='"+earlybudname+" Regular'/></td><td>  <input type='text' style='width:75%' class='datetimepickers' id='estart2'/></td><td><input type='text' style='width:75%' class='datetimepickers' id='elate2'/></td><td><input type='text' id='three' name='input_box_three[]'  /></td><td><input type='text' id='three' name='input_box_three[]' value='{!itemdefaultminqty}'/></td><td><input type='text' id='three' name='input_box_three[]'  value='{!itemdefaultmaxqty}'/></td><td><input type='text' id='three' name='input_box_three[]'  /></td><td id='regticket' style='display:none;'><input type='button' class='del2' title='Delete Ticket' value='' /></td></tr>";
+appendTxt += "<tr><td><input type='text' id='one' name='input_box_one[]' placeholder='' value='"+earlybudname+" Late'/></td><td>  <input type='text' style='width:75%' class='datetimepickers' id='estart3'/></td><td><input type='text' style='width:75%' class='datetimepickers' value='"+defaultendtime+"'/></td><td><input type='text' id='three' name='input_box_three[]'  /></td><td><input type='text' id='three' name='input_box_three[]' value='{!itemdefaultminqty}'/></td><td><input type='text' id='three' name='input_box_three[]'  value='{!itemdefaultmaxqty}'/></td><td><input type='text' id='three' name='input_box_three[]' /></td><td id='regticket' style='display:none;'><input type='button' class='del2' title='Delete Ticket' value='' /></td></tr>";
+$(".dynamic3 tbody").append(appendTxt);
+try{
+document.getElementById('elate1').onchange=function(){document.getElementById('estart2').value=document.getElementById('elate1').value};
+document.getElementById('estart2').onchange=function(){document.getElementById('elate1').value=document.getElementById('estart2').value};
+document.getElementById('elate2').onchange=function(){document.getElementById('estart3').value=document.getElementById('elate2').value};
+document.getElementById('estart3').onchange=function(){document.getElementById('elate2').value=document.getElementById('estart3').value};
+}catch(e){}
+var tmtable = document.getElementById("mytab1");
+       for (var p = 1,row; row = tmtable.rows[p]; p++) {
+        if(document.querySelector('input[name="payradio"]:checked').value=='Free'){
+       row.cells[6].children[0].value=0;
+       row.cells[6].children[0].disabled="disabled";
+       }
+       else{
+       row.cells[6].children[0].disabled=false;
+       }
+       }
+//document.getElementById("earlybirdbuttons").style.backgroundImage="none";
+//document.getElementById("earlybirdbuttons").style.border="none";
+//document.getElementById("earlybirdbuttons").style.outline="none";
+document.getElementById("earlybirdtickpric").style.display="";
+}
+            
+ </script>
+                    
+                    <div style="clear:both;"></div>
+      <!--------------------------->
+                      <div style="float:left; margin-bottom:10px;width:100%">
+         <button id="earlybirdbuttons" class="button-a blue" onClick="showet()"  style="float:left">Early Bird Tickets</button>
+         <div id="earlybirdtickpric" style="float: right; padding: 5px; border-radius: 3px; background-color: rgb(238, 238, 238);display:none">
+              
+              <table border="0">
+  <tbody><tr>
+    <td>Early Bird Ticket Pricing Display :</td>
+    <td>   <input type="checkbox" style="outline:none;" checked="checked" value="" id="ebudprcflag"/></td>
+  </tr>
+</tbody></table>
+
+                     </div>
+         
+               </div>
+                   
+          <!-------------------------------------------------->
+  
+                   <table class="display dynamic3" id="mytab1" style="width:100%; margin:0px auto; display:;">
+            <thead>
+              <tr>
+                <th width="27%" style="padding:3px 0px 3px 2px; font-size:13px; text-indent:8px;">Ticket Name</th>
+                <th width="15%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:8px;">Sale Start Date</th>
+                <th width="15%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:8px;">Sale End Date</th>
+                  <th width="11%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:8px;">Qty</th>
+                  <th width="10%" style="padding:3px 0px 3px 2px;font-size:13px;;text-indent:0px;">Order Min-Qty</th>
+                  <th width="10%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:0px;">Order Max-Qty</th>
+                <th width="13%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:8px;">Price</th>
+               
+                <th id="regth" width="" style="display:none;"></th>
+              </tr>
+            </thead>
+            
+            <tbody>
+          </tbody></table> 
+          
+       
+                   
+                    <div class="indent" style="float:right; margin-top:10px; margin-right:10px;"> 
+   
+                        <button class="button-a blue" onclick="saveticketalert()" >Apply</button>
+                        <script>
+                        function saveticketalert()
+                        {
+                          var table = document.getElementById("mytab1");
+                                 for (var i = 1, row; row = table.rows[i]; i++) {
+                                 try{
+                                 var endTime = new Date(defaultendtime);
+                                 var tendTime = new Date(row.cells[2].children[0].value);
+                      if( tendTime>endTime){
+                             alert('Ticket End date cannot be greater than Event End date');
+                             return;
+                            }
+                      }catch(e){alert(e);}
+                                 try{
+                      var tstartTime = new Date(row.cells[1].children[0].value);
+                      var tendTime = new Date(row.cells[2].children[0].value);
+                      if( tstartTime > tendTime){
+                             alert('Start date cannot be greater than End date');
+                             return;
+                            }
+                      }catch(e){alert(e);}
+                      
+                      if(Number(row.cells[5].children[0].value)>Number(row.cells[3].children[0].value))
+                      {
+                        
+                        alert('Order Max-Qty cannot be greater than actual quanity');
+                        return;
+                       
+                        
+                      }
+                      if(Number(row.cells[4].children[0].value)>Number(row.cells[3].children[0].value))
+                      {
+                        
+                        alert('Order Min-Qty cannot be greater than actual quanity');
+                        return;
+                       
+                        
+                      }
+                      if(Number(row.cells[4].children[0].value)>Number(row.cells[5].children[0].value))
+                      {
+                        
+                        alert('Order Min-Qty cannot be greater than Order Max-Qty');
+                        return;
+                       
+                        
+                      }
+                      if(Number(row.cells[4].children[0].value)<0)
+                      {
+                        
+                        alert('Order Min-Qty cannot be less than zero');
+                        return;
+                       
+                        
+                      }
+                 
+                                 }
+                           if(tckcontents=='')
+                           {
+                              getAll();
+                              ticketlogourl='';
+                           }
+                           else{
+                           saveTicketLogo(tckcontents);
+                           document.getElementById('ticketloader').style.display='';}
+                           Alert3.Cancel();
+                           return false;
+                        }
+                        </script>
+                        &nbsp;&nbsp;
+                        <button class="button-a dark-blue" onclick="Alert3.Cancel()" >Cancel</button>
+                      </div>
+                        <apex:form >
+      <apex:actionfunction name="saveTicketLogo" action="{!saveEventLogo}" rerender="reRenderedPanelToSetTicketVariable" oncomplete="getAll();document.getElementById('ticketloader').style.display='none';">
+      <apex:param name="imageData" value="" assignTo="{!imageData}"/>
+</apex:actionfunction></apex:form>
+<apex:outputPanel id="reRenderedPanelToSetTicketVariable">
+   <script type="text/javascript">
+       
+      ticketlogourl= "{!eventlogourl}";
+      
+   </script>
+</apex:outputPanel>
+                      <script>
+                     var tckcontents='';
+                     function checkticketlogo()
+                     {
+                          
+                             var oFReader = new FileReader();
+                     var f = document.getElementById("ticketlogo").files[0];
+          
+
+           if (f) {
+      var r = new FileReader();
+      r.onload = function(e) { 
+      tckcontents = e.target.result.split(',')[1];
+       document.getElementById('savedticketimage').src=e.target.result;
+                 
+      }
+      r.readAsDataURL(f);
+     
+    } else { 
+      alert("Failed to load file");
+    }
+    
+                     }
+                      
+                     function getAll()
+                     {
+                        
+                                                 
+                        for(var pi=0;pi<ticketlist.length;pi++) 
+                        {
+                             if(ticketlist[pi].trowid==parentrowindex)
+                             {
+                                  //set the grouptickets array to null
+                                 if(ticketlist[pi].grouptickets.length==0)
+                                   ticketlist[pi].grouptickets=[];
+                                   
+                                 //Get the inner table values
+                                 var table = document.getElementById("mytab1");
+                                 for (var i = 1, row,nhiderow=0,totqty=0,totprice=0; row = table.rows[i]; i++) {
+                                 if(row.style.display!='none'){
+                       if(ticketlist[pi].grouptickets[nhiderow]==undefined)
+                        ticketlist[pi].grouptickets.push({itemid:"",tname:"",sdate:"",edate:"",qty:"",minqty:"",maxqty:"",tprice:"",availabletickets:""})
+                        ticketlist[pi].grouptickets[nhiderow].tname=row.cells[0].children[0].value;
+                        ticketlist[pi].grouptickets[nhiderow].sdate=row.cells[1].children[0].value;
+                        ticketlist[pi].grouptickets[nhiderow].edate=row.cells[2].children[0].value;
+                        ticketlist[pi].grouptickets[nhiderow].qty=row.cells[3].children[0].value;
+                        ticketlist[pi].grouptickets[nhiderow].minqty=row.cells[4].children[0].value;
+                        ticketlist[pi].grouptickets[nhiderow].maxqty=row.cells[5].children[0].value;
+                        if(Number(ticketlist[pi].grouptickets[nhiderow].maxqty)>Number(ticketlist[pi].grouptickets[nhiderow].qty))
+                        ticketlist[pi].grouptickets[nhiderow].maxqty=ticketlist[pi].grouptickets[nhiderow].qty;
+                        ticketlist[pi].grouptickets[nhiderow].tprice=row.cells[6].children[0].value;
+                        totqty+=Number(row.cells[3].children[0].value);
+                        totprice+=Number(row.cells[6].children[0].value);
+                        nhiderow++;
+                        }
+                             }
+                             
+                             ticketlist[pi].ticketcount=nhiderow;
+                              ticketlist[pi].itemtype=document.getElementById('itemtype').value;
+                             ticketlist[pi].ispackage="false";
+                             if(ticketlist[pi].grouptickets.length==1)
+                             document.getElementById('tminfoname').value=ticketlist[pi].grouptickets[0].tname;
+                             
+                             document.getElementById("tickettable").rows[parentrowindex].cells[2].children[0].value=totqty;
+                             if(ticketlist[pi].ticketcount>1)
+                             document.getElementById("tickettable").rows[parentrowindex].cells[3].children[0].value='Group Tickets';
+                             else
+                             document.getElementById("tickettable").rows[parentrowindex].cells[3].children[0].value=totprice;
+                             try{
+                             document.getElementById("tickettable").rows[parentrowindex].cells[0].children[1].value=document.getElementById('tminfoname').value;}catch(e){}
+                             document.getElementById("tickettable").rows[parentrowindex].cells[1].children[0].value=document.querySelector('input[name="payradio"]:checked').value;
+                            
+                             ticketlist[pi].tvisib=$('#tvisib').attr('checked');
+                             ticketlist[pi].taxrateflag=$('#ttaxrate').attr('checked');
+                             ticketlist[pi].tebudprcflag=$('#ebudprcflag').attr('checked');
+                             if(ticketlist[pi].grouptickets.length==1){
+                             
+                             ticketlist[pi].tebudprcflag=true;
+                             }
+                             ticketlist[pi].tdesc=document.getElementById('tdesc').value;
+                             ticketlist[pi].tbdglabel=document.getElementById('tbdglabel').value;
+                              Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getbadgeinfo}',
+            ticketlist[pi].itemtype,
+            pi,
+           function(result, event){
+            ticketlist[result.arrindex].tbadgable=result.badgable;
+             });
+                             
+
+  if(ticketlogourl!=''){
+  ticketlist[pi].tcketlogo=ticketlogourl;
+  tckcontents='';
+  ticketlogourl='';
+  }
+                             //
+                             
+                             //set the tags array to null
+                                   
+                                  ticketlist[pi].tags=[];
+                             //code for adding tags
+                             var testimonialElements = $(".results");
+                             
+                             for(var f=0,tgindex=0; f<testimonialElements.length; f++){
+                                  
+                                  var element = testimonialElements.eq(f);
+                                  if(element[0].children[0].children[0].children[0].children[0].checked){
+                                  ticketlist[pi].tags.push({tagname:""});
+                                  ticketlist[pi].tags[tgindex].tagname=getKeyByValue(TagMap,element[0].children[0].children[0].children[1].innerHTML);
+                                  tgindex++;
+                                  }
+                                  }
+                             //end of tags
+                            
+                        }
+                        }
+                         
+                      
+                     
+                    }
+                     </script>
+                      
+                    <!----dynamic table for tickets on the popup---->
+                       
+          <!------------------------------end of dynamic table------------>
+                    <div class="clear"> </div>
+                  </div><!--close of form-->
+                   <!------------------->
+                <div class="clear"> </div>
+                </div><!--close of contentgrid-->
+             
+           </div><!--close of grid-1-->
+           
+            </div><!--close of dialogbox3-->
+            
+            
+         <style>
+     #blprodlink{background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(253,253,253,1)), color-stop(100%,rgba(227,227,227,1)));
+background: -webkit-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -o-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -ms-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#e3e3e3',GradientType=0 );
+border: 1px solid #e3e3e3;
+padding:5px; border-radius:3px; color:#3895ba; font-size:12px;}
+
+ #blprodlink:hover{ text-decoration:none;}
+ 
+ .pkgbttn{background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(253,253,253,1)), color-stop(100%,rgba(227,227,227,1)));
+background: -webkit-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -o-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -ms-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#e3e3e3',GradientType=0 );
+border: 1px solid #e3e3e3;
+padding:5px; border-radius:3px; color:#3895ba; font-size:12px; cursor:pointer; float:right; margin-bottom:10px; margin-top:-5px; margin-right:10px;}
+ 
+ #boothleadsprodcontents table{ border-collapse:collapse; margin-left:1%;border: 1px solid #e3e3e3; margin-top:-3px;}
+   #boothleadsprodcontents table tr td{ padding:0px 3px; border:none;}  
+   #boothleadsprodcontents table tr{  border:none;}   
+       </style>
+       <style>
+#tagwrapperpk {
+width:20%; height:auto; background-color:#ffffff; margin-left:13%; border-radius:3px; position:absolute;margin-top: -2px;
+}
+#tagtitleblockpk{
+width:100%; border:1px solid #D0D0D0; height:auto; border-radius:3px; padding:5px 0px;background: url({!URLFOR($Resource.createevents,'createevents/images/ul_playlist_li.png')} ) repeat-x center bottom #F5F5F5;
+}
+#tagtitleblockpk p{
+font-size:13px; color: #424242; text-align:center;
+}
+
+#addtagsdiv{width:100%; height:auto; padding-bottom:0px; background-color:#ffffff; padding-top:5px;}
+/* Styles for results table */
+.resultspk {
+/* width: 600px;*/
+width:95%;
+margin:0px auto;
+margin-top: 0px;
+text-align:left;
+border: 0px solid #999;
+padding:3px;
+display:block; margin-bottom:5px;
+background-color:#F5F5F5;
+overflow:hidden;
+}
+
+.resultspk td{ padding:0px 2px;}
+
+
+
+</style>         
+<!--------------------------------close of more ticket info popup------------->
+<!------------------------------package Moreinfo popup------------->
+        <div id="dialogoverlay2"></div>
+            <div id="dialogbox4">
+          <a  id="close" onclick="Alert4.Cancel()">×</a>
+          
+
+<!---tmore package info popup------------->
+          
+          
+          <div id="morepackageinfo">
+                     <div class="grid-1" style="text-align:left;"  >
+                <div class="title-grid">Create Package</div>
+                <div class="content-gird">
+                  <div class="form">
+                    <div id="left-form" style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:left">
+                   
+                    
+                   
+                      <div class="elem">
+                        <label>Package Name: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                          <input type="text"  id="pminfoname" name="pminfoname" class="medium"/>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Package Type: </label>
+                        <label id="mandatory">*</label>
+                        <div class="indent">
+                        <apex:repeat value="{!paymentSelectOptions}" var="paytype">
+                        <input type="radio" onchange="validfreepack()"  style="outline:none;" checked="checked" name="pkgpayradio" value="{!paytype.value}"/><span style="margin-left:5px; ">{!paytype.label}</span><br/>
+                        </apex:repeat>
+                        <script>
+                        function validfreepack()
+                        {
+                            var pmtable = document.getElementById("packagemoreinfotable");
+       for (var p = 1,row; row = pmtable.rows[p]; p++) {
+        if(document.querySelector('input[name="pkgpayradio"]:checked').value=='Free'){
+       row.cells[6].children[0].value=0;
+       row.cells[6].children[0].disabled="disabled";
+       }
+       else{
+       row.cells[6].children[0].disabled=false;
+       }
+       }
+       
+                        }
+                        </script>
+                        </div>
+                      </div>
+                      
+                     <div class="elem">
+                        <label>Ticket Type:</label>
+                        <div class="indent">
+                        <apex:outputpanel id="pkitemtypeblock">
+                          <select class="selectlist" style=" width:76%;" id="pkitemtype">
+                          
+                            <apex:repeat value="{!itemtypespackage}" var="ittype">
+                            <option value="{!ittype.value}">{!ittype.label}
+                            </option>
+                            </apex:repeat>
+                            
+                            
+                          </select>
+                          </apex:outputpanel>
+                        </div>
+                      </div>
+                      
+                      <div class="elem">
+                        <label>Package visibility: </label>
+                         <div class="indent" style="margin-top:5px;">
+                       <input type="checkbox"  id="pkvisib" value="" />
+                      </div>
+                      </div>
+                     <div class="elem">
+                        <label for="ch_effects">Tax Rate: </label>
+                        
+                     
+                        <div class="indent">
+                        <input type="checkbox"  style="outline:none;" id="ptaxrate" value="" />
+                        </div>
+             
+                                   
+                      </div>
+         
+                     
+                    </div>
+                    <!--close of left-form-->
+                    
+                    <div class="right-form"  style=" width:49%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:right">
+                      <!---------------------PACKAGE TAGS------>
+                   <div style="float:left;">Tags:</div>
+                   <div id="tagwrapperpk" style="">
+                       
+                       <div id="tagtitleblockpk" onclick="showet2()" style="">
+                       
+                       <p style=""><span><img src="{!URLFOR($Resource.createevents,'createevents/images/check_black.png')}" style="margin-right:5%;"/></span>Tags</p>
+                       </div><!--close of tagtitleblock1-->
+         
+          <div id="tagcontentblockpk" style="display:none;width: 100%; height: auto; z-index: 999999; border-width: 0px 1px 1px; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-color: rgb(208, 208, 208); border-bottom-color: rgb(208, 208, 208); border-left-color: rgb(208, 208, 208); position: relative; background-color: rgb(255, 255, 255);">
+          
+          
+          <div id="addtagsdivpk" style="">
+          
+           <!----------------------------------------------------->
+            <div id="abcpk" style="width:100%; padding-top:5px;">
+
+
+</div>
+
+<!--script for add tags flag------------------->
+                    
+                <script>
+                  var flagexppp=0;
+                function showet2(){
+               
+                if(flagexppp==0)
+                        { 
+                        flagexppp=1;
+                        /*alert("block");*/
+                            document.getElementById("tagcontentblockpk").style.display="";
+                            
+                        }
+                        else if (flagexppp==1)
+                        {
+                            /*alert("hide");*/
+                            flagexppp=0;
+                            document.getElementById("tagcontentblockpk").style.display="none";
+                             
+                        
+                        }
+                        
+            }
+            
+           
+            
+        
+                
+                </script>    
+                   <!--------close of script---------------> 
+                    <script type="text/javascript">//<![CDATA[ 
+$(window).load(function(){
+$(function() {
+   $('#btn_spk').click(function(e) {
+     e.preventDefault();
+     var name  = $('input[name="addtagtextpk"]').val()
+if(name !==''){
+       Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.createEventTag}',
+            eventmand.EventID,
+            name,
+           function(result, event){
+            if (event.status){
+            if(result!=''){
+       $('#abcpk').append('<table class="resultspk">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+name+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                    $('#addtextlabelpk').val(''); //clearing textbox value
+                     $('#abc').append('<table class="results">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+name+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                    $('#addtextlabel').val(''); //clearing textbox value
+                    $('#abcpkitems').append('<table class="resultspl">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+name+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                    $('#addtextlabelpkitems').val(''); //clearing textbox value
+                     TagMap[result] = name;
+                    console.log(TagMap);
+                    }
+                    else
+                    {
+                       alert('Duplicate value');
+                    }
+            }
+           });
+
+ //  }
+    }
+   }
+    );
+    $('#btn_ipk').click(function() {
+      $('.resultspk').remove();  
+    });
+});
+});//]]>  
+
+
+ function addtagsshow2(){
+     document.getElementById("addtagtextpk").style.display="";
+     document.getElementById("addtagsshowpk").style.display="none";
+     
+     }
+</script>
+                    <!------------------------->
+
+
+  <!--------------------------------------->
+  <div style="display:block; border-top: 1px #E5E5E5 solid;border-bottom: 1px #E5E5E5 solid; background-color:#F7F7F7; text-align:center;font-size:18px; font-family:cuprum; color:#5283cc;" class="inactive">
+    <div id="addtagsshowpk" onclick="addtagsshow2()" style="padding-top: 1px; display: none;">
+     <span style="margin-right:10%;"><img src="images/addtag.png" width="18px" height="18px" style="margin-right:2%; margin-bottom:-3px;"/>Add Tags</span>
+    </div>
+    <table id="addtagtextpk" border="0" width="95%" style="margin: 5px auto;">
+    <tbody>
+        <tr>
+      <!--<td style="text-align:left">Tag Name</td>-->
+      <td><input id="addtextlabelpk" type="text" name="addtagtextpk" placeholder="" style="width:80%;"/></td>
+      <td>
+       <div class="buttonHolder">   
+    <input class="button-a blue" type="button" name="submit" value="Save" onclick="" id="btn_spk"/>
+    <!--<input class="button-a blue"  value="clear" type="button" id="btn_i">--> 
+  </div></td>
+      <!--<td><input type="checkbox" name="check"></td>-->
+    
+    </tr>
+    
+  </tbody></table>
+  </div>
+ 
+ 
+             <!-------------------------------------------------------->
+          </div><!--close of addtagsdiv-->
+           
+           <div id="managetagbtn1" onclick="Alert.render()" style="width:100%; cursor:pointer; text-align:center; background-color:#F7F7F7; padding:5px 0px; font-size:18px; font-family:cuprum; color:#5283cc;">
+           
+           <img src="{!URLFOR($Resource.createevents,'createevents/images/manage.png')}" width="20px" height="20px" style="margin-right:2%; margin-bottom:-3px;"/>Manage Tags
+           
+           </div><!--close of managetagbutton-->
+          
+          <!--------------------------------------------------------------------->
+            </div><!--close of tagcontentblock-->
+          
+          </div>
+                   <!--END OF PACKAGE TAGS-->
+                      
+                        
+                      <div class="elem">
+                        <label>Package Description:</label>
+                        <div class="indent">
+                          <textarea class="medium" id="pkdesc" name="pkdesc" rows="5" style="width:75%"></textarea>
+                        </div>
+                      </div>
+                       <div class="elem">
+                        <label>Package Image:</label>
+                        <div class="indent">
+                          <div>
+                             <input type="file" id="pklogo" onchange="checkpackagelogo()" accept="image/jpeg,image/png" style="width:95px;color:transparent;"/>
+                              <img  width="50" height="50" id="savedpackageimage" />
+                          </div>
+                        </div>
+                      </div>
+                      <br/>
+                   
+                    </div> <!--close of right-form-->
+                     <script>
+                 
+function showetpck()
+{
+
+$(".dynamic4").find("tr:gt(0)").remove();
+var appendTxt = "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+earlybudname+" Early'/></td> <td><input type='text' style='width:75%' class='datetimepickers' value='"+new Date().today()+" " + new Date().timeNow()+"'/></td><td><input type='text' style='width:75%' class='datetimepickers' id='elate1pck' /></td><td><input type='text' id='three' name='input_box_three[]' value='"+earlybudqty+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='{!itemdefaultminqty}'/></td><td><input type='text' id='three' name='input_box_three[]'  value='{!itemdefaultmaxqty}'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+earlybudprice+"'/></td></tr>";
+appendTxt += "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+earlybudname+" Regular'/></td> <td><input type='text' style='width:75%' class='datetimepickers' id='estart2pck'/></td><td><input type='text' style='width:75%' class='datetimepickers'  id='elate2pck'/></td><td><input type='text' id='three' name='input_box_three[]' value=''/></td><td><input type='text' id='three' name='input_box_three[]' value='{!itemdefaultminqty}'/></td><td><input type='text' id='three' name='input_box_three[]'  value='{!itemdefaultmaxqty}'/></td><td><input type='text' id='three' name='input_box_three[]' value=''/></td></tr>";
+appendTxt += "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+earlybudname+" Late'/></td> <td><input type='text' style='width:75%' class='datetimepickers' id='estart3pck'/></td><td><input type='text' style='width:75%' class='datetimepickers'  value='"+defaultendtime+"'/></td><td><input type='text' id='three' name='input_box_three[]' value=''/></td><td><input type='text' id='three' name='input_box_three[]' value='{!itemdefaultminqty}'/></td><td><input type='text' id='three' name='input_box_three[]'  value='{!itemdefaultmaxqty}'/></td><td><input type='text' id='three' name='input_box_three[]' value=''/></td></tr>";
+$(".dynamic4 tbody").append(appendTxt);
+try{
+document.getElementById('elate1pck').onchange=function(){document.getElementById('estart2pck').value=document.getElementById('elate1pck').value};
+document.getElementById('estart2pck').onchange=function(){document.getElementById('elate1pck').value=document.getElementById('estart2pck').value};
+document.getElementById('elate2pck').onchange=function(){document.getElementById('estart3pck').value=document.getElementById('elate2pck').value};
+document.getElementById('estart3pck').onchange=function(){document.getElementById('elate2pck').value=document.getElementById('estart3pck').value};
+}catch(e){}
+
+/*document.getElementById("optionspck").style.display="";
+document.getElementById("options1pck").style.display="";
+document.getElementById("regpck").style.display="";
+document.getElementById("regtdpck").style.display="";
+document.getElementById("earlybirdbuttons1").style.backgroundImage="none";
+document.getElementById("earlybirdbuttons1").style.border="none";
+document.getElementById("earlybirdbuttons1").style.outline="none";*/
+document.getElementById("earlybirdpackkpric").style.display="";
+
+}
+            
+ </script> 
+ <div style="clear:both;"></div>
+                    <div style="float:left; margin-bottom:10px;width:100%">
+         <button id="earlybirdbuttons1" class="button-a blue" onclick="showetpck()" style="float:left">Early Bird Package</button>
+         <div id="earlybirdpackkpric" style="float: right; padding: 5px; border-radius: 3px; background-color: rgb(238, 238, 238);display:none">
+              
+              <table border="0">
+  <tbody><tr>
+    <td>Early Bird Package Pricing Display :</td>
+    <td>   <input type="checkbox" style="outline:none;" checked="checked" value="" id="pebudprcflag"/></td>
+  </tr>
+</tbody></table>
+
+                     </div>
+               </div>
+                    
+                     <table class="display dynamic4" id="packagemoreinfotable" style="width:100%; margin:0px auto;">
+            <thead>
+              <tr>
+                <th width="28%" style="padding:3px 0px 3px 2px; text-indent:5px;">Package Item Name</th>
+                <th width="15%" style="padding:3px 0px 3px 2px;text-indent:5px;">Start Date</th>
+                <th width="15%" style="padding:3px 0px 3px 2px;text-indent:5px;">End Date</th>
+                  <th width="11%" style="padding:3px 0px 3px 2px;text-indent:5px;">Qty</th>
+               <th width="10%" style="padding:3px 0px 3px 2px;font-size:13px;;text-indent:0px;">Order Min-Qty</th>
+                  <th width="10%" style="padding:3px 0px 3px 2px;font-size:13px;text-indent:0px;">Order Max-Qty</th>
+                 <th width="15%" style="padding:3px 0px 3px 2px;text-indent:5px;">Price</th>
+                 <!--<th id="regpck" width="" ><input type='button' class='add3' value='' /></th>-->
+              </tr>
+            </thead>
+            <tbody>
+                 
+                       
+            
+            
+          </tbody></table>
+        
+                <div class="indent" style="float:right; margin-top:10px; margin-right:10px;"> 
+   
+                        <button class="button-a blue" onclick="calpackagegrouptotal()">Apply</button>
+                        <button class="button-a dark-blue" onclick="cancelpackagegrouptotal()">Cancel</button>
+                        <script>
+                        function cancelpackagegrouptotal()
+                        {
+                           var rowindex;
+      if(isnewpackage=="true")
+       rowindex=$(".dynamic tr:last").index()+1;
+        else
+       rowindex=parentrowindex-1;
+       var appendTxt='';
+       var totprice=0,totqty=0;
+       for(var j=0,count=0;j<ticketlist[rowindex].ticketcount;j++)
+           {
+             
+          appendTxt += "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+escape(ticketlist[rowindex].grouptickets[j].tname)+"'/></td> <td><input type='text' style='width:75%' class='datetimepickers' value='"+ticketlist[rowindex].grouptickets[j].sdate+"'/></td><td><input type='text' style='width:75%' class='datetimepickers'  value='"+ticketlist[rowindex].grouptickets[j].edate+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[rowindex].grouptickets[j].qty+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[rowindex].grouptickets[j].minqty+"'/></td><td><input type='text' id='three' name='input_box_three[]'  value='"+ticketlist[rowindex].grouptickets[j].maxqty+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+document.getElementById('packageprice').value+"'/></td></tr>";
+           totqty+=Number(ticketlist[rowindex].grouptickets[j].qty);
+              totprice+=Number(ticketlist[rowindex].grouptickets[j].tprice);
+              count++;
+           }
+           if(appendTxt!=''){
+           $(".dynamic4").find("tr:gt(0)").remove();
+      $(".dynamic4 tbody").append(appendTxt);}
+      else
+      {
+           var datetime =new Date().today()+" " + new Date().timeNow();
+     var txt= "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+escape(earlybudname)+"'/></td> <td><input type='text' style='width:75%' class='datetimepickers' value='"+datetime+"'/></td><td><input type='text' style='width:75%' class='datetimepickers'  value='"+defaultendtime+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+earlybudqty+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='{!itemdefaultminqty}'/></td><td><input type='text' id='three' name='input_box_three[]'  value='{!itemdefaultmaxqty}'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+earlybudprice+"'/></td></tr>";
+      $(".dynamic4").find("tr:gt(0)").remove();
+      $(".dynamic4 tbody").append(txt);
+      }
+      
+      if(appendTxt!=''){
+       if(count>1)
+                             document.getElementById('packageprice').value='Group Packages';
+                             else
+                             document.getElementById('packageprice').value=totprice;
+               document.getElementById('packageqty').value=totqty;
+               }
+       Alert4.Cancel();
+                        }
+                        function calpackagegrouptotal()
+                        {
+                             var table = document.getElementById("packagemoreinfotable");
+                             
+                             var totprice=0,totqty=0;
+                             for (var i = 1, row,nhiderow=0; row = table.rows[i]; i++) {
+       
+        if(row.style.display!='none'){
+              totqty+=Number(row.cells[3].children[0].value);
+              totprice+=Number(row.cells[6].children[0].value);
+              try{
+                                 var endTime = new Date(defaultendtime);
+                                 var tendTime = new Date(row.cells[2].children[0].value);
+                      if( tendTime>endTime){
+                             alert('Package End date cannot be greater than Event End date');
+                             return;
+                            }
+                      }catch(e){alert(e);}
+              try{
+                      var pstartTime = new Date(row.cells[1].children[0].value);
+                      var pendTime = new Date(row.cells[2].children[0].value);
+                      if( pstartTime > pendTime){
+                             alert('Start date cannot be greater than End date');
+                             return;
+                            }
+                      }catch(e){alert(e);}
+                      
+                      if(Number(row.cells[5].children[0].value)>Number(row.cells[3].children[0].value))
+                      {
+                        
+                        alert('Order Max-Qty cannot be greater than actual quanity');
+                        return;
+                       
+                        
+                      }
+                      if(Number(row.cells[4].children[0].value)>Number(row.cells[3].children[0].value))
+                      {
+                        
+                        alert('Order Min-Qty cannot be greater than actual quanity');
+                        return;
+                       
+                        
+                      }
+                      if(Number(row.cells[4].children[0].value)>Number(row.cells[5].children[0].value))
+                      {
+                        
+                        alert('Order Min-Qty cannot be greater than Order Max-Qty');
+                        return;
+                       
+                        
+                      }
+                      if(Number(row.cells[4].children[0].value)<0)
+                      {
+                        
+                        alert('Order Min-Qty cannot be less than zero');
+                        return;
+                       
+                        
+                      }
+                 
+              nhiderow++;
+         }
+       }
+       if(nhiderow>1)
+                             document.getElementById('packageprice').value='Group Packages';
+                             else
+                             document.getElementById('packageprice').value=totprice;
+               document.getElementById('packageqty').value=totqty;
+        Alert4.Cancel();
+                        }
+                        </script>
+           </div>      
+                   
+                   
+                      
+                    <!----dynamic table for tickets on the popup---->
+                       
+          <!------------------------------end of dynamic table------------>
+                    <div class="clear"> </div>
+                  </div><!--close of form-->
+             
+                  <div class="clear"> </div>
+                </div><!--close of contentgrid-->
+           </div>
+            </div>
+            
+            
+            <!--close of more package info popup------------->
+          
+          </div><!--close of dialogbox4--------->
+<!---------------------------end of package moreinfo content popup------------------>
+
+          
+          <div id="package1" style="width:99%; margin:0px auto; margin-top:20px;  height:auto; display:none;"> 
+         
+          
+           <div class="grid-1" style=" width:100%; margin-left:0px;"  >
+          <div class="title-grid1" style=" border:0px solid #000;"><span></span>
+          <img src="{!URLFOR($Resource.createevents,'createevents/images/redheaderbg.png')}"  style="margin-top:-8px; 
+          margin-left:-2%;"/> <p style="color:#FFF; font-size:16px; font-family:segoe ui; margin-top:-34px;">Create Package </p>
+          
+        </div><!--close of title-grid1-->
+          
+          <div class="content-gird"  style=" border: 0px solid #e3e3e3;  padding:0px;">
+           <!----------------------Dynamic Table for Package-------------------------->
+            <table width="100%" border="0" style="border-collapse:collapse;  background-color:#F6F6F6; padding:5px; border-top: 1px solid #BDBDBD;border-bottom: 0px solid #BDBDBD; font-size:13px; color:#424242; 
+          font-family:Arial, Helvetica, sans-serif;">
+          <tr>
+          <td  style="font-size:17px; text-align:left;  text-indent:10px; color: #4f91cd;font-family:cuprum">1.</td>
+    <td width="10%" height="55px"  style="texr-indent:5px; text-align:right;">Package Name:</td>
+    <td width="20%" style="">      <input type="text"  id="packagename" name="packagename" class="medium" onKeyUp="pkgnmkeyupvalid()" onBlur="pkgnmblurvalid()"
+  style="width:78%;margin-left:10px;"/></td>
+   
+    <td width="12%" style="text-align:right;">Price:</td>
+    <td width="10%">      <input type="text"  id="packageprice" name="packageprice" class="medium" style="margin-left:10px; width:60%;" onKeyUp="pkgpricekeyupvalid()" onBlur="pkgpriceblurvalid()"
+/></td>
+     <td width="16%" height="55px" style="text-align:right;">Quantity:</td>
+    <td width="20%">      <input type="text"  id="packageqty" name="packageqty" class="medium" style="margin-left:10px;width:80%;" onKeyUp="pkgqtykeyupvalid()" onBlur="pkgqtyblurvalid()"/></td>
+
+  <td  >
+  <a onClick="Alert4.render(this.parentNode.parentNode.children[2].children[0].value,this.parentNode.parentNode.children[4].children[0].value,this.parentNode.parentNode.children[6].children[0].value)">
+  <div id="nwmoreinfodiv">
+ <apex:image url="{!URLFOR($Resource.createevents,'createevents/images/addmore.png')}" width="25px" height="25px"/>
+ </div>
+   </a>
+  <!--<a href="#" style="text-decoration:none;color: #FFF;" data-reveal-id="morepackageinfo" data-animation="none">
+   <img id="ticketinfo" src="creditcards/document_add.png" title="Add more info">
+   </a> -->
+ </td>
+  </tr>
+  
+ 
+  
+</table>
+<!--------------------------------------------------------------------------> 
+          
+          <table class="display dynamic2" id="packagetable" style="width:100%; margin:0px auto; margin-top:0px;" >
+            <thead>
+              <tr>
+                <th width="26%" style="padding:3px 0px 3px 2px; text-indent:5px;">Package Item Name</th>
+              
+                <th width="13%" style="padding:3px 0px 3px 2px;text-indent:5px;">Package Item Qty</th>
+                 <!-- <th width="11%" style="padding:3px 0px 3px 2px;text-indent:5px;">Price</th>-->
+                <th width="20%" style="padding:3px 0px 3px 2px;text-indent:5px;">Ticket Type</th>
+             <!--   <th width="9%" style="padding:3px 0px 3px 2px;text-indent:5px; ">More Info</th>-->
+             <th width="8%" style="padding:3px 0px 3px 2px;text-indent:5px;">Tags</th>
+                  <th width="20%" style="padding:3px 0px 3px 2px;text-indent:5px;">Badge label</th>
+   
+                  
+                <th width=""><a class="add1" title="Add Package Item" style="color:#807f7f; text-decoration:none;"><img src="{!URLFOR($Resource.createevents,'createevents/images/addrow.png')}" width="18" height="18" style="margin-right:5px; margin-bottom:-5px;"/>Add Package Item</a></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+            
+          </table>
+          <!-------------------------------->   
+           <div style="margin-top:10px; margin-bottom:5px; text-align:right;">
+   
+                        <button class="button-a blue" onClick="pkgvalid();return false;" >Apply</button>
+                        &nbsp;&nbsp;
+                        <button class="button-a dark-blue" onClick="showclose('package1','dynamictickets')" >Cancel</button>
+               </div>
+                      
+          
+          
+          </div></div>
+          
+          </div>
+          
+           
+          <!------------------------End of create Package Div------------------------->   
+          
+          
+          <script>
+           function mask1()
+   {
+       try{
+       document.getElementById("mask2overlay").style.display="none"; 
+       }catch(e){}
+          //if(sessionStorage.getItem('ticket')==null)
+ //{
+      if('{!$CurrentPage.parameters.id}'!='')
+ eventmand.EventID='{!$CurrentPage.parameters.id}';
+        //Get all available item pools
+        var itpoolid=[];
+        var itpoolname=[];
+Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getSavedTickets}',
+            eventmand.EventID,
+           function(result, event){
+           var j = 1,arrindex=0;
+          $.each(result, function(i, resulteach){
+          
+          
+          
+          ticketlist[arrindex].poolid=resulteach.Id;
+                ticketlist[arrindex].tname=resulteach.Item_Pool_Name__c;
+                itpoolid[arrindex]=resulteach.Id;
+                itpoolname[arrindex]=resulteach.Name;
+                ticketlist[arrindex].tqty=resulteach.Item_Count__c;
+                if(resulteach.Package_Flag__c=='I - Individual Item pool')
+                ticketlist[arrindex].ispackage='false';
+                else
+                ticketlist[arrindex].ispackage='true';
+                ticketlist[arrindex].itemtype=resulteach.Item_Type__c;
+                ticketlist[arrindex].tbdglabel=resulteach.Badge_Label__c==undefined?'':resulteach.Badge_Label__c;
+                ticketlist[arrindex].tbadgable=resulteach.Badgable__c==undefined?'':resulteach.Badgable__c;
+                ticketlist[arrindex].trowid=j;
+               arrindex++;
+                j++;
+                
+                console.log(resulteach);
+                });
+              
+         //Get Items
+           for(k=0;k<itpoolid.length;k++)
+           {
+              //Get Items/Group Tickets
+                Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getnewItemsBasedOnPool}',
+            itpoolid[k],
+            eventmand.EventID,
+           function(result1, event1){
+           var ik=0,totqty=0,totprice=0;
+           $.each(result1, function(i1, resulteach1){
+           for(l=0;l<itpoolid.length;l++){
+           if(resulteach1.ite.Item_Pool__c==itpoolid[l]){
+           ticketlist[l].grouptickets.push({itemid:"",tname:"",sdate:"",edate:"",qty:"",minqty:"",maxqty:"",tprice:"",availabletickets:""});
+           ticketlist[l].tcketlogo=resulteach1.ite.image_url__c;
+           ticketlist[l].grouptickets[ik].availabletickets=resulteach1.ite.Available_Tickets__c;
+           ticketlist[l].grouptickets[ik].itemid=resulteach1.ite.Id;
+           ticketlist[l].grouptickets[ik].tname=resulteach1.ite.item_name__c;
+           
+            /*Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getTimeZoneValueforitem}',
+            eventmand.EventID,
+            resulteach1.sale_start__c,
+            resulteach1.sale_end__c,
+            l,
+            ik,
+           function(resulted, eventd){
+           var eddates=resulted.itdate;
+           var res = eddates.split(",");
+          
+           ticketlist[resulted.l].grouptickets[resulted.ik].sdate=res[0];
+           ticketlist[resulted.l].grouptickets[resulted.ik].edate=res[1];
+          
+           });*/
+           ticketlist[l].grouptickets[ik].sdate=resulteach1.startdate;
+           ticketlist[l].grouptickets[ik].edate=resulteach1.enddate;
+           ticketlist[l].grouptickets[ik].qty=resulteach1.ite.item_count__c;
+           ticketlist[l].grouptickets[ik].minqty=resulteach1.ite.min_per_order__c;
+           ticketlist[l].grouptickets[ik].maxqty=resulteach1.ite.max_per_order__c;
+           totqty+=resulteach1.ite.item_count__c;
+           totprice+=resulteach1.ite.price__c;
+           
+           ticketlist[l].grouptickets[ik].tprice=resulteach1.ite.price__c;
+           ik++;
+           ticketlist[l].ticketcount=ik;
+           
+           ticketlist[l].tprice=totprice;
+             if(ik>1)
+             ticketlist[l].tprice='Group Tickets';
+             ticketlist[l].tpaytype=resulteach1.ite.Payment__c;
+             ticketlist[l].tvisib=resulteach1.ite.Visibility__c;
+             ticketlist[l].taxrateflag=resulteach1.ite.Taxable__c;
+              ticketlist[l].tebudprcflag=resulteach1.ite.Early_Bird_Pricing_Display_Flag__c;
+             ticketlist[l].tdesc=resulteach1.ite.Description__c==undefined?'':resulteach1.ite.Description__c;
+               }
+           }
+           });
+           
+          
+           sessionStorage['ticket']=JSON.stringify(ticketlist);
+           getTicketState();
+           try{
+           if(document.getElementById('meventstat').value=='Live')
+           show('payment');}catch(e){}
+           });  
+           
+            //Get Addon Item Pools
+           Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getAddonPool}',
+            itpoolid[k],
+           function(result2, event2){
+           console.log(result2);
+           var ik1=0;
+           $.each(result2, function(i2, resulteach2){
+           for(m=0;m<itpoolid.length;m++){
+           if(resulteach2.Addon_Parent__c==itpoolid[m]){
+           ticketlist[m].subpackagegroup.push({addonid:"",pkgitemname:"",pkgitemqty:"",ttype:"",badgelabel:"",badgable:""});
+           ticketlist[m].subpackagegroup[ik1].addonid=resulteach2.Id;
+          
+           ticketlist[m].subpackagegroup[ik1].pkgitemname=resulteach2.Item_Pool_Name__c;
+           ticketlist[m].subpackagegroup[ik1].pkgitemqty=resulteach2.Addon_Count__c;
+           ticketlist[m].subpackagegroup[ik1].ttype=resulteach2.Item_Type__c;
+           ticketlist[m].subpackagegroup[ik1].badgelabel=resulteach2.Badge_Label__c==undefined?'':resulteach2.Badge_Label__c;
+           ticketlist[m].subpackagegroup[ik1].badgable=resulteach2.Badgable__c==undefined?'':resulteach2.Badgable__c;
+           ticketlist[m].subpackagegroup[ik1].tags=[];
+           try{
+           for(b=0;b<resulteach2.BLN_Event_Tags__r.length;b++)
+           {
+             
+             ticketlist[m].subpackagegroup[ik1].tags.push({tagname:""});
+            ticketlist[m].subpackagegroup[ik1].tags[b].tagname=resulteach2.BLN_Event_Tags__r[b].ParentId__c;
+           }
+           }catch(e){}
+           
+           ik1++;
+               }
+           }
+           });
+           
+          
+           sessionStorage['ticket']=JSON.stringify(ticketlist);
+           getTicketState();
+           try{
+           if(document.getElementById('meventstat').value=='Live')
+           show('payment');}catch(e){}
+           });  
+           //End Of Get Addon Item Pools   
+           }//end of itpoolid loop
+           
+            Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getSavedTags}',
+            eventmand.EventID,
+           function(result3, event3){
+           
+           //var set = [];
+          $.each(result3, function(i3, resulteach3){
+          /*var setflag=0;
+          for(seti=0;seti<set.length;seti++)
+          {
+             if(resulteach3.Tag_Id__c==set[seti])
+             setflag=1;
+          }
+          
+            if (setflag==0) { 
+                 set.push(resulteach3.Tag_Id__c);
+               }*/
+                          
+                          for(mt=0;mt<itpoolid.length;mt++){
+                          if(resulteach3.RowId__c==itpoolid[mt]){
+                          
+                          ticketlist[mt].tags.push({tagname:resulteach3.ParentId__c});
+                          
+                                  }
+                          }
+            });
+            
+            /*for(tagi=0;tagi<set.length;tagi++){
+            $('#abc').append('<table class="results">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+set[tagi]+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');}*/
+            sessionStorage['ticket']=JSON.stringify(ticketlist);
+           getTicketState();
+            });
+           
+            }, 
+            {escape: true}
+        );
+sessionStorage['ticket']=JSON.stringify(ticketlist); 
+         //}
+          getTicketState();
+   }
+          
+          
+          
+ 
+          var ticketlist=[]; 
+            for(var loopi=0;loopi<50;loopi++)
+{
+ticketlist.push({poolid:"",tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",tbadgable:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:"",taxrateflag:"",tebudprcflag:""});
+}
+
+   function getTicketState()
+   {
+        if(sessionStorage['ticket']!=null){
+   
+   var temp = sessionStorage.getItem('ticket');
+    console.log('temp '+temp);
+   
+    ticketlist= $.parseJSON(temp);
+   
+   
+   
+    var appendTxt='';
+     var apvar=0;
+    for(var p=0;p<ticketlist.length;p++)
+    {
+        
+       if(ticketlist[p].trowid!=''){
+      appendTxt += "<tr><td><img src='{!$Resource.DragButton}'  style='margin-left:-5px;margin-right:5px;'/><input type='text' id='one' class='tickfield' name='input_box_one[]' value='"+ticketlist[p].tname+"'></td> <td><SELECT class=' selectlist ' NAME=\"Animal\" id='ppptype"+apvar+"'><apex:repeat value="{!paymentSelectOptions}" var="paytype"><option value='{!paytype.value}'>{!paytype.label}</option></apex:repeat></SELECT><script>document.getElementById('ppptype"+apvar+"').value='"+ticketlist[p].tpaytype+"';<\/script></td></td><td><input type='text' class='tickfield' name='input_box_two[]' value='"+ticketlist[p].tqty+"'/></td><td><input type='text' class='tickfield' id='three' name='input_box_three[]' value='"+ticketlist[p].tprice+"'/></td><td style='text-align:center;'><a style='cursor:pointer'  onClick=Alert3.render(this.parentNode.parentNode.rowIndex,this.parentNode.parentNode.children[0].children[1].value,this.parentNode.parentNode.children[1].children[0].value,this.parentNode.parentNode.children[2].children[0].value,this.parentNode.parentNode.children[3].children[0].value)><div id='nwmoreinfodiv' style='margin-right:32%;'><img src={!URLFOR($Resource.createevents,'createevents/images/addmore.png')} width='25px' height='25px'/></div></a></td> <td><input type='button' class='del' value='' /></td></tr>";  
+        //alert(ticketlist[p].ticketcount);
+         apvar=apvar+1;
+        
+      }
+    }
+    
+     $(".dynamic").find("tr:gt(0)").remove();
+      $(".dynamic tbody").append(appendTxt); 
+      var tableappend2=document.getElementById("tickettable");
+                    var tableDnD2 = new TableDnD();
+
+                    tableDnD2.init(tableappend2);
+    }
+     m=setInterval('saveTicketSate()', 1 * 1000);
+   }
+   function saveTicketSate()
+   {
+ 
+   var tableappend2=document.getElementById("tickettable");
+                    var tableDnD2 = new TableDnD();
+
+                    tableDnD2.init(tableappend2);
+   
+         //create session for tickets
+        var table = document.getElementById("tickettable");
+             for (var i = 1, row,arrindex=0; row = table.rows[i]; i++) {
+              if(row.style.display!='none'){
+             col = row.cells[0];
+             ticketlist[arrindex].tname=col.children[1].value;
+             //for showing package information 
+               if(ticketlist[arrindex].ispackage=="true"){
+             var cacheDiv = document.createElement('div');
+             for(var sub=0,inntext='';sub<ticketlist[arrindex].subpackagegroup.length;sub++)
+             inntext=inntext+'['+ticketlist[arrindex].subpackagegroup[sub].pkgitemname+' : '+ticketlist[arrindex].subpackagegroup[sub].pkgitemqty+'] ';
+               cacheDiv.innerHTML = inntext;
+               try{
+               col.children[2].innerHTML=inntext;
+               }catch(e){col.appendChild(cacheDiv);}
+               }
+             col = row.cells[1];
+             ticketlist[arrindex].tpaytype=col.children[0].value;
+             col = row.cells[2];
+             ticketlist[arrindex].tqty=col.children[0].value;
+             col = row.cells[3];
+             //for showing help text for donation
+               var cacheImage = document.createElement('img');
+               cacheImage.src = '/s.gif';
+               cacheImage.className= 'helpIcon';
+               ;
+               if(ticketlist[arrindex].tpaytype=='Donation'){
+               col.children[0].style.width="60%";
+               if(col.children[0].value=="")
+               col.children[0].value="0";
+               cacheImage.alt='Enter Minimum Donation Amount';
+               cacheImage.title='Enter Minimum Donation Amount';
+               try{
+               console.log(col.children[1].value);
+               }catch(e){col.appendChild(cacheImage);}
+               }
+               else if(ticketlist[arrindex].tpaytype=='Paid' && Number(col.children[0].value)==0)
+               {
+                  col.children[0].value="";
+                  col.children[0].style.width="60%";
+                  cacheImage.alt='Price cannot be left blank or 0 for Paid Ticket';
+               cacheImage.title='Price cannot be left blank or 0 for Paid Ticket';
+                   try{
+               console.log(col.children[1].value);
+               }catch(e){col.appendChild(cacheImage);}
+               }
+               else
+               {
+                   try{
+                        col.removeChild(col.children[1]);
+                        }catch(e){}
+               }
+               
+             ticketlist[arrindex].tprice=col.children[0].value;
+             if(ticketlist[arrindex].tpaytype=='Free'){
+             if(ticketlist[arrindex].tprice!='Group Tickets')
+             col.children[0].value=0;
+             col.children[0].disabled="disabled";
+             }
+             else
+             col.children[0].disabled=false;
+             ticketlist[arrindex].trowid=col.parentNode.rowIndex;
+             if(ticketlist[arrindex].grouptickets.length==1){
+             ticketlist[arrindex].grouptickets[0].tname=ticketlist[arrindex].tname;
+             ticketlist[arrindex].grouptickets[0].qty=ticketlist[arrindex].tqty;
+             ticketlist[arrindex].grouptickets[0].tprice=ticketlist[arrindex].tprice;
+             }
+             
+           
+             
+             if(ticketlist[arrindex].grouptickets.length==0){
+             ticketlist[arrindex].tvisib=true;
+             if(ticketlist[arrindex].ispackage=="true")
+             ticketlist[arrindex].itemtype=$("#pkitemtype option:first").val();
+             else{
+             if(ticketlist[arrindex].itemtype==''||ticketlist[arrindex].itemtype==undefined)
+             ticketlist[arrindex].itemtype=$("#itemtype option:first").val();
+            
+             
+             }
+             
+             }
+             
+             arrindex++;
+             }
+           
+             }
+             
+            //console.log(ticketlist);
+             sessionStorage['ticket']=JSON.stringify(ticketlist);
+           
+       
+   }
+   
+   
+    var ticketclick=false;
+   
+   function saveTicket()
+   {
+   var paidflag=0;
+   var ticketlimit='{!defaultnooftickets}';
+    var totcountqty=0;
+    var totcountinner=0;
+   for(tkind=0;tkind<ticketlist.length;tkind++)
+   {
+        if(ticketlist[tkind].tpaytype=="Paid"){
+       paidflag=1;
+
+       }
+       totcountqty=totcountqty+Number(ticketlist[tkind].tqty);
+       totcountinner=totcountinner+Number(ticketlist[tkind].tqty);
+       for(var tkindj=0;tkindj<ticketlist[tkind].subpackagegroup.length;tkindj++)
+           {
+            
+           totcountinner=totcountinner+(Number(ticketlist[tkind].subpackagegroup[tkindj].pkgitemqty)*Number(ticketlist[tkind].tqty));             
+            
+           }
+       
+   }
+  
+   if(totcountqty>ticketlimit){
+       alert('Max ticket limit reached, Please call Eventdex support');
+       document.getElementById("ticketloader").style.display="none";
+       return;
+       }
+        if(totcountinner>10000){
+       alert('Max ticket limit reached, Please call Eventdex support');
+       document.getElementById("ticketloader").style.display="none";
+       return;
+       }
+      
+       if(paidflag==1&&'{!$CurrentPage.Name}'=='BLN_EventNew')
+   {
+       
+        if(document.querySelector('input[name="pgopt"]:checked').value=='None'&&document.getElementById('check1').checked==false&&document.getElementById('cash1').checked==false&&document.getElementById('external1').checked==false){
+        alert('Please Choose a Payment Gateway/Select Cheque Option  For Paid Tickets');
+        document.getElementById("ticketloader").style.display="none";
+        return;}
+        
+        if(document.getElementById('check1').checked==true&&(document.getElementById('chqaddr1').value==''||document.getElementById('chqZip').value==''||document.getElementById('chqcountry').value=='None'||document.getElementById('chqstate').value==''||document.getElementById('chqcity').value==''))
+        {
+        alert('Please enter the mandatory fields for check address');
+        document.getElementById("ticketloader").style.display="none";
+        return;}
+   }
+   if(ticketclick==true)
+  return;
+  if(ticketclick==false)
+  ticketclick=true;
+   var datetime =new Date().today()+" " + new Date().timeNow();
+    Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.savesTicketInfo}',
+            JSON.stringify(ticketlist),
+            eventmand.EventID,
+            datetime,
+            defaultendtime,
+            function(result, event){
+            if (event.status){
+            if(result==''){
+            //sucess code
+            try{
+            smoothScroll(document.getElementById('stepss3')); 
+            mask2();
+            }catch(e){}
+           ticketlist=[]; 
+           for(var loopi=0;loopi<50;loopi++)
+{
+ticketlist.push({poolid:"",tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",tbadgable:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:"",taxrateflag:"",tebudprcflag:""});
+}
+            mask1();
+            
+            }
+            else
+            alert(result);
+            document.getElementById("ticketloader").style.display="none";
+            try{
+            savespaymentfunction();
+            }catch(e){}
+             } 
+             else if (event.type === 'exception') {
+                    alert(event.message + " " + event.where + " ");
+                    document.getElementById("ticketloader").style.display="none";
+                } else {
+                    alert(event.message);
+                    document.getElementById("ticketloader").style.display="none";
+                }  
+                ticketclick=false; 
+                try{
+                releaseTicketDirtyFlag(); 
+                }catch(e){}               
+            }, 
+            {escape: true}
+        );
+        
+       
+        
+        }
+  
+
+</script>
+            
+
+
+<apex:form >
+      <apex:actionfunction name="savePackageLogo" action="{!saveEventLogo}" rerender="reRenderedPanelToSetPackageVariable" oncomplete="savepackageinfo();document.getElementById('ticketloader').style.display='none';">
+      <apex:param name="imageData" value="" assignTo="{!imageData}"/>
+</apex:actionfunction></apex:form>
+<apex:outputPanel id="reRenderedPanelToSetPackageVariable">
+   <script type="text/javascript">
+      packagelogourl= "{!eventlogourl}";
+      
+   </script>
+</apex:outputPanel>
+      <!---script for on click  close during package  div --->
+                 <script>
+                 
+function showclose(show,hide)
+{
+document.getElementById(show).style.display="none";
+document.getElementById(hide).style.display="block";
+lineitemaddcount=0;
+
+}
+var pckcontents='';
+var packagelogourl='';
+                     function checkpackagelogo()
+                     {
+                          
+                             var oFReader = new FileReader();
+                     var f = document.getElementById("pklogo").files[0];
+          
+
+           if (f) {
+      var r = new FileReader();
+      r.onload = function(e) { 
+      pckcontents= e.target.result.split(',')[1];
+      document.getElementById('savedpackageimage').src=e.target.result;
+                 
+      }
+      r.readAsDataURL(f);
+     
+    } else { 
+      alert("Failed to load file");
+    }
+    
+                     }
+
+function savepackageinfo()
+{
+
+  if(deladdonid.length!=0){
+var deleteflag=0;
+           for(var np=0;np<ticketlist[parentrowindex-1].ticketcount;np++)
+           {
+               if(ticketlist[parentrowindex-1].grouptickets[np].availabletickets!=Number(ticketlist[parentrowindex-1].grouptickets[np].qty)){
+               deleteflag=1;
+               break;
+               }
+           }
+           if(deleteflag==1){
+           alert('Can not delete Ticket, Package or Line Item when you already have sold items!');
+            deladdonid='';
+     addonrowindex='';
+           return;
+           
+           }
+           }
+
+
+    deladdonid=deladdonid.slice(0,-1);
+    addonrowindex=addonrowindex.slice(0,-1);
+    
+     var araddonrowindex = [];
+     araddonrowindex = addonrowindex.split(",");
+     if(addonrowindex.length!=0){
+     for (var araddonrowindexi= 0; araddonrowindexi< araddonrowindex.length; araddonrowindexi++) {
+    
+    ticketlist[parentrowindex-1].subpackagegroup.splice(araddonrowindex[araddonrowindexi],1);
+       }
+       
+       Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.deleteaddonItemPool}',
+            deladdonid,
+           function(result, event){
+           
+           });}
+     
+     deladdonid='';
+     addonrowindex='';
+      var rowindex;
+      if(isnewpackage=="true")
+       rowindex=$(".dynamic tr:last").index()+1;
+        else
+       rowindex=parentrowindex-1;
+       
+       ticketlist[rowindex].trowid=rowindex;
+       ticketlist[rowindex].ispackage="true";
+       
+       //store the package items/subgroup
+       //if(ticketlist[rowindex].subpackagegroup.length==0)
+       //ticketlist[rowindex].subpackagegroup=[];
+       var table = document.getElementById("packagetable");
+       for (var i = 1, row,nhiderow=0; row = table.rows[i]; i++) {
+       
+        if(row.style.display!='none'){
+        
+              if(ticketlist[rowindex].subpackagegroup[nhiderow]==undefined)
+              ticketlist[rowindex].subpackagegroup.push({addonid:"",pkgitemname:"",pkgitemqty:"",ttype:"",badgelabel:"",badgable:"",tags:[]});
+              ticketlist[rowindex].subpackagegroup[nhiderow].pkgitemname=row.cells[0].children[0].value;
+              ticketlist[rowindex].subpackagegroup[nhiderow].pkgitemqty=row.cells[1].children[0].value;
+              
+              ticketlist[rowindex].subpackagegroup[nhiderow].ttype=row.cells[2].children[0].value;
+              //add tags at package item level
+              ticketlist[rowindex].subpackagegroup[nhiderow].tags=[];
+              var testimonialElements = $(".resultspl");
+              var tsps=LineItemTagMap [nhiderow+1];
+         if(tsps!=undefined){
+         tsps=tsps.split(";");
+         
+          for(var l=0;l<tsps.length;l++)
+          {
+            ticketlist[rowindex].subpackagegroup[nhiderow].tags.push({tagname:""});
+            ticketlist[rowindex].subpackagegroup[nhiderow].tags[l].tagname=tsps[l];
+          }
+          }
+              //
+              
+              ticketlist[rowindex].subpackagegroup[nhiderow].badgelabel=row.cells[4].children[0].value;
+              Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getbadgeinfo}',
+            ticketlist[rowindex].subpackagegroup[nhiderow].ttype,
+            nhiderow,
+           function(result, event){
+            ticketlist[rowindex].subpackagegroup[result.arrindex].badgable=result.badgable;
+         
+             });
+              nhiderow++;
+         }
+       }
+       
+       //
+      
+       //store the package more ingo group
+       if(ticketlist[rowindex].grouptickets.length==0)
+        ticketlist[rowindex].grouptickets=[];
+       var table = document.getElementById("packagemoreinfotable");
+       for (var i = 1, row,nhiderow=0; row = table.rows[i]; i++) {
+       
+        if(row.style.display!='none'){
+              if(ticketlist[rowindex].grouptickets[nhiderow]==undefined)
+              ticketlist[rowindex].grouptickets.push({itemid:"",tname:"",sdate:"",edate:"",qty:"",minqty:"",maxqty:"",tprice:"",availabletickets:""});
+              ticketlist[rowindex].grouptickets[nhiderow].tname=row.cells[0].children[0].value;
+              ticketlist[rowindex].grouptickets[nhiderow].sdate=row.cells[1].children[0].value;
+              ticketlist[rowindex].grouptickets[nhiderow].edate=row.cells[2].children[0].value;
+              ticketlist[rowindex].grouptickets[nhiderow].qty=row.cells[3].children[0].value;
+              ticketlist[rowindex].grouptickets[nhiderow].minqty=row.cells[4].children[0].value;
+              ticketlist[rowindex].grouptickets[nhiderow].maxqty=row.cells[5].children[0].value;
+              ticketlist[rowindex].grouptickets[nhiderow].tprice=row.cells[6].children[0].value;
+              
+              nhiderow++;
+         }
+       }
+       //
+              ticketlist[rowindex].itemtype=document.getElementById('pkitemtype').value;
+              ticketlist[rowindex].tpaytype=document.querySelector('input[name="pkgpayradio"]:checked').value;
+              ticketlist[rowindex].tvisib=$('#pkvisib').attr('checked');
+              ticketlist[rowindex].tebudprcflag=$('#pebudprcflag').attr('checked');
+              ticketlist[rowindex].taxrateflag=$('#ptaxrate').attr('checked');
+              if(ticketlist[rowindex].grouptickets.length==1){
+                             
+                             ticketlist[rowindex].tebudprcflag=true;
+                             }
+              ticketlist[rowindex].tdesc=document.getElementById('pkdesc').value;
+              Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getbadgeinfo}',
+            ticketlist[rowindex].itemtype,
+            rowindex,
+           function(result, event){
+           ticketlist[result.arrindex].tbadgable=result.badgable;
+           
+           if(result.badgable!='B - Badge')
+                            {
+                                ticketlist[result.arrindex].tbdglabel="";
+                                
+                             }
+                           else{
+                           
+                             ticketlist[result.arrindex].tbdglabel=result.badgelabel;
+                             
+                         }
+             });
+              //Adding PackageLogo
+          
+  if(packagelogourl!=''){
+  ticketlist[rowindex].tcketlogo=packagelogourl;
+  pckcontents='';
+  packagelogourl='';
+  }
+   //set the tags array to null
+                                   
+                                  ticketlist[rowindex].tags=[];
+
+
+//code for adding tags
+                             var testimonialElements = $(".resultspk");
+                             
+                             for(var f=0,tgindex=0; f<testimonialElements.length; f++){
+                                  
+                                  var element = testimonialElements.eq(f);
+                                  if(element[0].children[0].children[0].children[0].children[0].checked){
+                                  ticketlist[rowindex].tags.push({tagname:""});
+                                  //store eventtag id
+                                  ticketlist[rowindex].tags[tgindex].tagname=getKeyByValue(TagMap,element[0].children[0].children[0].children[1].innerHTML);
+                                  tgindex++;
+                                  }
+                                  }
+                             //end of tags
+                             //
+       //
+       ticketlist[rowindex].ticketcount=nhiderow;
+       //
+        if(isnewpackage=="false")
+        {
+              document.getElementById("tickettable").rows[parentrowindex].cells[0].children[1].value=document.getElementById('packagename').value;
+              document.getElementById("tickettable").rows[parentrowindex].cells[2].children[0].value=document.getElementById('packageqty').value;
+               document.getElementById("tickettable").rows[parentrowindex].cells[3].children[0].value=document.getElementById('packageprice').value;
+                document.getElementById("tickettable").rows[parentrowindex].cells[1].children[0].value=document.querySelector('input[name="pkgpayradio"]:checked').value;
+        }
+      else{ 
+var appendTxt = "<tr><td><img src='{!$Resource.DragButton}'  style='margin-left:-5px;margin-right:5px;'/><input type='text' id='one' class='tickfield' name='input_box_one[]' value='"+document.getElementById('packagename').value+"'></td> <td><SELECT id='ppptype"+rowindex+"' class='selectlist' NAME=\"Animal\"><apex:repeat value="{!paymentSelectOptions}" var="paytype"><option value='{!paytype.value}'>{!paytype.label}</option></apex:repeat></SELECT><script>document.getElementById('ppptype"+rowindex+"').value='"+ticketlist[rowindex].tpaytype+"';<\/script></td></td><td><input type='text' class='tickfield' name='input_box_two[]' value='"+document.getElementById('packageqty').value+"'/></td><td><input type='text' class='tickfield' id='three' name='input_box_three[]' value='"+document.getElementById('packageprice').value+"' /></td><td style='text-align:center;'><a onClick=Alert3.render(this.parentNode.parentNode.rowIndex,this.parentNode.parentNode.children[0].children[1].value,this.parentNode.parentNode.children[1].children[0].value,this.parentNode.parentNode.children[2].children[0].value,this.parentNode.parentNode.children[3].children[0].value)><div id='nwmoreinfodiv' style='margin-right:32%;'><img src={!URLFOR($Resource.createevents,'createevents/images/addmore.png')} width='25px' height='25px'/></div></a></td> <td><input type='button' class='del' value='' /></td></tr>";
+      $(".dynamic tbody").append(appendTxt); 
+      //drag and drop on click of add new row
+                    var tableappend=document.getElementById("tickettable");
+                    var tableDnD1 = new TableDnD();
+                    tableDnD1.init(tableappend);
+      
+      if(ticketlist[0].trowid=='')
+      {
+         ticketlist.splice(0, 1);
+         ticketlist.push({poolid:"",tname:"",tpaytype:"",tqty:"",tprice:"",tvisib:"",tdesc:"",tcketlogo:"",tbdglabel:"",tbadgable:"",trowid:"",grouptickets:[],ticketcount:"",tags:[],subpackagegroup:[],ispackage:"",itemtype:"",taxrateflag:"",tebudprcflag:""});
+            
+      }
+      }
+      
+     
+          var npflag=0;
+           for(var np=0;np<ticketlist[rowindex].ticketcount;np++)
+           {
+               if(ticketlist[rowindex].grouptickets[np].availabletickets!=0){
+               npflag=1;
+               break;
+               }
+           }
+           if(npflag==0&&isnewpackage!="true"&&ticketlist[rowindex].poolid!=''&&lineitemaddcount==1)
+           alert('There are no package available while adding the line items');
+      
+       lineitemaddcount=0;
+
+console.log(ticketlist);
+}
+     </script>         
+     
+     <!--------------------end of script-------------->    
+          
+    <!-----------------------start of ticket row validation---------------------------------------------------------------------->
+<script>
+function ticketvalid(){
+/* alert ("hhhhhhh");*/
+var tickss= document.getElementsByClassName("tickfield");
+var ticklen=tickss.length;
+var s='';
+for (var i=0; i<ticklen; i++){
+if (tickss[i].value==""){
+/alert("null");/
+tickss[i].style.border="2px solid #d43535"
+s='error';
+}
+else if(tickss[i].value!==""){
+
+tickss[i].style.border="1px solid #e3e3e3"
+
+}
+
+}
+var qflag=0;
+var table = document.getElementById("tickettable");
+             for (var i = 1, row,arrindex=0; row = table.rows[i]; i++) {
+             if(row.cells[2].children[0].value==0){
+             row.cells[2].children[0].style.border="2px solid #d43535";
+             s='error';
+              qflag=1;
+              }
+                     else {
+
+               row.cells[2].children[0].style.border="1px solid #e3e3e3";
+
+                  }
+             }
+              if(qflag==1) alert('Quantity cannot be 0 or blank');
+if(s!='error')
+{
+/alert("success");/
+document.getElementById("ticketloader").style.display="";
+
+saveTicket();
+
+
+}
+
+
+}
+
+
+</script>
+
+<!-------------------------------package section validation------------------------------------------------>
+<script>
+
+<!----------------pkgname onblur valid---------------------------->
+function pkgnmblurvalid(){
+if (document.getElementById("packagename").value== ""){
+document.getElementById("packagename").style.border="2px solid #d43535";
+
+}
+if (document.getElementById("packagename").value!= "")
+{
+document.getElementById("packagename").style.border="2px solid #bac958";
+}
+}
+
+<!-----------------------pkgname onKeyup valid----------------------------------------->
+function pkgnmkeyupvalid(){
+document.getElementById("packagename").style.border="1px solid #e3e3e3";
+}
+
+<!--------------------------------------------------------------------------------->
+
+<!----------------pkgprice onblur valid---------------------------->
+function pkgpriceblurvalid(){
+if (document.getElementById("packageprice").value== ""){
+document.getElementById("packageprice").style.border="2px solid #d43535";
+
+}
+if (document.getElementById("packageprice").value!= "")
+{
+document.getElementById("packageprice").style.border="2px solid #bac958";
+}
+}
+
+<!-----------------------pkgprice onKeyup valid----------------------------------------->
+function pkgpricekeyupvalid(){
+document.getElementById("packageprice").style.border="1px solid #e3e3e3";
+}
+
+<!--------------------------------------------------------------------------------->
+
+<!----------------pkgqty onblur valid---------------------------->
+function pkgqtyblurvalid(){
+if (document.getElementById("packageqty").value== ""){
+document.getElementById("packageqty").style.border="2px solid #d43535";
+
+}
+if (document.getElementById("packageqty").value!= "")
+{
+document.getElementById("packageqty").style.border="2px solid #bac958";
+}
+}
+
+<!-----------------------pkgqty onKeyup valid----------------------------------------->
+function pkgqtykeyupvalid(){
+document.getElementById("packageqty").style.border="1px solid #e3e3e3";
+}
+
+<!--------------------------------------------------------------------------------->
+
+<!------------on click of package save valid--------------------------------------------------------------------------->
+function pkgvalid(){
+<!--------------------------------error--------------------------------->
+if (document.getElementById("packagename").value==""){
+document.getElementById("packagename").style.border="2px solid #d43535";
+}
+
+if (document.getElementById("packageprice").value==""){
+document.getElementById("packageprice").style.border="2px solid #d43535";
+}
+
+if (document.getElementById("packageqty").value==""){
+
+document.getElementById("packageqty").style.border="2px solid #d43535";
+}
+
+<!------------------success------------------------>
+
+if (document.getElementById("packagename").value!=""){
+document.getElementById("packagename").style.border="1px solid #e3e3e3";
+}
+
+if (document.getElementById("packageprice").value!=""){
+document.getElementById("packageprice").style.border="1px solid #e3e3e3";
+}
+
+if (document.getElementById("packageqty").value!=""){
+
+document.getElementById("packageqty").style.border="1px solid #e3e3e3";
+}
+
+<!-------------------------------Pkg line item validation---------------------------------------------->
+
+var pkgitm= document.getElementsByClassName("pkglineitmfield");
+var pkgitmlen=pkgitm.length;
+var s='';
+
+for (var i=0; i<pkgitmlen; i++){
+if (pkgitm[i].value==""){
+/alert("null");/
+pkgitm[i].style.border="2px solid #d43535"
+s='error';
+}
+else if(pkgitm[i].value!==""){
+
+pkgitm[i].style.border="1px solid #e3e3e3"
+
+}
+
+}
+
+if(s!='error' && document.getElementById("packagename").value != "" && document.getElementById("packageprice").value != "" && document.getElementById("packageqty").value != "" )
+{
+/alert("success");/
+if(pckcontents=='')
+{
+ savepackageinfo();
+ packagelogourl='';
+}
+else{
+savePackageLogo(pckcontents);
+document.getElementById("ticketloader").style.display="";}
+showclose('package1','dynamictickets');
+
+}
+
+
+<!------------------------------------------------------------------------------------------------------>
+
+}
+
+</script>
+<!------------------------------------------------------------------------------------------------------->
+<!-----------------------------------end of ticket row validation------------------------------------------------------------------------------------->
+ 
+<!-------css for dynamic table-------------------->
+     
+    
+ <style>
+select optgroup{
+background:#EFEFEF;
+color:#438ac2;
+font-style:normal;
+font-weight:normal;
+padding:3px 0px;
+margin:3px 0px;
+}
+
+.selectoption option{
+background:#fff;
+color:#000;
+font-style:normal;
+font-weight:normal;
+
+}
+</style>
+
+          <style type="text/css">
+        .del{ 
+background-image:url({!URLFOR($Resource.createevents,'createevents/images/removerow.png')} ); background-repeat:no-repeat; background-position:center; width:30px; height:30px;
+          background-color: #DDD; border-radius:3px; cursor:pointer;margin-left:35%;}
+        
+        
+        #three{width:65.5%;}    
+        #one{width:87.5%;}   
+    
+    .del1{background-image:url({!URLFOR($Resource.createevents,'createevents/images/removerow.png')} ); background-repeat:no-repeat; background-position:center;width:30px; height:30px;
+          background-color: #DDD; border-radius:3px; cursor:pointer;margin-left:35%;}
+        
+         
+          .del2{background-image:url({!URLFOR($Resource.createevents,'createevents/images/removerow.png')} ); background-repeat:no-repeat; background-position:center; width:30px; height:30px;
+          background-color: #DDD; border-radius:3px; cursor:pointer;margin-left:35%;}
+        
+        
+        .del3{background-image:url({!URLFOR($Resource.createevents,'createevents/images/removerow.png')} ); background-repeat:no-repeat; background-position:center; width:30px; height:30px;
+          background-color: #DDD; border-radius:3px; cursor:pointer;margin-left:35%;}
+        
+        .add,.add1,.add2,.add3{
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(253,253,253,1)), color-stop(100%,rgba(227,227,227,1)));
+background: -webkit-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -moz-gradient(linear, left top, left bottom, color-stop(0%,rgba(253,253,253,1)), color-stop(100%,rgba(227,227,227,1)));
+background: -moz-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -o-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -ms-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#e3e3e3',GradientType=0 );
+border: 1px solid #e3e3e3;
+float:left;
+text-decoration:none;
+
+border-radius: 3px;
+/* padding-top: 5px; */
+padding-left:0px;
+padding: 5px 5px 2px 5px;
+margin-right:10%;
+cursor:pointer;  
+              }
+    
+        </style>
+    
+<!--popup script for manage tags-->
+<script type="text/javascript">
+function getKeyByValue(object,value ) {
+    for( var prop in object) {
+        if( object.hasOwnProperty( prop ) ) {
+             if( object[ prop ] === value )
+                 return prop;
+        }
+    }
+}
+
+function CustomAlert(){
+    this.render =function(dialog){
+    
+    //code for adding existing event tags
+   
+   
+                    var appendTxt = '';
+                    
+                    for(var key in TagMap) {
+
+                    appendTxt+='<tr><td width="85%">'+TagMap[key]+'</td><td><img src=" {!URLFOR($Resource.createevents,'createevents/images/delete1.png')}" class="btnExcluir" style="margin-right:20%;"/><img src="{!URLFOR($Resource.createevents,'createevents/images/pencil.png')}" width="20" height="20" class="btnEditar"/></td></tr>';
+                    }
+                     
+                      $("#managetagpopup").find("tr:gt(0)").remove();
+                     $("#managetagpopup tbody").append(appendTxt);
+                      $(function(){
+     var oldtagtext=''
+      
+    function Editar(){
+    
+        var par = $(this).parent().parent(); //tr
+        var tdNome = par.children("td:nth-child(1)");
+        oldtagtext=tdNome.html();
+   
+        var tdBotoes = par.children("td:nth-child(2)");
+
+        tdNome.html("<input type='text' id='txtNome' value='"+tdNome.html()+"'/>");
+       
+
+        tdBotoes.html("<img src={!URLFOR($Resource.createevents,'createevents/images/disk.png')} class='btnSalvar'/>");
+
+        $(".btnSalvar").unbind("click").bind("click", Salvar);
+        //$(".btnEditar").bind("click", Editar);
+        //$(".btnExcluir").bind("click", Excluir);
+        
+    };
+
+    function Salvar(){
+  
+        var par = $(this).parent().parent(); //tr
+        var tdNome = par.children("td:nth-child(1)");
+        
+        var tdBotoes = par.children("td:nth-child(2)");
+
+        tdNome.html(tdNome.children("input[type=text]").val());
+       
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.updateEventTag}',
+            eventmand.EventID,
+            oldtagtext,
+            tdNome.html(),
+           function(result, event){
+           if (event.status){
+           TagMap[result]=tdNome.html();
+           console.log(TagMap);
+           }}
+           );
+    
+        tdBotoes.html("<img src={!URLFOR($Resource.createevents,'createevents/images/delete1.png')} class='btnExcluir' style='margin-right:20%;'/><img src={!URLFOR($Resource.createevents,'createevents/images/pencil.png')} class='btnEditar'/>");
+
+        $(".btnEditar").unbind("click").bind("click", Editar);
+        //$(".btnEditar").bind("click", Editar);
+        //$(".btnExcluir").bind("click", Excluir);
+         $(".btnExcluir").unbind("click").bind("click", Excluir);
+    };
+
+    function Excluir(){
+        var par = $(this).parent().parent(); //tr
+         var tdNome = par.children("td:nth-child(1)");
+          var keys=getKeyByValue(TagMap,tdNome.html());
+           delete TagMap[keys];
+          Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.deleteEventTag}',
+            eventmand.EventID,
+            tdNome.html(),
+           function(result, event){
+           if (event.status){
+          
+           console.log(TagMap);
+           }}
+           );
+        par.remove();
+    };
+
+     $(".btnEditar").bind("click", Editar);
+    $(".btnExcluir").bind("click", Excluir);
+    //$("#btnAdicionar").bind("click", Adicionar);           
+
+});
+           
+          
+    
+    //
+    
+    
+        var winW = window.innerWidth;
+        var winH = window.innerHeight;
+        var dialogoverlay =document.getElementById('dialogoverlay');
+        var dialogbox = document.getElementById('dialogbox');
+        dialogoverlay.style.display="block";
+        /*dialogoverlay.style.height = winH +"px";
+        dialogbox.style.left=(winW/2) -(905*.5)+"px";*/
+        dialogbox.style.top="80px";
+        dialogbox.style.display="block";
+        
+    }
+    this.Cancel = function(){
+        document.getElementById('dialogbox').style.display ="none";
+                document.getElementById('dialogoverlay').style.display ="none";
+          //get saved tags
+          
+                    var appendTxt = '';
+                     $('.results').remove(); 
+                     $('.resultspk').remove(); 
+                     $('.resultspl').remove(); 
+                   for(var key in TagMap) {
+                    $('#abc').append('<table class="results">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+TagMap[key]+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                    $('#abcpk').append('<table class="resultspk">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+TagMap[key]+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>'); 
+                       $('#abcpkitems').append('<table class="resultspl">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+TagMap[key]+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');  
+                     }
+                     $('#addtextlabel').val(''); //clearing textbox value
+                     $('#addtextlabelpk').val(''); //clearing textbox value
+                     $('#addtextlabelpkitems').val('');
+                     
+                if(ticketlist[parentrowindex-1].ispackage=="true"){
+            //prepopulate tags
+        
+        
+        for(var k=0;k<ticketlist[parentrowindex-1].tags.length;k++)
+           {
+               var testimonialElements = $(".resultspk");
+                             for(var l=0; l<testimonialElements.length; l++){
+                            
+                                  var element = testimonialElements.eq(l);
+                                  if(TagMap[ticketlist[parentrowindex-1].tags[k].tagname]==element[0].children[0].children[0].children[1].innerHTML)
+                                  element[0].children[0].children[0].children[0].children[0].checked=true;
+                                  
+                                  }
+             
+           }
+        //end of prepopulate tags
+        }
+        else{
+        for(var k=0;k<ticketlist[parentrowindex-1].tags.length;k++)
+           {
+               var testimonialElements = $(".results");
+                             for(var l=0; l<testimonialElements.length; l++){
+                            
+                                  var element = testimonialElements.eq(l);
+                                  if(TagMap[ticketlist[parentrowindex-1].tags[k].tagname]==element[0].children[0].children[0].children[1].innerHTML)
+                                  element[0].children[0].children[0].children[0].children[0].checked=true;
+                                  
+                                  }
+             
+           }
+           
+         
+        //end of prepopulate tags
+        }
+        
+          try{
+          var testimonialElements = $(".resultspl");
+         var tsps=LineItemTagMap [pklinerowindex];
+         if(tsps!=undefined){
+         tsps=tsps.split(";");
+         
+          for(var l=0;l<tsps.length;l++)
+          {
+            
+             
+                             for(var k=0; k<testimonialElements.length; k++){
+                            
+                                  var element = testimonialElements.eq(k);
+                                  if(tsps[l]==getKeyByValue(TagMap ,element[0].children[0].children[0].children[1].innerHTML))
+                                  element[0].children[0].children[0].children[0].children[0].checked=true;
+                                  
+                                  }
+          }
+          }
+           }
+           catch(e){}
+                return false;
+        
+        }
+    
+    }
+    
+    var Alert = new CustomAlert(); 
+
+</script>
+<!-----------------------popupscript for ticket moreinfo-------------------------------->
+<script type="text/javascript">
+var parentrowindex;
+ var flag;
+ var earlybudname,earlybudqty,earlybudprice;
+ var isnewpackage;
+ </script>
+<script>
+ function renderpackagebadge()
+ {
+     var ptable = document.getElementById("packagetable");
+       for (var l = 1,row; row = ptable.rows[l]; l++) {
+       Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getbadgeinfo}',
+            row.cells[2].children[0].options[row.cells[2].children[0].selectedIndex].value,
+            l,
+           function(result, event){
+           
+           
+           if(result.badgable!='B - Badge')
+                            {
+                                ptable.rows[result.arrindex].cells[3].children[0].disabled="disabled";
+                                
+                             }
+                           else{
+                           
+                             ptable.rows[result.arrindex].cells[3].children[0].disabled=false;
+                             
+                         }
+             });
+      
+    
+       }
+ }
+    </script>
+ <apex:outputpanel id="ticketmoreinfoblock">
+<script type="text/javascript">
+function CustomAlert(){
+    this.render =function(rowindex,tname,tpaytype,tqty,tprice){
+    parentrowindex=rowindex;
+    
+    for(var i=0;i<ticketlist.length;i++)
+    {
+       if(ticketlist[i].trowid==parentrowindex)
+       {
+          if(ticketlist[i].ispackage=="true"){
+          renderpackage(i,tname,tqty,tprice);
+          
+          }
+          else
+          renderticket(i,tname,tpaytype,tqty,tprice);
+       }
+    }      
+    
+  }  
+    
+  
+    this.Cancel = function(){
+        document.getElementById('dialogbox3').style.display ="none";
+                document.getElementById('dialogoverlay2').style.display ="none";
+            
+                
+                return false;
+        
+        }
+    
+    }
+    
+    var Alert3 = new CustomAlert(); 
+    function renderpackage(i,tname,tqty,tprice)
+    {
+    
+    
+    flag=-1;
+   
+       showpackage('package1','dynamictickets','false');
+       document.getElementById('packagename').value=tname;
+       document.getElementById('pminfoname').value=tname;
+       document.getElementById('packageqty').value=tqty;
+       document.getElementById('packageprice').value=tprice;
+       var appendTxt='';
+       try{
+       $('#pkvisib').attr('checked',ticketlist[i].tvisib);
+       $('#pebudprcflag').attr('checked',ticketlist[i].tebudprcflag);
+       $('#ptaxrate').attr('checked',ticketlist[i].taxrateflag);
+document.getElementById('pkdesc').value=ticketlist[i].tdesc;
+$('input[name="pkgpayradio"][value="' + ticketlist[i].tpaytype+ '"]').attr("checked",true);}catch(e){}
+
+       for(var j=0;j<ticketlist[i].ticketcount;j++)
+           {
+            
+          appendTxt += "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+escape(ticketlist[i].grouptickets[j].tname)+"'/></td> <td><input type='text' style='width:75%' class='datetimepickers' value='"+ticketlist[i].grouptickets[j].sdate+"'/></td><td><input type='text' style='width:75%' class='datetimepickers'  value='"+ticketlist[i].grouptickets[j].edate+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].grouptickets[j].qty+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].grouptickets[j].minqty+"'/></td><td><input type='text' id='three' name='input_box_three[]'  value='"+ticketlist[i].grouptickets[j].maxqty+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].grouptickets[j].tprice+"'/></td></tr>";
+          flag=0;
+          document.getElementById('savedpackageimage').src="/servlet/servlet.FileDownload?file="+ticketlist[i].tcketlogo;
+           }
+      $(".dynamic4").find("tr:gt(0)").remove();
+      $(".dynamic4 tbody").append(appendTxt);
+        flag=ticketlist[i].ticketcount-1; 
+       
+        //show early bird price checkbox or not
+         if(ticketlist[i].grouptickets.length>1)
+        document.getElementById("earlybirdpackkpric").style.display="";
+        else
+        document.getElementById("earlybirdpackkpric").style.display="none";
+        
+        //prepopulate tags
+        
+        
+        for(var k=0;k<ticketlist[i].tags.length;k++)
+           {
+               var testimonialElements = $(".resultspk");
+                             for(var l=0; l<testimonialElements.length; l++){
+                            
+                                  var element = testimonialElements.eq(l);
+                                  if(TagMap[ticketlist[i].tags[k].tagname]==element[0].children[0].children[0].children[1].innerHTML)
+                                  element[0].children[0].children[0].children[0].children[0].checked=true;
+                                  
+                                  }
+             
+           }
+        //end of prepopulate tags
+        
+        
+        
+        
+        var pmtable = document.getElementById("packagemoreinfotable");
+       for (var k = 1,row; row = pmtable.rows[k]; k++) {
+       row.cells[0].children[0].value=unescape(row.cells[0].children[0].value);
+       if(document.querySelector('input[name="pkgpayradio"]:checked').value=='Free'){
+       row.cells[6].children[0].value=0;
+       row.cells[6].children[0].disabled="disabled";
+       }
+       else{
+       row.cells[6].children[0].disabled=false;
+       }
+       }
+        
+        appendTxt='';
+        
+       
+        for(var j=0;j<ticketlist[i].subpackagegroup.length;j++)
+           {
+            
+           appendTxt += "<tr><td><input type='text' id='one' class='pkglineitmfield' name='input_box_one[]' value='"+escape(ticketlist[i].subpackagegroup[j].pkgitemname)+"'/></td> <td><input type='text' class='pkglineitmfield' id='three' name='input_box_three[]' value='"+ticketlist[i].subpackagegroup[j].pkgitemqty+"'/></td><td><select class='selectlist'  style='outline:none;' onchange='checkbadgelabeledit(this);' id='ttypeindex"+j+"' ><optgroup label='Tickets'><apex:repeat value="{!individualTicketsSelectOptions}" var="indittype"><option value='{!indittype.value}'>{!indittype.label}</option></apex:repeat></optgroup><optgroup label='BL Products'><apex:repeat value="{!BLPRODTicketsSelectOptions}" var="indittype"><option value='{!indittype.value}'>{!indittype.label}</option></apex:repeat></optgroup><optgroup label='Add On Items'><apex:repeat value="{!itemtypesaddon}" var="indittype"><option value='{!indittype.value}'>{!indittype.label}</option></apex:repeat></optgroup></select></td><td><div id='pkgtagsdiv' onclick='Alert6.render(this.parentNode.parentNode.rowIndex)'><img src={!URLFOR($Resource.createevents,'createevents/images/addtags.png')} width='25px' height='25px'></div></td><td><input type='text' id='one'   name='input_box_one[]' style='width: 85%;' value='"+ticketlist[i].subpackagegroup[j].badgelabel+"'/></td><td><input type='button' class='del1' value='' /></td></tr>";             
+            
+           try{
+                var pli=''
+                for(var l=0;l<ticketlist[i].subpackagegroup[j].tags.length;l++)
+                {
+                  
+                   pli=pli+ticketlist[i].subpackagegroup[j].tags[l].tagname+';';   
+                }
+                pli=pli.replace(/;(\s+)?$/, '');
+                LineItemTagMap[j+1]=pli;
+                
+           }catch(e){}
+           
+           }
+           
+           $(".dynamic2").find("tr:gt(0)").remove();
+      $(".dynamic2 tbody").append(appendTxt);
+      
+      showttype(i);
+      
+      var ptable = document.getElementById("packagetable");
+       for (var l = 1,row; row = ptable.rows[l]; l++) {
+       row.cells[0].children[0].value=unescape(row.cells[0].children[0].value);
+       
+       
+       
+       
+       
+      
+       }
+       
+       renderpackagebadge();
+       
+    }
+    function showttype(i)
+    {
+        
+          
+        for(var j=0;j<ticketlist[i].subpackagegroup.length;j++)
+           { 
+              document.getElementById('ttypeindex'+j).value=ticketlist[i].subpackagegroup[j].ttype;
+           }
+             
+    }
+    
+   function renderticket(i,tname,tpaytype,tqty,tprice)
+   {
+  
+    //LOGIC FOR RENDERING TICKETS FROM TICKETLIST
+    earlybudname=tname;
+    earlybudqty=tqty;
+    earlybudprice=tprice;
+   
+    var appendTxt='';
+    flag=-1;
+     //clear all checkbox in tags
+      var testimonialElements = $(".results");
+      for(var l=0; l<testimonialElements.length; l++){
+                            
+                                  var element = testimonialElements.eq(l);
+                                  element[0].children[0].children[0].children[0].children[0].checked=false;
+                                  }
+   
+          
+           for(var j=0;j<ticketlist[i].ticketcount;j++)
+           {
+               
+             appendTxt =appendTxt + "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+escape(ticketlist[i].grouptickets[j].tname)+"'/></td><td>  <input type='text' style='width:75%' class='datetimepickers' value='"+ticketlist[i].grouptickets[j].sdate+"'/></td><td><input type='text' style='width:75%' class='datetimepickers' value='"+ticketlist[i].grouptickets[j].edate+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].grouptickets[j].qty+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].grouptickets[j].minqty+"' /></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].grouptickets[j].maxqty+"' /></td><td><input type='text' id='three' name='input_box_three[]' value='"+ticketlist[i].grouptickets[j].tprice+"' /></td><td id='regticket' style='display:none;'><input type='button' class='del2' title='Delete Ticket' value='' /></td></tr>";
+             document.getElementById('savedticketimage').src="/servlet/servlet.FileDownload?file="+ticketlist[i].tcketlogo;
+           }
+      $(".dynamic3").find("tr:gt(0)").remove();
+      $(".dynamic3 tbody").append(appendTxt);
+        flag=ticketlist[i].ticketcount-1; 
+        
+        
+        //show early bird price checkbox or not
+         if(ticketlist[i].grouptickets.length>1)
+        document.getElementById("earlybirdtickpric").style.display="";
+        else
+        document.getElementById("earlybirdtickpric").style.display="none";
+        
+        
+        //prepopulate tags
+        
+        
+        for(var k=0;k<ticketlist[i].tags.length;k++)
+           {
+               var testimonialElements = $(".results");
+                             for(var l=0; l<testimonialElements.length; l++){
+                            
+                                  var element = testimonialElements.eq(l);
+                                  if(TagMap[ticketlist[i].tags[k].tagname]==element[0].children[0].children[0].children[1].innerHTML)
+                                  element[0].children[0].children[0].children[0].children[0].checked=true;
+                                  
+                                  }
+             
+           }
+        //end of prepopulate tags
+        
+     
+   
+    if(flag==-1){
+    document.getElementById('savedticketimage').src='';
+   var datetime =new Date().today()+" " + new Date().timeNow();
+   var currentmaxqty='{!itemdefaultmaxqty}'>Number(tqty)?tqty:'{!itemdefaultmaxqty}';
+    appendTxt = "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+escape(tname)+"'/></td><td>  <input type='text' class='datetimepickers' style='width:75%' value='"+datetime+"'/></td><td><input type='text' style='width:75%' class='datetimepickers' value='"+defaultendtime+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+tqty+"' /></td><td><input type='text' id='three' name='input_box_three[]' value='{!itemdefaultminqty}' /></td><td><input type='text' id='three' name='input_box_three[]' value='"+currentmaxqty+"' /></td><td><input type='text' id='three' name='input_box_three[]' value='"+tprice+"' /></td><td id='regticket' style='display:none;'><input type='button' class='del2' title='Delete Ticket' value='' /></td></tr>";
+      $(".dynamic3").find("tr:gt(0)").remove();
+      $(".dynamic3 tbody").append(appendTxt);
+     
+      }
+     //special character checking
+      var tmtable = document.getElementById("mytab1");
+       for (var p = 1,row; row = tmtable.rows[p]; p++) {
+       row.cells[0].children[0].value=unescape(row.cells[0].children[0].value);
+       if(tpaytype=='Free'){
+       row.cells[6].children[0].value=0;
+       row.cells[6].children[0].disabled="disabled";
+       }
+       else
+       {
+       row.cells[6].children[0].disabled=false;
+       }
+       
+       }
+       
+      $('input[name="payradio"][value="' + tpaytype+ '"]').attr("checked",true);
+      document.getElementById('tminfoname').value=tname;
+     document.getElementById('tdesc').value=ticketlist[i].tdesc;
+       document.getElementById('tbdglabel').value=ticketlist[i].tbdglabel;
+       $('#tvisib').attr('checked',ticketlist[i].tvisib);
+       $('#ttaxrate').attr('checked',ticketlist[i].taxrateflag);
+       $('#ebudprcflag').attr('checked',ticketlist[i].tebudprcflag);
+       document.getElementById('itemtype').value=ticketlist[i].itemtype;
+       try{
+       editticketbadgelabelmoreinfo(document.getElementById('itemtype').value);
+       }catch(e){alert(e);}
+      
+       //END OF LOGIC FOR RENDERING TICKETS FROM TICKETLIST
+        var winW = window.innerWidth;
+        var winH = window.innerHeight;
+        var dialogoverlay =document.getElementById('dialogoverlay2');
+        var dialogbox = document.getElementById('dialogbox3');
+        dialogoverlay.style.display="block";
+        /*dialogoverlay.style.height = winH +"px";
+        dialogbox.style.left=(winW/2) -(905*.5)+"px";*/
+        dialogbox.style.top="10px";
+        dialogbox.style.display="block";
+        
+    } 
+    
+
+    
+   Date.prototype.today = function () { 
+    return (((this.getMonth()+1) < 10)?"0":"")+(this.getMonth()+1)+"/"  + ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+ this.getFullYear();
+} 
+  Date.prototype.timeNow = function(){     return ((this.getHours() < 10)?"0":"") + ((this.getHours()>12)?(this.getHours()-12):this.getHours()) +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +" "+ ((this.getHours()>12)?('PM'):'AM'); };
+     
+   
+
+</script>
+<!------------------------------------------------------------------------------------->
+</apex:outputpanel>
+<!------------------------------------------------------------------------------------->
+
+
+<!-----------------------popupscript for package moreinfo -------------------------------->
+<script type="text/javascript">
+var mrclick;
+function CustomAlert(){
+    this.render =function(pname,pprice,pqty){
+   
+       earlybudname=pname;
+       earlybudqty=pqty;
+       earlybudprice=pprice;
+      if(flag==-1)
+      {
+        if(mrclick==0){
+        var datetime =new Date().today()+" " + new Date().timeNow();
+        var currentmaxqty='{!itemdefaultmaxqty}'>Number(pqty)?pqty:'{!itemdefaultmaxqty}';
+     var appendTxt= "<tr><td><input type='text' id='one' name='input_box_one[]' value='"+escape(pname)+"'/></td> <td><input type='text' style='width:75%' class='datetimepickers' value='"+datetime+"'/></td><td><input type='text' style='width:75%' class='datetimepickers'  value='"+defaultendtime+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+pqty+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='{!itemdefaultminqty}'/></td><td><input type='text' id='three' name='input_box_three[]'  value='"+currentmaxqty+"'/></td><td><input type='text' id='three' name='input_box_three[]' value='"+pprice+"'/></td></tr>";
+      $(".dynamic4").find("tr:gt(0)").remove();
+      $(".dynamic4 tbody").append(appendTxt);
+      mrclick++;
+      //special character
+       var pmtable = document.getElementById("packagemoreinfotable");
+       for (var i = 1,row; row = pmtable.rows[i]; i++) {
+       row.cells[0].children[0].value=unescape(row.cells[0].children[0].value);
+        if(document.querySelector('input[name="pkgpayradio"]:checked').value=='Free'){
+       row.cells[6].children[0].value=0;
+       row.cells[6].children[0].disabled="disabled";
+       }
+       else{
+       row.cells[6].children[0].disabled=false;
+       }
+       }
+      }
+      document.getElementById('pminfoname').value=pname;
+      }
+        var winW = window.innerWidth;
+        var winH = window.innerHeight;
+        var dialogoverlay =document.getElementById('dialogoverlay2');
+        var dialogbox = document.getElementById('dialogbox4');
+        dialogoverlay.style.display="block";
+        
+        dialogbox.style.top="10px";
+        dialogbox.style.display="block";
+        
+    }
+    this.Cancel = function(){
+        document.getElementById('dialogbox4').style.display ="none";
+                document.getElementById('dialogoverlay2').style.display ="none";
+            
+                
+                return false;
+        
+        }
+    
+    }
+    
+    var Alert4= new CustomAlert();  
+
+</script>
+ <!---script for show package div --->
+                 <apex:outputpanel id="showpackageblock">
+                 <script>
+                 
+                 
+                 
+function showpackage(show,hide,blnewpack)
+{
+//for new package
+document.getElementById('packagename').value='';
+document.getElementById('packageprice').value='';
+document.getElementById('packageqty').value='';
+ mrclick=0;
+var appendTxt='';
+for(var j=1;j<2;j++)
+           {
+           appendTxt += "<tr><td><input type='text' id='one' class='pkglineitmfield' name='input_box_one[]'/></td> <td><input type='text' class='pkglineitmfield' id='three' name='input_box_three[]' /></td><td><select class='selectlist'  style='outline:none;' onchange='checkbadgelabeledit(this);'><optgroup label='Tickets'><apex:repeat value="{!individualTicketsSelectOptions}" var="indittype"><option value='{!indittype.value}'>{!indittype.label}</option></apex:repeat></optgroup><optgroup label='BL Products'><apex:repeat value="{!BLPRODTicketsSelectOptions}" var="indittype"><option value='{!indittype.value}'>{!indittype.label}</option></apex:repeat></optgroup><optgroup label='Add On Items'><apex:repeat value="{!itemtypesaddon}" var="indittype"><option value='{!indittype.value}'>{!indittype.label}</option></apex:repeat></optgroup></select></td><td><div id='pkgtagsdiv' onclick='Alert6.render(this.parentNode.parentNode.rowIndex)'><img src={!URLFOR($Resource.createevents,'createevents/images/addtags.png')} width='25px' height='25px'></div></td><td><input type='text' id='one'   name='input_box_one[]' style='width: 85%;'/></td><td><input type='button' class='del1' value='' /></td></tr>";             
+           }
+           $(".dynamic2").find("tr:gt(0)").remove();
+      $(".dynamic2 tbody").append(appendTxt);
+//
+flag=-1;
+document.getElementById('savedpackageimage').src='';
+isnewpackage=blnewpack;
+document.getElementById(show).style.display="block";
+document.getElementById(hide).style.display="none";
+if(isnewpackage=="true"){
+$('input[name="pkgpayradio"][value="Paid"]').attr("checked",true);
+$('#pkvisib').attr('checked',true);
+document.getElementById('pkdesc').value='';
+getlabelbadgeout();
+}
+
+}
+
+
+     </script>   
+    </apex:outputpanel>  
+     <script>
+    function getlabelbadgeout()
+    {
+       var table = document.getElementById("packagetable");
+             var row = table.rows[1];
+
+
+Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getbadgeinfo}',
+            row.cells[2].children[0].value,
+            1,
+           function(result, event){
+           
+           
+           if(result.badgable!='B - Badge')
+                            {
+                                row.cells[4].children[0].value="";
+                                row.cells[4].children[0].disabled="disabled";
+                             }
+                           else{
+                             row.cells[4].children[0].disabled=false;
+                             row.cells[4].children[0].value=result.badgelabel;
+                         }
+             });
+    }
+    function checkbadgelabeledit(badgelabelcombo)
+{
+var table = document.getElementById("packagetable");
+var row = table.rows[$(badgelabelcombo).parent().parent().index()+1];
+
+
+Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.getbadgeinfo}',
+            badgelabelcombo.options[badgelabelcombo.selectedIndex].value,
+            1,
+           function(result, event){
+           
+           
+           if(result.badgable!='B - Badge')
+                            {
+                                row.cells[4].children[0].value="";
+                                row.cells[4].children[0].disabled="disabled";
+                             }
+                           else{
+                             row.cells[4].children[0].disabled=false;
+                             row.cells[4].children[0].value=result.badgelabel;
+                         }
+             });
+
+
+
+}
+
+    </script>    
+             
+<c:ticketdragdrop />
+
+
+<!---------------------------------------------------------------->
+<style>
+
+#dialogoverlay2{
+    display:none;
+    opacity: .8;
+position: fixed;
+top: 0px;
+left: 0px;
+background-color: #484848;
+width: 100%;
+z-index:99;
+height: 100%;
+    
+    }
+
+  #dialogbox6{ display:none; position:fixed;padding:5px;;
+ width:40%; margin-left:29%; z-index:100;padding-bottom:30px;  overflow:auto; border-radius:3px;
+  -webkit-border-radius: 3px;-moz-border-radius: 3px;}
+
+
+ #pkgtagsdiv{
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(253,253,253,1)), color-stop(100%,rgba(227,227,227,1)));
+background: -webkit-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -o-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -ms-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#e3e3e3',GradientType=0 );
+border: 1px solid #e3e3e3;
+padding: 5px;
+padding-bottom:1px;
+border-radius: 3px;
+/* padding-top: 5px; */
+padding-left:6px;
+float: right;
+margin-right:30%;
+cursor:pointer;
+}
+
+
+</style>
+
+<!--------------------------------------------------------------------------->
+<!-----------------------popupscript for tags for package line items -------------------------------->
+<script type="text/javascript">
+var LineItemTagMap = {}; 
+var pklinerowindex;
+function CustomAlert(){
+    this.render =function(plrowindex){
+        pklinerowindex=plrowindex;
+        var testimonialElements = $(".resultspl");
+        for(var l=0; l<testimonialElements.length; l++){
+                            
+                                  var element = testimonialElements.eq(l);
+                                    element[0].children[0].children[0].children[0].children[0].checked=false;
+                                  
+                                  }
+         var tsps=LineItemTagMap [pklinerowindex];
+         if(tsps!=undefined){
+         tsps=tsps.split(";");
+         
+          for(var l=0;l<tsps.length;l++)
+          {
+            
+             
+                             for(var k=0; k<testimonialElements.length; k++){
+                            
+                                  var element = testimonialElements.eq(k);
+                                  if(tsps[l]==getKeyByValue(TagMap ,element[0].children[0].children[0].children[1].innerHTML))
+                                  element[0].children[0].children[0].children[0].children[0].checked=true;
+                                  
+                                  }
+          }
+          }
+          
+               
+         
+        
+        
+        var winW = window.innerWidth;
+        var winH = window.innerHeight;
+        var dialogoverlay =document.getElementById('dialogoverlay2');
+        var dialogbox = document.getElementById('dialogbox6');
+        dialogoverlay.style.display="block";
+        
+        dialogbox.style.top="100px";
+        dialogbox.style.display="block";
+        
+    }
+    this.Cancel = function(){
+        document.getElementById('dialogbox6').style.display ="none";
+                document.getElementById('dialogoverlay2').style.display ="none";
+          
+          var tsp='';
+          var testimonialElements = $(".resultspl");
+                             
+                             for(var f=0; f<testimonialElements.length; f++){
+                                  
+                                  var element = testimonialElements.eq(f);
+                                  if(element[0].children[0].children[0].children[0].children[0].checked){
+                                  tsp=tsp+getKeyByValue(TagMap,element[0].children[0].children[0].children[1].innerHTML)+';';
+                                  
+                                  }
+                                  }
+                                  
+          tsp=tsp.replace(/;(\s+)?$/, ''); 
+         
+          LineItemTagMap[pklinerowindex]=tsp;
+          
+          
+          
+         
+            
+                
+                return false;
+        
+        }
+    
+    }
+    
+    var Alert6= new CustomAlert();  
+
+</script>
+<!------------------------>
+<!--------close of script---------------> 
+                    <script type="text/javascript">//<![CDATA[ 
+$(window).load(function(){
+$(function() {
+   $('#btn_spkitems').click(function(e) {
+     e.preventDefault();
+     var name  = $('input[name="addtagtextpkitems"]').val()
+if(name !==''){
+        
+          Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.BLN_ReUse_EventsEditCon.createEventTag}',
+            eventmand.EventID,
+            name,
+           function(result, event){
+            if (event.status){
+            if(result!=''){
+       $('#abcpk').append('<table class="resultspk">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+name+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                    $('#addtextlabelpk').val(''); //clearing textbox value
+                     $('#abc').append('<table class="results">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+name+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                    $('#addtextlabel').val(''); //clearing textbox value
+                    
+                    $('#abcpkitems').append('<table class="resultspl">'
+                         +'<tr>' 
+                          +'<td>'+'<input type="checkbox" />'+'</td>'
+                            +'<td>'+name+'</td>'
+                            
+                           +'</tr>'
+                       + '</table>');
+                       
+                    $('#addtextlabelpkitems').val(''); //clearing textbox value
+                     TagMap[result] = name;
+                    console.log(TagMap);
+                    }
+                    else
+                    {
+                       alert('Duplicate value');
+                    }
+            }
+           });
+
+ 
+    }
+   }
+    );
+    $('#btn_i').click(function() {
+      $('.results').remove();  
+    });
+});
+});//]]>  
+
+
+ function addtagsshowpkitems(){
+     document.getElementById("addtagtextpkitems").style.display="";
+     document.getElementById("addtagsshowpkitems").style.display="none";
+     
+     }
+</script>
+                    <!------------------------->
+
+<!---------------------------------------popup for packagelineitems tag-------------->        
+     <div id="dialogoverlay2"></div>
+<!--close of dialogoverlay2-->
+<div id="dialogbox6"><a id="close" onclick="Alert6.Cancel()">×</a>
+<div class="grid-1" style=" width:98%;margin-left:1%; padding-right:0px;">
+    <div class="title-grid">Add Tags</div>
+    <div class="content-gird" >
+    <!---------------------------------------------------->
+    <div id="addtagsdivpkitems" style="">
+          <div id="abcpkitems" style="width:100%;">
+
+
+</div>
+
+  <!--------------------------------------->
+  <div style="display:block; border-top: 1px #E5E5E5 solid;border-bottom: 1px #E5E5E5 solid; background-color:#F7F7F7; text-align:center;font-size:18px; font-family:cuprum; color:#5283cc;">
+    <div id="addtagsshowpkitems" onClick="addtagsshowpkitems()" style="padding:5px;" >
+     <span style="margin-right:0%;"><img src="{!URLFOR($Resource.createevents,'createevents/images/addtag.png')}" width="18px" height="18px" style="margin-right:2%; margin-bottom:-3px;"/>Add Tags</span>
+    </div>
+    <table id="addtagtextpkitems" border="0" width="95%" style="margin:0px auto; margin-top:5px; margin-bottom:5px; display:none;">
+    <tbody>
+        <tr>
+      <!--<td style="text-align:left">Tag Name</td>-->
+      <td><input id="addtextlabelpkitems" type="text" name="addtagtextpkitems" placeholder="" style="width:80%;"/></td>
+      <td>
+       <div class="buttonHolder">   
+    <input class="button-a blue"  type="button" name="submit" value="Save" onclick="" id="btn_spkitems"/>
+    <!--<input class="button-a blue"  value="clear" type="button" id="btn_i">--> 
+  </div></td>
+      <!--<td><input type="checkbox" name="check"></td>-->
+    
+    </tr>
+    
+  </tbody></table>
+  </div>
+ 
+ 
+             <!-------------------------------------------------------->
+          </div><!--close of addtagsdiv-->
+           
+           <div id="managetagbtn" onclick="Alert.render()"  style="width:100%; cursor:pointer; text-align:center; background-color:#F7F7F7; padding:5px 0px; font-size:18px; font-family:cuprum; color:#5283cc;">
+           
+           <img src="{!URLFOR($Resource.createevents,'createevents/images/manage.png')}" width="20px" height="20px" style="margin-right:2%; margin-bottom:-3px;"/>Manage Tags
+           
+           </div><!--close of managetagbutton-->
+          
+          <!--------------------------------------------------------------------->
+         
+    
+    <!------------------------------------------------------->
+    
+    
+    </div><!--close of content-grid-->
+    </div><!--close of grid-1-->
+    </div><!--close of dialogbox6-->
+    
+    <!----------------close of popup for packagelineitems tag-------------------->
+</apex:page>

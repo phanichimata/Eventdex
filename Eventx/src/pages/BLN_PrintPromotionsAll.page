@@ -1,0 +1,71 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_PromoCodeReportCon" renderAs="pdf">
+ 
+<apex:stylesheet value="{!URLFOR($Resource.pdfstyles, 'pdfstyles.css')}"/>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+</head>
+<!--header-->
+
+<div class="header" style="text-align:center;padding:0px; margin:0px;font-family: Arial,Helvetica,sans-serif;color:#04408c;">
+<h3>PromoCode Report</h3>
+<table width="100%" cellspacing="0" cellpadding="5" style="border:1px solid #CCCCCC;">
+        <tr>
+       <td>
+           <c:EventDetails BLN_EventDetails="{!eventInfo}"></c:EventDetails>
+       </td>
+   
+   </tr>                                                                                                                                                                                                       
+        <tr>
+
+            <th class="tableHeader" style="width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Ticket Name</b></th>
+            <th class="tableHeader" style="width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Tag</b></th>      
+            <th class="tableHeader" style="width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Quantity Used</b></th>
+            <th class="tableHeader" style="width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Discount Amount</b></th>
+            <th class="tableHeader" style="width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;color:#04408c;background-color:#d6e3f2;border-bottom: 1px solid #CCCCCC;border-left: 1px solid #CCCCCC;border-top: 1px solid #CCCCCC;"><b>Total Discounted Amount</b></th>
+            
+        </tr>
+        </table>
+</div>  
+<!-- header -->
+
+<!--table-->
+<body>
+<div style="padding-top:1px;">
+
+<table width="100%" cellspacing="0" cellpadding="5" border="1">
+    <TBODY>  
+    <apex:repeat value="{!promoCodeInnerList}" var="promocode">
+        <apex:repeat value="{!promocode.itemPromotionList}" var="itemPromotion">   
+        <tr style="page-break-after:auto;">                                                                                                                                     
+              <td colspan="5" class="tableContent" style="text-align:left;width:10%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;"> 
+                <span style="color:#247dba; margin-left:1%;"><b>Promotion Code:</b></span><span style="color:#000; margin-left:.2%;font-weight:700;">{!promocode.promotionData.Promo_Code__c}</span>
+                <span style="color:#247dba; margin-left:1%;"><b>Promocode Type:</b></span><span style="color:#000; margin-left:.2%;font-weight:700;">{!promocode.promotionData.Promotion_Type__c}</span>
+                <span style="color:#247dba; margin-left:1%;"><b>Discount:</b></span><span style="color:#000; margin-left:.2%;font-weight:700;">{!promocode.promotionData.Discount_Value__c}</span>
+                <span style="color:#247dba; margin-left:1%;"><b>Used/Available:</b></span><span style="color:#000; font-weight:700; margin-left:.2%;">{!promocode.promotionData.T_Used_Count__c}</span>
+              </td>           
+           </tr>      
+            <tr style="page-break-after:auto;">                                                                                                                                     
+              <td class="tableContent" style="text-align:left;width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!itemPromotion.itemPromotionData.Buy_Item__r.item_name__c}</td>
+              <td class="tableContent" style="text-align:left;width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!itemPromotion.itemPromotionData.Buy_Item__r.item_type__r.Name}</td>
+              <td class="tableContent" style="text-align:left;width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">{!itemPromotion.itemPromotionData.Buy_Item_Quantity__c}</td>
+              <td class="tableContent" style="text-align:left;;width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;"><apex:outputText rendered="{!IF(itemPromotion.itemPromotionData.Item_Discount_Type__c == 'Amount', TRUE, FALSE)}" value="$"/> {!itemPromotion.itemPromotionData.Item_Discount_Value__c}<apex:outputText rendered="{!IF(itemPromotion.itemPromotionData.Item_Discount_Type__c == 'Percent', TRUE, FALSE)}" value="%"/></td>
+              <td class="tableContent" style="text-align:left;width:20%;font-family: Arial,Helvetica,sans-serif;font-size:9px;border-top: 1px black;">${!itemPromotion.discountedPrice}</td>
+     
+           </tr>
+
+        </apex:repeat> </apex:repeat> 
+    </TBODY>
+    <TFOOT>
+     
+    </TFOOT>
+    
+</table> 
+</div>
+</body>
+
+
+</html>
+
+
+</apex:page>

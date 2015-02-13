@@ -1,0 +1,7 @@
+<apex:page >
+ <script type="text/javascript" src="{!URLFOR($Resource.createevents, 'createevents/js/jquery-1.9.1.js')}"></script> 
+  <script type="text/javascript" src="{!URLFOR($Resource.createevents, 'createevents/js/jquery.min.js')}"></script> 
+   <apex:stylesheet value="{!URLFOR($Resource.checkboxPicklist, 'jquery.toChecklist.css')}" />
+    <apex:includeScript value="{!URLFOR($Resource.checkboxPicklist, 'jquery.toChecklist.js')}" />
+
+</apex:page>

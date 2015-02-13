@@ -1,0 +1,1181 @@
+<apex:page controller="BLN_Displaysettingscon" standardStylesheets="false" showHeader="false" id="pageid"   action="{!displayPermissions}" >
+ <apex:stylesheet value="{!URLFOR($Resource.MyTickets, 'css/chosen.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/style.css')}"/> 
+      <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/style-button.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/tables.css')}"/>
+
+      <!--    <script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/functions.js')}"></script> -->  
+ 
+   <script type="text/javascript" src="{!URLFOR($Resource.displaysettingsvalidations, 'displaysettings/displaysettingsvalidations.js')}"></script>
+   <script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/jquery.min.js')}"></script>
+   <script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/jquery-ui-1.8.16.custom.min.js')}"></script>
+  
+   
+<c:myComponent BLN_UtillDisplayLinks="{!mydisplaysettings }" id="compid" >
+    
+  
+
+ <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/fancybox.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/fullcalendar.min.js')}"></script>
+
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/elfinder.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/jquery.wysiwyg.js')}"></script>
+
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/tipTip.minified.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/forms.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/chosen.jquery.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/fautoresize.jquery.min.js')}"></script>
+
+
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/functions.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/colorpicker.js')}"></script>
+
+ <style>
+              .add{
+                background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(253,253,253,1)), color-stop(100%,rgba(227,227,227,1)));
+background: -webkit-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -o-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -ms-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#e3e3e3',GradientType=0 );
+border: 1px solid #e3e3e3;
+float:left;
+text-decoration:none;
+
+border-radius: 3px;
+/* padding-top: 5px; */
+padding-left:0px;
+padding: 5px 5px 2px 5px;
+margin-right:10%;
+cursor:pointer;}
+.del{
+    
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(253,253,253,1)), color-stop(100%,rgba(227,227,227,1)));
+background: -webkit-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -o-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: -ms-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+background: linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#e3e3e3',GradientType=0 );
+border: 1px solid #e3e3e3;
+float:left;
+text-decoration:none;
+
+border-radius: 3px;
+/* padding-top: 5px; */
+padding-left:0px;
+padding: 5px 5px 2px 5px;
+margin-right:10%;
+cursor:pointer;     
+    }
+
+
+</style>
+              
+  
+ 
+ <script>
+              function show_content(){
+             
+                if(document.getElementById("regtabsfield").checked==true){
+                    // alert("show");                 
+                     document.getElementById("regtabcontent").style.display="";
+                    }
+                  else {
+                  // alert("hide");
+                  document.getElementById("regtabcontent").style.display="none";
+                  }
+               
+
+       }
+     
+      function sort_order(){
+     
+     
+         document.onmousemove = function(ev){
+    if (currenttable && currenttable.dragObject) {
+        ev   = ev || window.event;
+        var mousePos = currenttable.mouseCoords(ev);
+        var y = mousePos.y - currenttable.mouseOffset.y;
+        if (y != currenttable.oldY) {
+            // work out if were going up or down...
+            var movingDown = y > currenttable.oldY;
+            // update the old value
+            currenttable.oldY = y;
+            // update the style to show were dragging
+            currenttable.dragObject.style.backgroundColor = "#eee";
+            // If were over a row then move the dragged row to there so that the user sees the
+            // effect dynamically
+            var currentRow = currenttable.findDropTargetRow(y);
+            if (currentRow) {
+                if (movingDown && currenttable.dragObject != currentRow) {
+                    currenttable.dragObject.parentNode.insertBefore(currenttable.dragObject, currentRow.nextSibling);
+                } else if (! movingDown && currenttable.dragObject != currentRow) {
+                    currenttable.dragObject.parentNode.insertBefore(currenttable.dragObject, currentRow);
+                }
+            }
+        }
+
+        return false;
+    }
+}
+
+// Similarly for the mouseup
+document.onmouseup   = function(ev){
+    if (currenttable && currenttable.dragObject) {
+        var droppedRow = currenttable.dragObject;
+        // If we have a dragObject, then we need to release it,
+        // The row will already have been moved to the right place so we just reset stuff
+        droppedRow.style.backgroundColor = 'transparent';
+        currenttable.dragObject   = null;
+        // And then call the onDrop method in case anyone wants to do any post processing
+        currenttable.onDrop(currenttable.table, droppedRow);
+        currenttable = null; // let go of the table too
+    }
+}
+
+
+/** get the source element from an event in a way that works for IE and Firefox and Safari
+ * @param evt the source event for Firefox (but not IE--IE uses window.event) */
+function getEventSource(evt) {
+    if (window.event) {
+        evt = window.event; // For IE
+        return evt.srcElement;
+    } else {
+        return evt.target; // For Firefox
+    }
+}
+
+/**
+ * Encapsulate table Drag and Drop in a class. Well have this as a Singleton
+ * so we dont get scoping problems.
+ */
+function TableDnD() {
+    /** Keep hold of the current drag object if any */
+    this.dragObject = null;
+    /** The current mouse offset */
+    this.mouseOffset = null;
+    /** The current table */
+    this.table = null;
+    /** Remember the old value of Y so that we dont do too much processing */
+    this.oldY = 0;
+
+    /** Initialise the drag and drop by capturing mouse move events */
+    this.init = function(table) {
+        this.table = table;
+        var rows = table.tBodies[0].rows; //getElementsByTagName("tr")
+
+        for (var i=0; i<rows.length; i++) {
+        
+            // John Tarr: added to ignore rows that Ive added the NoDnD attribute to (Category and Header rows)
+            var nodrag = rows[i].getAttribute("NoDrag")
+            if (nodrag == null || nodrag == "undefined") { //There is no NoDnD attribute on rows I want to drag
+                this.makeDraggable(rows[i]);
+            }
+        }
+    }
+
+   /** This function is called when you drop a row, so redefine it in your code
+        to do whatever you want, for example use Ajax to update the server */
+    
+ 
+    
+    this.onDrop = function(table, row) {
+     
+     var arryan = [];
+     var valu = '';
+     
+    $('tr td input[type="text"]').each(function(){
+
+     var aid = $(this).attr('id') ;
+
+       //alert(aid);
+    
+
+                                   
+                            
+        });
+  
+    
+    
+    }
+
+    
+    /** Get the position of an element by going up the DOM tree and adding up all the offsets */
+    this.getPosition = function(e){
+        var left = 0;
+        var top  = 0;
+        /** Safari fix -- thanks to Luis Chato for this! */
+        if (e.offsetHeight == 0) {
+            /** Safari 2 doesnt correctly grab the offsetTop of a table row
+                this is detailed here:
+                http://jacob.peargrove.com/blog/2006/technical/table-row-offsettop-bug-in-safari/
+                the solution is likewise noted there, grab the offset of a table cell in the row - the firstChild.
+                note that firefox will return a text node as a first child, so designing a more thorough
+                solution may need to take that into account, for now this seems to work in firefox, safari, ie */
+            e = e.firstChild; // a table cell
+        }
+
+        while (e.offsetParent){
+            left += e.offsetLeft;
+            top  += e.offsetTop;
+            e     = e.offsetParent;
+        }
+
+        left += e.offsetLeft;
+        top  += e.offsetTop;
+
+        return {x:left, y:top};
+    }
+
+    /** Get the mouse coordinates from the event (allowing for browser differences) */
+    this.mouseCoords = function(ev){
+        if(ev.pageX || ev.pageY){
+            return {x:ev.pageX, y:ev.pageY};
+        }
+        return {
+            x:ev.clientX + document.body.scrollLeft - document.body.clientLeft,
+            y:ev.clientY + document.body.scrollTop  - document.body.clientTop
+        };
+    }
+
+    /** Given a target element and a mouse event, get the mouse offset from that element.
+        To do this we need the elements position and the mouse position */
+    this.getMouseOffset = function(target, ev){
+        ev = ev || window.event;
+
+        var docPos    = this.getPosition(target);
+        var mousePos  = this.mouseCoords(ev);
+        return {x:mousePos.x - docPos.x, y:mousePos.y - docPos.y};
+    }
+
+    /** Take an item and add an onmousedown method so that we can make it draggable */
+    this.makeDraggable = function(item) {
+        if(!item) return;
+        var self = this; // Keep the context of the TableDnd inside the function
+        item.onmousedown = function(ev) {
+            // Need to check to see if we are an input or not, if we are an input, then
+            // return true to allow normal processing
+            var target = getEventSource(ev);
+            if (target.tagName == 'INPUT' || target.tagName == 'SELECT') return true;
+            currenttable = self;
+            self.dragObject  = this;
+            self.mouseOffset = self.getMouseOffset(this, ev);
+            return false;
+        }
+        item.style.cursor = "move";
+    }
+
+    /** Were only worried about the y position really, because we can only move rows up and down */
+    this.findDropTargetRow = function(y) {
+        var rows = this.table.tBodies[0].rows;
+        for (var i=0; i<rows.length; i++) {
+            var row = rows[i];
+            // John Tarr added to ignore rows that Ive added the NoDnD attribute to (Header rows)
+            var nodrop = row.getAttribute("NoDrop");
+            if (nodrop == null || nodrop == "undefined") {  //There is no NoDnD attribute on rows I want to drag
+                var rowY    = this.getPosition(row).y;
+                var rowHeight = parseInt(row.offsetHeight)/2;
+                if (row.offsetHeight == 0) {
+                    rowY = this.getPosition(row.firstChild).y;
+                    rowHeight = parseInt(row.firstChild.offsetHeight)/2;
+                }
+                // Because we always have to insert before, we need to offset the height a bit
+                if ((y > rowY - rowHeight) && (y < (rowY + rowHeight))) {
+                    // thats the row were over
+                    return row;
+                }
+            }
+        }
+        return null;
+    }
+}
+
+        var table = document.getElementById('options-table');
+       // alert(table);
+        var tableDnD = new TableDnD();
+        tableDnD.init(table);
+     
+     
+     }
+     
+      $(window).load(function() {
+      //alert('{!tabinclude}');
+      if('{!tabinclude}' == 'true'){
+      $("#regtabsfield").attr("checked", true);
+      // document.getElementById("regtabsfield").checked = true;
+      }
+      else{
+          $("#regtabsfield").attr("checked", false);
+           //  document.getElementById("regtabsfield").checked = false;
+      }
+           
+      
+sort_order();
+     
+    });
+     
+        </script>  
+    
+    <body >
+
+<!------------------------------------Start Of Survey Table For The Selected Event.-------------------------------------------->
+
+
+<div id="displaydiv">
+ <apex:form id="displaysettid" >   
+ 
+ <script>
+ function savedisplaysettings(timeval){
+ 
+ if(timeval >= 100){
+                        alert('Please Give TimeOut value Less Than 100 Minutes');
+                       return false;
+                       }
+ else{
+ 
+ 
+ var tabschkdval = '';
+ tabschkdval = document.getElementById("regtabsfield").checked;
+
+ 
+ var regsetlist ='';
+       var tabname = '';
+         var SelBranchVal1 ='';  
+           var selbol = true;
+    $('tr td input[type="text"]').each(function(){
+
+     if($(this).hasClass( "input_box_one" )){
+        var aid = $(this).attr('id') ;
+      tabname = document.getElementById(aid).value;
+    
+      document.getElementById(aid).style.border = "1 px";
+     document.getElementById(aid).style.borderColor = "#E3E3E3";  
+
+             var els = $('.selecttag');
+               els.each(function(index, el) {
+                   el = $(el);
+                   el = el.find("select");
+                   var fildname = el.attr('id');
+                    var n = fildname.search(aid);
+             if(n != -1){
+               SelBranchVal1 ='';  
+               var ele = document.getElementById(fildname);
+               var x = 0;
+     
+              for (x=0;x<ele.length;x++)
+                 {
+                    if (ele[x].selected)
+                    {
+                       SelBranchVal1 += ele[x].value+'123543';
+                    }
+                  }
+                
+          }
+             });      
+          regsetlist = regsetlist+tabname+'1!@#'+SelBranchVal1+'-';     
+   
+       
+      if(tabschkdval && tabname == ''){
+               alert('Please Enter TabName');
+               selbol = false;
+               document.getElementById(aid).style.border = "1 px";
+               document.getElementById(aid).style.borderColor = "#FF0000";
+               return false;
+          }
+          else{
+         
+         
+         if(SelBranchVal1 == ''){
+                 alert('Please Select Atleast One Ticket');
+                 selbol = false;
+                 return false;
+         } 
+          else{
+            selbol = true;
+          }
+         }
+    
+    
+    
+    }
+    
+    
+
+  });
+            
+           var finalreglist = regsetlist.slice(0,-7);  
+             //  alert(finalreglist);
+             if(selbol == true){
+             alert('Display Settings Saved Successfully.');
+            
+ 
+               savedpsettings(finalreglist,tabschkdval);
+            }
+
+ 
+ 
+ 
+ }
+  
+
+ }
+ 
+ </script>
+    
+
+ 
+ 
+     <div class="grid-1"  >
+  
+        
+            
+                 <div class="form" style="width:100%; border:0px solid #000; margin:0px auto;  height:auto; padding-bottom:50px; ">
+                
+                
+              <style type="text/css">
+       
+       .distance p{ float:none; line-height:none;}
+       .selectoption{
+            width:93%; height:28px; background-image:url(images/input.png)
+                 ; border-radius:3px; border:1px solid #e3e3e3;color: #575757;outline:none }
+                 
+                 .tabno{ font-size:14px; font-weight:700; margin-left:25%;}
+       </style>
+     
+             
+              <ul>
+            
+                 <!----------------Timeout Settings: ------------------------------->
+                  <div  id="timeout" style="border:0px solid #F00; margin-top:15px;">
+                   <table width="100%" border="0">
+  <tr>
+
+    <td width="17%" valign="top"   style="margin-left:5px;font-size:18px; font-family:cuprum;  color:#4f91cd;"><span style="color:#000; margin-right:1%; ">1.</span> Time Out Settings:</td>
+    <td width="7%" >
+    <apex:InputField value="{!regsettingsMAP['Time Out'].order__C}" id="timeoutid"  html-placeholder="10" style="width:40%; margin-top:-5px; outline:none;" / > 
+    <!---<input type="text" placeholder="10" style="width:40%; margin-top:-5px; outline:none;" /> onblur="validatetime(this);" -->
+   
+    </td>
+    <td width="10%"  valign="top"  style="margin-left:5px;font-size:18px; font-family:cuprum;  color:#4f91cd;">
+  Minutes
+    </td>
+    <td>   <apex:InputField value="{!regsettingsMAP['Time Out'].Included__c}" styleclass="timeoutclass"  id="timeinclid" style="outline:none; margin-left:.5%;"  />
+  <!--  <input type="checkbox"   id="acceptterms"  style="outline:none; margin-left:.5%;"  /> ---></td>
+     </tr>
+</table>
+            </div><!-- Timeout Settings:-->      
+               
+            <!----------------------------------------------->
+                
+                
+                <!----------------------------------------------->
+         
+                  <div  id="taxrate" style="border:0px solid #F00; margin-top:30px;">
+                  <span style="color:#000; margin-right:.5%;font-size:18px;font-family:cuprum; ">2.</span> 
+               <span style=" margin-left:0px;font-size:18px; margin-top:15px; font-family:cuprum;  color:#4f91cd;">
+             Select the columns and labels to be displayed on the registration page.</span>
+             <br/><br/>
+             <style>
+             #details{ border-collapse:collapse; font-family:cuprum; text-align:center; font-size:18px;}
+              #details tr td{ padding:10px; border-right:1 px #CCC;}
+             
+             </style>
+             <div style="border:0px solid #ddd; width:95%;">
+             
+             <table id="details" width="100%" >
+  <tr style="background-color:#D7D7D7">
+    <td width="15%" style=" font-family:cuprum; font-weight:700;">Label</td>
+      <td width="15%"> <apex:InputField value="{!regsettingsMAP['Ticket Image'].Label_Name__c}" id="TicketImagelid" html-placeholder="Ticket Image" style="width:90%; outline:none;"/> </td>
+    <td width="15%"> <apex:InputField value="{!regsettingsMAP['Ticket Type'].Label_Name__c}" id="TicketTypelid" html-placeholder="Ticket Type" style="width:90%; outline:none;"/> </td>
+    <td width="15%"><apex:InputField value="{!regsettingsMAP['Sales End'].Label_Name__c}" id="Salesendlid" html-placeholder="Sales End" style="width:90%; outline:none;"/></td>
+    <td width="15%"><apex:InputField value="{!regsettingsMAP['Price'].Label_Name__c}" id="Pricelid" html-placeholder="Price" style="width:90%; outline:none;"/></td>
+    <td width="15%" > <apex:InputField value="{!regsettingsMAP['Fee'].Label_Name__c}" id="Feelid" html-placeholder="Fee" style="width:90%; outline:none;"/></td>
+    <td width="15%"><apex:InputField value="{!regsettingsMAP['Quantity'].Label_Name__c}" id="Quantitylid"  html-placeholder="Quantity" style="width:70%; outline:none;"/></td>
+  
+  </tr>
+   <tr style="background-color:#ECECEC">
+    <td width="10%" style="font-family:cuprum; font-weight:700;">Include</td>
+    <td width="12%"><apex:InputField value="{!regsettingsMAP['Ticket Image'].Included__c}" id="Ticketimgincid" style="outline:none; margin-left:0.5%;" /></td>
+    <td width="12%"><apex:InputField value="{!regsettingsMAP['Ticket Type'].Included__c}" id="TicketTypeincid" style="outline:none; margin-left:0.5%;" /></td>
+    <td width="12%"><apex:InputField value="{!regsettingsMAP['Sales End'].Included__c}" id="Salesendincid" style="outline:none; margin-left:0.5%;" /></td>
+    <td width="12%"><apex:InputField value="{!regsettingsMAP['Price'].Included__c}" id="Priceincid"  style="outline:none; margin-left:0.5%;" /></td>
+    <td width="12%"><apex:InputField value="{!regsettingsMAP['Fee'].Included__c}" id="Feeincid" style="outline:none; margin-left:0.5%;" /></td>
+    <td><apex:InputField value="{!regsettingsMAP['Quantity'].Included__c}" id="Quantityincid"   style="outline:none; margin-left:0.5%;" /></td>
+  </tr>
+  
+  </table> 
+</div>
+
+              </div><!--clode of taxrate-->
+       
+       <!----------------------------------------------->
+      
+                  <div  id="moreinfofortickets" style="border:0px solid #F00; margin-top:30px;">
+                
+                  <table width="100%" border="0">
+  <tr>
+
+    <td width="19%" valign="top" style="margin-left:5px;font-size:18px; margin-top:-50px; font-family:cuprum;  color:#4f91cd;"><span style="color:#000; margin-right:1%;">3.</span> More Info For Tickets: </td>
+    <td width="53%">
+    <apex:InputField value="{!regsettingsMAP['More Info'].Label_Name__c}" id="Infoid" html-placeholder="More Info" style="width:94%; outline:none;"  />
+    
+    </td>
+    <td>
+     <apex:InputField value="{!regsettingsMAP['More Info'].Included__c}" id="Infoincid" style="margin-left:.5%; outline:none;"  />
+     
+    </td>  
+    </tr>
+    </table>         
+              
+             </div><!-- moreinfofortickets-->      
+            
+              <!----------------------------------------------->
+              
+                <!----------------------------------------------->
+               
+                  <div  id="sales-msg-box" style="border:0px solid #F00; margin-top:30px;">
+                  
+                  <table width="100%" border="0">
+  <tr>
+ 
+    <td width="19%" valign="top" style="margin-left:5px;font-size:18px; margin-top:-50px; font-family:cuprum;  color:#4f91cd;"><span style="color:#000; margin-right:1%;font-size:18px;font-family:cuprum; ">4.</span> Sales Message Box:</td>
+    <td width="53%">
+    <apex:InputField value="{!regsettingsMAP['Sales Message'].Sales_Message__c}"  id="Salesid" style="width:94%;text-indent:3px;"  />
+  
+    </td>
+    <td>  <apex:InputField value="{!regsettingsMAP['Sales Message'].Included__c}"   id="Salesincid" style="outline:none; margin-left:.5%;"  />    </td>
+    <script>
+    document.getElementById('pageid:compid:commoncomponent:displaysettid:Salesincid').checked=false;
+    </script>
+    
+  </tr>
+</table>
+            </div><!-- moreinfofortickets-->      
+    
+              <!----------------------------------------------->
+              
+               <!----------------------------------------------->
+               
+                  <div  id="sales-msg-box" style="border:0px solid #F00; margin-top:30px;">
+                  
+                  <table width="100%" border="0">
+  <tr>
+
+    <td width="9.5%" valign="top" style="margin-left:5px;font-size:18px; margin-top:-50px; font-family:cuprum;  color:#4f91cd;"><span style="color:#000; margin-right:1%;font-size:18px;font-family:cuprum; ">5.</span> Include Organizer Details:</td>
+    <td width="17%" valign="top" style="margin-left:5px;font-size:18px; margin-top:-50px; font-family:cuprum;  color:#4f91cd;"><span style="color:#000; margin-right:1%;font-size:18px;font-family:cuprum; ">6.</span> Include Registration Page Widgets:</td> 
+  </tr>
+</table>
+<style>
+#organizer-fields td{padding:5px;}
+</style>
+
+<table id="organizer-fields" width="100%" border="0" style="margin-top:10px;font-size:18px;font-family:cuprum; border-collapse:collapse;color:#000">
+  <tr>
+    <td width="15%;">Name:</td>
+    <td width="21%"><apex:InputField value="{!regsettingsMAP['Name'].Included__c}"   id="Nameid"  style="outline:none; margin-left:.5%;"  /> </td>
+    <td width="15%;">Days Left:</td>
+     <td><apex:InputField value="{!regsettingsMAP['Days Left'].Included__c}" id="Daysid"  style="outline:none; margin-left:.5%;"  /></td>
+  </tr>
+  <tr>
+    <td>Phone:</td>
+    <td><apex:InputField value="{!regsettingsMAP['Phone'].Included__c}" id="Phoneid"  style="outline:none; margin-left:.5%;"  /></td>
+      <td width="15%;">Map:</td>
+     <td><apex:InputField value="{!regsettingsMAP['Map'].Included__c}"  id="Mapid"  style="outline:none; margin-left:.5%;"  /></td>
+  </tr>
+  <tr>
+    <td>Email:</td>
+    <td><apex:InputField value="{!regsettingsMAP['Email'].Included__c}" id="Emailid" style="outline:none; margin-left:.5%;"  /></td>
+     <td width="15%;">Social Widgets:</td>
+     <td>
+     <apex:image url="{!URLFOR($Resource.socialnwimages, 'socialimages/fb1.png')}"  width="30" height="30"/><apex:InputField value="{!regsettingsMAP['Facebook'].Included__c}" id="fbid"  style="outline:none; margin-left:.5%;"  />
+     <apex:image url="{!URLFOR($Resource.socialnwimages, 'socialimages/tw1.png')}"  width="30" height="30" style="margin-left:2%;"/><apex:InputField value="{!regsettingsMAP['Twitter'].Included__c}" id="twtid"   style="outline:none; margin-left:.5%;"  />
+       <apex:image url="{!URLFOR($Resource.socialnwimages, 'socialimages/linkedin1.png')}"  width="30" height="30" style="margin-left:2%;"/><apex:InputField value="{!regsettingsMAP['LinkedIn'].Included__c}" id="lnkdid" style="outline:none; margin-left:.5%;"  />
+       <apex:image url="{!URLFOR($Resource.socialnwimages, 'socialimages/blg1.png')}"  width="30" height="30" style="margin-left:2%;"/><apex:InputField value="{!regsettingsMAP['Blogger'].Included__c}" id="blogid" style="outline:none; margin-left:.5%;"  />
+     
+     </td>
+  </tr>
+  <tr>
+    <td>Website:</td>
+    <td><apex:InputField value="{!regsettingsMAP['Website'].Included__c}" id="webid"  style="outline:none; margin-left:.5%;"  /></td>
+    <td>Promo code</td>
+    <td><apex:InputField value="{!regsettingsMAP['Promo code'].Included__c}" id="pid"  style="outline:none; margin-left:.5%;"  /></td>
+  </tr>
+</table>
+
+            </div><!-- moreinfofortickets-->      
+    
+              <!----------------------------------------------->
+              
+ <!-----------------------------------------------------7 tickets tab-------------------------->
+
+ 
+  <div id="ticketsettings-tab" style="width:100%; margin-top:30px;">
+             
+           <table width="100%" border="0">
+  <tr>
+
+    <td width="22%" valign="top" style="margin-left:5px;font-size:18px; margin-top:-50px; font-family:cuprum;  color:#4f91cd;"><span style="color:#000; margin-right:1%;font-size:18px;font-family:cuprum; ">7.</span>Tickets Type Settings:</td>
+    
+  </tr>
+</table>  
+               <div id="ticketsettingscontent">
+               <style>
+               .chkboxtd{ text-align:center;}
+               .display .edittd{ text-align:right; border-right:0px;}
+               </style>
+             <!------------------------------------------------------>
+             <table  class="display"  style="width:60%; height:auto;" >
+            <thead>
+              <tr>
+              <th> Ticket Type</th>
+               <!--<th></th>-->
+                <th>Label</th>
+                <th>Registration Page</th>
+                <th>Eventdex App</th>
+              </tr>
+              </thead>
+<tbody>
+<apex:repeat value="{!ttypelist}" var="m">
+<tr>
+<td width="20%"><apex:outputtext value="{!ttypelist[m].ITYPEName}"/></td>
+<!--<td class="edittd" >
+<img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/>
+</td>-->
+<td width="35%"><apex:inputtext value="{!ttypelist[m].ITYPELabel}"/></td>
+<td class="chkboxtd"><apex:inputCheckbox value="{!ttypelist[m].RegInclude}"/></td>
+<td class="chkboxtd"><apex:inputCheckbox value="{!ttypelist[m].MobInclude}"/></td>
+</tr>
+</apex:repeat>
+</tbody>
+
+
+
+</table>
+
+            
+            <!-------------------------------------------------------->
+               </div><!--close of ticketsettingscontent--->
+             
+             
+              <!------------------------------->
+                 </div><!--close of ticketsettings-tab-->
+<!-------------------------------------------------------------------------------------------->
+
+              
+              
+              
+              
+              
+              
+              
+              <div id="tickets-tab" style="width:100%; margin-top:30px;">
+              <!------------------------------->
+                
+   <table width="100%" border="0">
+  <tr>
+
+    <td width="22%" valign="top" style="margin-left:5px;font-size:18px; margin-top:-50px; font-family:cuprum;  color:#4f91cd;"><span style="color:#000; margin-right:1%;font-size:18px;font-family:cuprum; ">
+    8.</span> Registrations Tickets Tab:</td>
+    <td><input id="regtabsfield" type="checkbox" onClick="show_content()" style="outline:none; margin-left:.5%; margin-top:5px;"/></td> 
+  </tr>
+</table>
+
+<!-----------------------------show_content-------------------->
+
+
+
+      <script type="text/javascript">
+
+        
+          
+         function delrow(rowid,size){
+          
+          
+          var regsetlist ='';
+          var tabname = '';
+         var SelBranchVal1 ='';  
+         var count =0;
+            //alert(size);
+        
+            
+           $('tr td input[type="text"]').each(function(){
+        
+             if($(this).hasClass( "input_box_one" )){
+            count++;
+             if(count <= size){
+             //   alert('242342');
+                    var aid = $(this).attr('id') ;
+
+                      tabname = document.getElementById(aid).value;
+                      
+                        var els = $('.selecttag');
+               els.each(function(index, el) {
+           
+                   el = $(el);
+                   el = el.find("select");
+                   var fildname = el.attr('id');
+                 
+                    var n = fildname.search(aid);
+             if(n != -1){
+                     SelBranchVal1 ='';  
+       var ele = document.getElementById(fildname);
+       var x = 0;
+     
+              for (x=0;x<ele.length;x++)
+                 {
+                    if (ele[x].selected)
+                    {
+                       //SelBranchVal1.push(ele[x].value);
+                       SelBranchVal1 += ele[x].value+'123456';
+                    }
+                  }
+                
+             
+          }
+             });      
+                    regsetlist = regsetlist+tabname+'1!@#'+SelBranchVal1+'-';     
+                      
+    
+                }
+                 }
+                }); 
+         
+         
+    //   alert(rowid);
+        delterc(rowid,regsetlist);
+          
+          }
+          
+          
+        
+        
+         function addrow(size){
+       
+         var regsetlist ='';
+         var tabname = '';
+         var SelBranchVal1 ='';  
+         var count =0;
+         var selbol = '';
+
+     $('tr td input[type="text"]').each(function(){
+
+     if($(this).hasClass( "input_box_one" )){
+     
+     if(count <= size){
+        var aid = $(this).attr('id') ;
+
+      tabname = document.getElementById(aid).value;
+       document.getElementById(aid).style.border = "1 px";
+       document.getElementById(aid).style.borderColor = "#E3E3E3";       
+      
+              var els = $('.selecttag');
+               els.each(function(index, el) {
+
+                   el = $(el);
+                   el = el.find("select");
+                   var fildname = el.attr('id');
+                         
+                
+                    var n = fildname.search(aid);
+             if(n != -1){
+                     SelBranchVal1 ='';  
+                     var ele = document.getElementById(fildname);
+                     var x = 0;
+      
+              for (x=0;x<ele.length;x++)
+                 {
+                    if (ele[x].selected)
+                    {
+                       //SelBranchVal1.push(ele[x].value);
+                       SelBranchVal1 += ele[x].value+'123456';
+                    }
+                  }
+        }
+             });      
+                regsetlist = regsetlist+tabname+'1!@#'+SelBranchVal1+'-';     
+
+       }
+       
+     
+       
+         if(size!=0){
+          if(tabname == '' && inputcheckBoxvalue.checked==true){
+               alert('Please Enter TabName');
+               selbol = false;
+               document.getElementById(aid).style.border = "1 px";
+               document.getElementById(aid).style.borderColor = "#FF0000";
+               return false;
+          }
+          else{
+         
+          if(SelBranchVal1 == ''){
+                 alert('Please Select Atleast One Ticket');
+                 selbol = false;
+                 return false;
+         } 
+          else{
+            selbol = true;
+          }
+         }
+        }
+          
+    
+        }    
+        }); 
+         
+      if(size == 0){
+      selbol = true;
+      }
+         if(selbol == true){
+            addnwrow(regsetlist);
+          }
+
+  
+   }
+            
+            
+        </script>       
+        
+      
+
+<div id="regtabcontent" style="display:none;">
+        
+<apex:outputPanel id="panelid" >  
+
+    <script>
+    function afteraddrow()
+    {
+       var table = document.getElementById("options-table");
+ 
+             for (var i = 1, row; row = table.rows[i]; i++);
+             i=i-1;
+             //$('#seltxt'+i).empty();
+             document.getElementById('seltxt'+i).selectedIndex = -1;
+             
+    }
+    function excludealreadyselected(sid)
+    {
+    
+             var s,t;
+              var asel=document.getElementById(sid).value;
+              
+$('#'+sid).empty();
+<apex:repeat value="{!tagslst}" var="tlst1" >  
+
+
+ s="{!tlst1}";
+ t="{!tagslst[tlst1].item_name__c}";
+
+ var table = document.getElementById("options-table");
+ var alreadyflag=0;
+             for (var i = 1, row; row = table.rows[i]; i++) {
+             
+             if(row.cells[2].children[0].children[0].value==s)
+             alreadyflag=1;
+             
+             if(s==asel)
+             alreadyflag=0;
+             }
+             if(alreadyflag==0)
+ $('#'+sid).append('<option value="'+s+'">'+t+'</option>'); 
+
+</apex:repeat>
+    }
+
+   $(".chzn-select").chosen();
+
+
+   var aa = '{!addnwregset}'
+    if(aa.length >2){
+        document.getElementById("regtabsfield").checked = true ;
+          document.getElementById("regtabcontent").style.display="";
+       
+         }  
+         
+sort_order();
+         </script>
+      
+       
+   <table class="display dynamic" id="options-table" style="width:100%; margin:0px auto; margin-top:0px;" >
+
+           <thead>
+              <tr>
+              <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px;"></th>
+               <!-- <th width="15%" style="padding:3px 0px 3px 2px; text-indent:5px;">Tab No</th>-->
+                <th width="35%" style="padding:3px 0px 3px 2px;text-indent:5px;">Tab Name</th>
+                <th  width="45%" style="padding:3px 0px 3px 2px;text-indent:5px;">Tickets - Select to display in the Tab</th>
+                <th width="10%" style="padding:3px 0px 3px 2px;text-indent:5px;">
+               
+           <a class="add" title="Add new ticket" onclick="return addrow('{!addnwregset.size}');">
+             <apex:image url="{!$Resource.Addrow}"  width="20" height="20"/></a>
+         <!----     
+             <apex:commandLink action="{!addrow}"  reRender="panelid"  >  
+                         <apex:image url="{!$Resource.Addrow}"  width="20" height="20"/>
+                     </apex:commandLink> --->
+
+                </th>
+</tr>
+ </thead>    
+ 
+
+<!--- <tbody style="cursor:all-scroll;">-->
+ 
+<apex:variable var="inc" value="{!0}"/>
+<apex:variable value="{!selectedoptions}" var="selop" id="varsid"/>
+
+ <apex:repeat value="{!addnwregset}"  var="addnw" id="repid">
+
+<tr class="tabtr">
+<apex:variable value="{!inc+1}" var="inc"/>
+ <td > 
+<apex:image url="{!$Resource.DragButton}"  style="margin-left:-5px;"/></td>
+
+<td >
+<apex:variable value="txt{!inc}" var="idd" />
+<apex:variable value="seltxt{!inc}" var="seltxt" />
+
+
+<input type="text" id="{!idd}" value="{!addnw.Table_Name__c}"  class="input_box_one"  name="input_box_one[]"/> 
+<!---<apex:inputField value="{!addnw.Table_Name__c}"  id="{!idd}"  styleClass="inbox"/>--->
+</td>
+
+<!--rendered="{!IF(inc == 0 , TRUE,FALSE)}"       onchange="getselval(id,'{!inc}', $(this).val());"  style="width:251%"--->
+<td >
+  <div class="selecttag" >
+<apex:outputpanel rendered="{!IF(addnwregset.size > 1, TRUE,FALSE)}" layout="none">
+<select   data-placeholder="Search Tickets" class="chzn-select medium-select select txt1" multiple="multiple"   style="width:90%"  name="SelBranch" tabindex="17"  id="{!seltxt}"  >  
+
+<apex:repeat value="{!tagslst}" var="tlst" >  
+
+<apex:outputpanel rendered="{!CONTAINS(addnw.Column_Name__c, tlst)}"> 
+<option value="{!tlst}" selected="selected">{!tagslst[tlst].item_name__c}</option>
+</apex:outputpanel>
+
+
+<apex:outputpanel rendered="{!NOT(CONTAINS(addnw.Column_Name__c,tlst))}">
+
+<!---<apex:outputText rendered="{!NOT(CONTAINS(selop, tlst))}"> 
+    
+</apex:outputText>---->
+
+<option value="{!tlst}"  >{!tagslst[tlst].item_name__c}</option>
+</apex:outputpanel>
+
+</apex:repeat>
+
+</select>
+</apex:outputpanel>
+<!---,refreshlst.size <  1),--->
+<apex:outputText rendered="{!IF(AND(addnwregset.size == 1,refreshlst.size >= 1), TRUE,FALSE)}">
+
+<select   data-placeholder="Search Tickets"  class="chzn-select medium-select select txt1" multiple="multiple" style="width:90%"  name="SelBranch" tabindex="17"  id="{!seltxt}"  >  
+
+<apex:repeat value="{!tagslst}" var="tlst" >  
+<apex:outputText rendered="{!CONTAINS(addnw.Column_Name__c, tlst)}"> 
+<option value="{!tlst}" selected="selected">{!tagslst[tlst].item_name__c}</option>
+</apex:outputText>
+<apex:outputText rendered="{!NOT(CONTAINS(addnw.Column_Name__c,tlst))}">
+<option value="{!tlst}"  >{!tagslst[tlst].item_name__c}</option>
+</apex:outputText>
+
+</apex:repeat>
+
+</select>
+</apex:outputText>
+
+<!---,refreshlst.size >= 1),--->
+<apex:outputText rendered="{!IF(AND(addnwregset.size == 1,refreshlst.size < 1),TRUE,FALSE)}">
+
+
+<select   data-placeholder="Search Tickets" class="chzn-select medium-select select txt1"  multiple="multiple"  style="width:90%"   name="SelBranch" tabindex="17"  id="{!seltxt}"  >  
+
+<apex:repeat value="{!tagslst}" var="tlst" >  
+<apex:outputText rendered="{!CONTAINS(addnw.Column_Name__c, tlst)}">    
+<option value="{!tlst}" selected="selected">{!tagslst[tlst].item_name__c}</option>
+</apex:outputText>
+<apex:outputText rendered="{!NOT(CONTAINS(addnw.Column_Name__c,tlst))}">
+<option value="{!tlst}"  >{!tagslst[tlst].item_name__c}</option>
+</apex:outputText>
+</apex:repeat>
+
+</select>
+</apex:outputText>
+ </div>
+</td>
+
+<td  ><a  class="del" value="" title='Delete Row' onclick="return delrow('{!inc-1}','{!addnwregset.size}');">
+    <apex:image url="{!$Resource.deleterow}"  width="25" height="25"/>
+</a></td>
+
+</tr>
+
+</apex:repeat>
+
+
+<!---
+</tbody>       -->
+
+
+   </table>   
+       
+     
+      
+   
+             
+ 
+       
+   </apex:outputPanel>
+
+
+</div><!--regtabcontent--> 
+                
+
+        </div>  
+          
+          
+          
+              
+         </ul>     
+         
+         
+             
+              </div><!--close of form--> 
+              
+              
+            
+              
+              
+              <!---------------------------------------------------------> 
+        
+          <!--------------------------------------------------------------------------------->
+        <div class="clear"></div>
+          <div style=" width:25%; margin-left:30%; height:100px; border:0px #000000 solid; margin-top:-20px;">
+          <apex:commandButton value="Save"    styleclass="button-a blue" style="width:45%;height:32px; " onclick="return validatefields();"  rerender="aaa"/>&nbsp;&nbsp;
+           <!-- <button class="button-a blue" style="width:45%;height:32px; "  onClick="location.href='createevent.htm'">Save</button> --->
+            &nbsp;&nbsp;
+              <apex:commandButton value="Cancel"  action="{!cancelmethod}"   styleclass="button-a dark-blue" style="width:45%; height:32px; "   />
+            <!-- <button class="button-a dark-blue" style="width:45%; height:32px; "  >Cancel</button> reRender="displaysettid"-->
+          </div>
+        </div>
+       
+  <apex:actionFunction name="savedpsettings" action="{!savemethod}"  rerender="aaa">
+            <apex:param name="chkArray"  value=""/>
+            <apex:param name="tabschkdval"  value=""/>
+            
+           </apex:actionFunction> 
+     
+     
+        <apex:actionFunction name="addnwrow" action="{!addrow}" reRender="panelid" > 
+           <apex:param value="" name="addrow"/>
+       </apex:actionFunction> 
+       
+       
+        <apex:actionFunction name="delterc" action="{!deleterec}" reRender="panelid,varsid" > 
+           <apex:param value="" name="deleterow"/>
+            <apex:param value="" name="inputval"/>
+       </apex:actionFunction> 
+       
+       
+      <!----- <apex:actionFunction name="refreshvalinlist" action="{!refreshtags}" reRender="panelid,varsid" > 
+      oncomplete="afteraddrow()"
+           <apex:param value="" name="addtolist"/>
+           <apex:param value="" name="recRID"/>
+                       <apex:param value="" name="tabname"/>
+           <apex:param value="" name="chkaddrremove"/>
+
+           
+       </apex:actionFunction> --->
+       
+       
+       
+     
+ </apex:form>
+             </div>
+
+  
+    
+    
+
+<apex:form id="aaa">
+</apex:form>
+    
+</body>
+
+    </c:myComponent>
+<!----------------------------------------------start of script of inline editing-------------------------------------------------->
+  <script type="text/javascript" src="{!URLFOR($Resource.Promocodes, 'promocodes/js/jquery.min.js')}"></script>
+ <script>
+    var $jkkk = jQuery.noConflict();
+$jkkk(document).ready(function() {
+
+    function Editar(){
+    
+        var par = $jkkk(this).parent().parent();    //tr
+        var tdNome = par.children("td:nth-child(3)");//input text
+        var tdBotoes = par.children("td:nth-child(2)");
+
+        tdNome.html("<input type='text' id='txtNome' value='"+tdNome.html()+"'/>");
+/*      tdTelefone.html("<input type='text' id='txtTelefone' value='"+tdTelefone.html()+"'/>");
+        tdEmail.html("<input type='text' id='txtEmail' value='"+tdEmail.html()+"'/>");*/
+        tdBotoes.html("<img src='{!URLFOR($Resource.newzebraaccordian, 'nwzebra/disk.png')}' title='Save' class='btnSalvar'/>");
+
+        $jkkk(".btnSalvar").bind("click", Salvar);
+        $jkkk(".btnEditar").bind("click", Editar);
+        $jkkk(".btnExcluir").bind("click", Excluir);
+    };
+
+    function Salvar(){
+        var par = $jkkk(this).parent().parent(); //tr
+        var tdNome = par.children("td:nth-child(3)");
+    
+        var tdBotoes = par.children("td:nth-child(2)");
+
+        tdNome.html(tdNome.children("input[type=text]").val());
+    
+        tdBotoes.html("<img src='{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}' title='Edit' class='btnEditar'/>");
+
+        $jkkk(".btnEditar").bind("click", Editar);
+        $jkkk(".btnExcluir").bind("click", Excluir);
+    };
+
+    function Excluir(){
+        var par = $jkkk(this).parent().parent(); //tr
+        par.remove();
+    };
+
+    $jkkk(".btnEditar").bind("click", Editar);
+    $jkkk(".btnExcluir").bind("click", Excluir);
+    $jkkk("#btnAdicionar").bind("click", Adicionar);            
+
+})
+</script>
+<!----------------------------------------------end of script of inline editing-------------------------------------------------->
+</apex:page>
+
+
+
+
+
+<!----
+
+  var tagsnwlst = [];
+           // alert('{!tagslst}');
+            
+            var tagslst =   '{!tagslst}'.replace('[','');
+            var tagslst = tagslst.replace(']','');
+             var tagslst = tagslst.split(',');
+           // alert(tagslst);
+             for (var i=0; i<tagslst.length; i++) {  
+              //   alert(tagslst[i]);
+                 if(tagslst[i] == 'Attendee'){
+               //       alert('645756756');
+                 }
+                 else{
+                //   alert('35456457');
+                 tagsnwlst.push(tagslst[i]); 
+                 }
+
+             }  
+           
+
+--->

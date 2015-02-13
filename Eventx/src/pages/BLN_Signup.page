@@ -1,0 +1,412 @@
+<apex:page controller="BLN_SignUpCon" showHeader="false" standardStylesheets="true" id="thepage">
+<apex:stylesheet value="{!URLFOR($Resource.BLN_Signup, 'css/login.css')}"/>
+<apex:includeScript value="{!URLFOR($Resource.MM_styles,"js/jquery.min.js")}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/popup.css')}"/>       
+<apex:stylesheet value="{!URLFOR($Resource.MyTickets, 'css/buttons.css')}"/>
+      
+<style>
+    .button-a.blue{
+        float:none;
+    }
+    
+    
+    #form-login{
+        background-color: #FFF;
+        border: 0px solid #ededed;  
+        width: 100%;
+        height: 310px;
+        margin: auto;
+        padding: 20px;
+        background: #f7f7f7;
+        background: -moz-linear-gradient(top, #f7f7f7 0%, #e9e9e9 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(100%,#e9e9e9));
+        background: -webkit-linear-gradient(top, #f7f7f7 0%,#e9e9e9 100%);
+        background: -o-linear-gradient(top, #f7f7f7 0%,#e9e9e9 100%);
+        background: -ms-linear-gradient(top, #f7f7f7 0%,#e9e9e9 100%);
+        background: linear-gradient(top, #f7f7f7 0%,#e9e9e9 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e9e9e9',GradientType=0 );
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+</style>  
+      
+      
+<!------------------------------------------------------ Validations Start ----------------------------------------------------------->
+    <script>
+    function validate(){
+    
+    
+     
+      
+    
+        // first name validation
+        var fn=  document.getElementById("{!$Component.thepage.AS_SignUpForm.FirstName}").value;
+        if(fn!=""){
+        }
+        else{
+            alert('Please Enter First Name');
+            return false;
+        }
+        
+         
+        
+        // lastName valiation 
+        var ln =  document.getElementById("{!$Component.thepage.AS_SignUpForm.LastName}").value;
+        if(ln!=""){
+        }else{
+        alert('Please Enter Last Name');
+        return false;
+        }
+        
+       
+        
+        var em=  document.getElementById("{!$Component.thepage.AS_SignUpForm.ASUserEmail}").value;
+        if(em== ""){
+        alert('Please Enter EmailId');
+        return false;
+        }else{
+           if(em != "" ){
+          var boo = validateEmail(em);
+            if(boo ==false){
+               return false
+            } 
+         }
+        
+        }
+        
+        
+         var pass=  document.getElementById("{!$Component.thepage.AS_SignUpForm.password}").value;
+        if(pass==""){
+            alert('Please Enter Password');
+            return false;
+        }
+        
+       
+        
+         
+        
+        return true;
+    }   
+    
+    function validateEmail(var1){
+        var x= var1;
+        var atpos=x.indexOf("@");
+        var dotpos=x.lastIndexOf(".");
+        if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length){
+            alert("Please enter a valid Email ID");
+            return false;
+        }
+    }
+    
+    function validatelogin(){
+        var em1=  document.getElementById("{!$Component.thepage.AS_SignUpForm.usermail}").value;
+        if(em1== ""){
+            alert('Please Enter EmailId');
+            return false;
+        }
+        
+        if(x != "" ){
+            var boo = validateEmail(em1);
+            if(boo ==false){
+                return false;
+            } 
+        }
+      
+        return true;
+    }
+   </script>  
+<!------------------------------------------------------ Validations End ----------------------------------------------------------->
+    
+<!-- for place holder start --->   
+<script>
+    $(function(){
+        $('.placeholder').each(function(index, elem){
+            $(elem).prop('placeholder',$(elem).prop('title'));
+        });
+    });
+</script>
+<!-- for place holder end --->  
+
+<!------------------------------------------------------------ Apex Form Start -------------------------------------------------------->
+<apex:form id="AS_SignUpForm" forceSSL="true">
+<div id="header">
+  <div id="logo" style="width:20%;">
+      <apex:image value="{!$Resource.evendexlogo}" style="padding-top:10px;" /> 
+  </div>
+  <!--close of logo-->
+  
+    <div id="loginform" style="width:78%; height:40px; float:right; margin-top:15px; text-align:right; padding-right:10px; float:right;">
+    <ul style="list-style:none; text-align:right;width:100%; ">
+        <li style="display:inline;">
+            <label for="usermail" style="font-size:14px; color:#FFF;">Email&nbsp;&nbsp;</label>
+            <apex:inputText id="usermail" html-placeholder="youremail@email.com*" value="{!loginName}"  style="background-image:none; width:220px; padding:1px; height:26px; border-radius:0px; padding-left:5px;font-size:14px;color:#000;" />
+        </li>
+        
+        
+        &nbsp;&nbsp;
+        <li style="display:inline;">&nbsp;&nbsp;
+            <label for="password" style="font-size:14px; color:#FFF;">Password</label>
+            <apex:inputSecret title="password*" id="lpass" value="{!loginPassword}" styleclass="rounded placeholder" style="background-image:none; width:220px; padding:1px; height:26px; border-radius:0px; padding-left:5px; margin-left:5px; border:1px solid #979797;font-size:14px;color:#000;" />&nbsp;&nbsp;&nbsp;
+            
+            <apex:commandButton value="Login" styleclass="button-a blue" action="{!login}" onclick="return validatelogin();" style="padding:3px; width:55px; background-color:#607aab; color:#FFFFFF; border:0px; height:34px; cursor:pointer; font-weight:bold; font-size:14px;" />
+            
+            <div style=" margin-right:180px;">
+                <font style="text-align:left;">
+                    <a href="/BLN_ForgotPassword" style="color:#FFF;">Forgot Password?</a>
+                </font>
+            </div>
+        </li>
+        &nbsp;
+        <li style="display:inline;;">
+        
+        </li>
+    </ul>
+    
+    <!-- <input type="text" style="background-image:none; width:220px; padding:1px; height:32px; border-radius:0px; padding-left:5px;" />
+    <input type="password" style="background-image:none; width:220px; padding:1px; height:32px; border-radius:0px; padding-left:5px;" />
+    <input type="button" value="Login" style="padding:3px; width:55px; background-color:#607aab; color:#FFFFFF; border:0px; height:36px; cursor:pointer; font-weight:bold; font-size:14px;" />--> 
+    </div>
+</div>
+<!--close of header--->
+
+<div  id="ribbon"></div>
+<!--close of ribbon-->
+
+    <div style=" width:100%; padding-top:100px;">
+        <div style=" width:30%; float:left;">
+            <apex:image value="{!URLFOR($Resource.BLN_Signup, 'images/phonewithphone.png')}" style="width:100%; height:auto;" />
+        </div>
+    
+    
+    <div style="width:30%; float:left; padding:25px;">
+    
+    <div>
+        <h2 style="text-align:center;font-size:18px;">Welcome to Eventdex</h2>
+        <p style="line-height:30px; font-size:16px; text-align:justify;">Eventdex is a Mobile, Social, and Analytical Platform for
+        Event Management 
+        </p>
+    </div>
+    
+    
+    </div>
+    <div style="width:30%; float:left; text-align:right;">
+  
+      <div style="background: #f7f7f7; padding:15px;background: -moz-linear-gradient(top, #f7f7f7 0%, #e9e9e9 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(100%,#e9e9e9));
+background: -webkit-linear-gradient(top, #f7f7f7 0%,#e9e9e9 100%);background: -o-linear-gradient(top, #f7f7f7 0%,#e9e9e9 100%);background: -ms-linear-gradient(top, #f7f7f7 0%,#e9e9e9 100%);
+background: linear-gradient(top, #f7f7f7 0%,#e9e9e9 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e9e9e9',GradientType=0 );
+-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
+          <div class="form-title" style="text-align:left;">Sign Up</div>
+          <div class="form-sub-title" style="text-align:left;">It is free and anyone can join</div>
+             <table style="width:100%;border:0px solid red;" cellpadding="0" cellspacing="8" border="2">
+              <tbody>
+                <tr>
+                  <td width="49%" style="align:left;"><apex:inputText title="First Name*" value="{!ASFirstName}"  styleclass="rounded placeholder" id="FirstName" style="background-image:none; width:82%;  border:1px solid #CCC; height:32px; border-radius:0px; padding-left:5px; float:left; margin:0px;color:#000;" /></td>
+                  <td width="49%"><apex:inputText title="Last Name*" value="{!ASLastName}" styleclass="rounded placeholder" id="LastName"   style="background-image:none; width:83%; border:1px solid #CCC; height:32px;  border-radius:0px; padding-left:5px; float:left; margin:0px;color:#000;" /></td>
+                </tr>
+               <tr>
+                  <td colspan="2">
+                    <apex:inputText title="Company" value="{!ASCompanyName}" styleclass="rounded placeholder" id="CompanyName"  style="background-image:none; width:220px; padding:1px; height:32px; width:100%; border:1px solid #CCC; border-radius:0px; padding-left:5px;color:#000;" />
+                  </td>
+                </tr> 
+                <tr>
+                  <td colspan="2">
+                    <apex:inputText title="youremail@email.com*" value="{!ASUserEmail}" styleclass="rounded placeholder" id="ASUserEmail"  style="background-image:none; width:220px; padding:1px; height:32px; width:100%; border:1px solid #CCC; border-radius:0px; padding-left:5px;color:#000" />
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td colspan="2">
+                    <apex:inputSecret title="Password*" value="{!password}" id="password"  styleclass="rounded placeholder" style="background-image:none; width:220px; padding:1px; height:32px; width:100%; border:1px solid #CCC; border-radius:0px; padding-left:5px;color:#000;" />
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td colspan="2" style="text-align:center;border:0px solid red;" align="center">
+                   <apex:commandButton value="Sign up" id="SaveAccount" styleclass="button-a blue" action="{!BLS_SignUpUser}" onclick="return validate();" style="text-align:center;padding:3px; width:80%; background-color:#607aab; color:#FFFFFF; border:0px; height:36px; cursor:pointer; font-weight:bold; font-size:14px;" />&nbsp;
+                 
+                  <!--<input type="button" value="Signup" class="button-a blue" style="padding:3px; width:55px; background-color:#607aab; color:#FFFFFF; border:0px; height:36px; cursor:pointer; font-weight:bold; font-size:14px;"/>--> </td>
+                </tr>
+              </tbody>
+            </table>
+         
+        </div>
+  
+  </div>
+</div>
+
+
+<table width="95%" border="0" cellspacing="0" cellpadding="0">
+ 
+  <tr>
+   
+    <td><div style="position:absolute; width:50%; left:430px; top:500px;"> <strong style="font-size:18px;">Try Our App</strong><br />
+        <br />
+        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="5">
+          <tr>
+            <td width="154" align="left" valign="middle"><a href="http://goo.gl/tfrJvS" id="learn-more" class="animated slideInDown" target="_blank"> <span><apex:image value="{!URLFOR($Resource.BLN_Signup, 'images/matchleads_apple.png')}" /></span> </a></td>
+            <td width="154" align="left" valign="middle"><a href="http://goo.gl/urinjU" id="learn-more" class="animated slideInDown" target="_blank"> <span><apex:image value="{!URLFOR($Resource.BLN_Signup, 'images/matchleads_gogleplay.png')}" /></span> </a></td>
+            <td width="154" align="left" valign="middle"><a href="http://goo.gl/vFHbmt" id="learn-more" class="animated slideInDown" target="_blank"> <span><apex:image value="{!URLFOR($Resource.BLN_Signup, 'images/matchleads_windows_store.png')}" width="154" height="40" /></span> </a></td>
+            <td width="154" align="left" valign="middle"><!--<a href="http://appworld.blackberry.com/webstore/content/24216876/?countrycode=IN&lang=en" id="learn-more" class="animated slideInDown" target="_blank"> <span><apex:image value="{!URLFOR($Resource.BLN_Signup, 'images/boothleads_blackberry_button.png')}" /> </span> </a>--> &nbsp;</td>
+          </tr>
+        </table>
+
+      </div></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>
+        
+      </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+<div style="width:100%; height:25px;margin-top:50px;">
+
+
+
+<hr />
+<p style="text-align:center; line-height:30px;">Copyright © 2014 eventdex.</p>
+</div>
+
+<apex:outputPanel rendered="{!forDisplayError}">
+             <script>
+               alert('{!error}');
+             </script>
+           </apex:outputPanel>
+</apex:form>
+
+<!------------------------------------------------------------ Apex Form End -------------------------------------------------------->
+
+<style>
+
+table td{border:0px;}   
+.rightcontent{border:0px}
+</style>
+
+<style>
+.pophead{background-color:#54b5f1; width:100%;color:#414141;font-size:15px; text-align:left;font-weight:normal; padding-left:15px;
+    background: #f9f9f9; /* Old browsers */
+    background: -moz-linear-gradient(top, #f9f9f9 0%, #f1f1f1 40%, #e4e4e4 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f9f9f9), color-stop(40%,#f1f1f1), color-stop(100%,#e4e4e4)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #f9f9f9 0%,#f1f1f1 40%,#e4e4e4 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #f9f9f9 0%,#f1f1f1 40%,#e4e4e4 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #f9f9f9 0%,#f1f1f1 40%,#e4e4e4 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #f9f9f9 0%,#f1f1f1 40%,#e4e4e4 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#e4e4e4',GradientType=0 ); /* IE6-9 */
+}
+    
+.custPopup{color:#000000;background-color:#ffffff;position: absolute;top:10px;left:0px;right:0px;z-index: 100;
+    width:70%;height: auto; margin:0 auto;-moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; 
+    -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; 
+    -moz-box-shadow:0 0 64px #000; -webkit-box-shadow:0 0 64px #000; box-shadow:0 0 64px #000;
+    font: 12px/24px "Lucida Grande",Arial,sans-serif;
+    //background-color:#eee; color:#000;  padding-bottom:4px; width:600px; margin-top:15px; 
+    -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px;
+    -webkit-border-bottom-right-radius:6px; border-radius:6px 0 6px 6px; -moz-box-shadow:6px 0 64px #000; -webkit-box-shadow:0 0 64px #000; 
+    box-shadow:0 0 64px #000; padding:0px; height:75%;
+}
+        
+.popupBackground{background-color:#000000; Opacity:0.50;  width: 100%;height:100%;
+    position: absolute;left:0px;top:0px; z-index: 50; } 
+
+.btn{background-image:none;}
+    table{border:0px;} 
+
+</style>
+<!------------------------------------------------------------- Pop Up Form Start ------------------------------------------------------------------>
+<apex:form id="showpopup" forceSSL="true">   
+<!--  rendered="{!Successbool}"-->
+    <apex:outputPanel styleClass="popupBackground" layout="block"   style="width:100%" rendered="{!Successbool}"/>
+    <apex:outputPanel styleClass="custPopup"  style="width:70%;height:200px;"  rendered="{!Successbool}">
+
+
+ <style>
+ 
+ .title-grid {
+        background: -moz-linear-gradient(top, rgba(253,253,253,1) 0%, rgba(227,227,227,1) 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(253,253,253,1)), color-stop(100%,rgba(227,227,227,1))); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%); /* IE10+ */
+        background: linear-gradient(top, rgba(253,253,253,1) 0%,rgba(227,227,227,1) 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#e3e3e3',GradientType=0 ); /* IE6-8 */
+        border:1px solid #e3e3e3;
+        border-bottom:0;
+        font: 16px "Cuprum", Helvetica, Arial, sans-serif;
+        color:#55585d;
+        display: block;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top:7px;
+        text-decoration: none;
+        height:25px;
+        -webkit-border-top-left-radius: 3px;
+        -webkit-border-top-right-radius: 3px;
+        -moz-border-radius-topleft: 3px;
+        -moz-border-radius-topright: 3px;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+
+    .title-grid span {
+        float:left;
+    }
+    .title-grid ul {
+        float:right;
+    }
+    .title-grid ul {
+        height:35px;
+        margin-left:2px;
+    }
+ 
+ .content-gird {
+        background-color:#ffffff;border:0px solid #e3e3e3; padding:8px; color:#424242;  -webkit-border-bottom-right-radius: 3px;
+        -webkit-border-bottom-left-radius: 3px;-moz-border-radius-bottomright: 3px;
+        -moz-border-radius-bottomleft: 3px;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+    }
+ </style>
+
+
+   <div style="height:280px;">
+    <div>
+          <div class="grid-1" style="text-align:left">
+             <div class="title-grid">Sign Up Successful</div>
+              <div class="content-gird">
+              <div class="form" style="background-color:#FFFFFF;">
+                  <div id="left-form" style=" width:98%; padding-bottom:20px; margin-top:15px;  border:0px #000000 solid; float:left;background-color:#FFFFFF;">
+                    <table border="0"  cellspacing="0" cellpadding="0" width="100%" class="tabs_table"  style="background-color:#FFFFFF;padding-top:20px;">
+                    <tr>
+                        <td align="Center" colspan="2" style="font-size:14px;">
+                            <apex:outputText >       
+                                Your signup for eventdex application is successful. <br/> 
+                                <!-- You will be notified by email which consists of Username and Password to Login.<br/> -->
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="padding-left:70px;padding-top:8px;">
+                           <apex:commandButton value="OK" action="{!signUpLogin}" styleclass="button-a blue" style="height:30px; cursor:pointer;font-size:14px;color:#FFFFFF;"/>
+                        </td>
+                    </tr>
+                  </table>
+
+                  </div>
+                  <div class="clear"> </div>
+              </div>  
+        
+              <div class="clear"> </div>
+              </div>
+          </div>        
+    </div>
+    </div>
+    </apex:outputPanel>
+</apex:form>
+<!------------------------------------------------------------- Pop Up Form End ------------------------------------------------------------------>
+
+</apex:page>

@@ -1,0 +1,47 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_AttendeeDetailReportCon" contentType="application/vnd.ms-excel#Attendees.xls"><apex:pageBlock > 
+    <apex:repeat value="{!listOfListTickets}" var="tickets">   
+        <apex:pageBlockTable value="{!tickets}" var="ticket" border="1">
+            <apex:column value="{!ticket.ticketData.Client_GN_User__r.Prefix__c}" headerValue="Prefix"/>
+            <apex:column value="{!ticket.ticketData.Client_GN_User__r.First_Name__c}" headerValue="First Name"/>
+            <apex:column value="{!ticket.ticketData.Client_GN_User__r.Last_Name__c}" headerValue="Last Name"/>
+            <apex:column value="{!ticket.ticketData.Client_GN_User__r.Suffix__c}" headerValue="Suffix"/>
+            <apex:column value="{!ticket.ticketData.Client_GN_User__r.Email__c}" headerValue="Email"/>                      
+            <apex:column value="{!ticket.ticketData.Company__c}" headerValue="Company Name"/>
+            <apex:column value="{!ticket.ticketData.TKT_Job_Title__c}" headerValue="Designation"/>  
+            <apex:column value="{!ticket.ticketData.Client_GN_User__r.Phone__c}" headerValue="Phone Number"/>                      
+            <apex:column value="{!ticket.ticketData.item__r.item_name__c}" headerValue="Ticket Name"/>                                          
+            <apex:column value="{!ticket.ticketData.Badge_Label__c}" headerValue="Tag Name"/>    
+            <apex:column value="{!ticket.ticketData.Client_GN_User__r.Address1__c}" headerValue="Home Address1"/>    
+            <apex:column value="{!ticket.ticketData.Client_GN_User__r.Address2__c}" headerValue="Home Address2"/>    
+            <apex:column value="{!ticket.ticketData.Client_GN_User__r.City__c}" headerValue="Home City"/>            
+            <apex:column value="{!ticket.ticketData.Client_GN_User__r.State__r.Long_Name__c}" headerValue="Home State"/>  
+            <apex:column value="{!ticket.ticketData.Client_GN_User__r.Country__r.Long_Name__c}" headerValue="Home Country"/>  
+            <apex:column value="{!ticket.ticketData.Client_GN_User__r.Zip_Code__c}" headerValue="Home Zip"/>  
+            <apex:column value="{!ticket.companyExtData.Primary_Business_Category__c}" headerValue="Primary Business Category"/> 
+            <apex:column value="{!ticket.companyExtData.Secondary_Business_Category__c}" headerValue="Secondary Business Category"/> 
+            <apex:column value="{!ticket.companyExtData.Established_Date__c}" headerValue="Business Established Date"/> 
+            <apex:column value="{!ticket.companyExtData.Duns_Number__c}" headerValue="Business Duns Number"/> 
+            <apex:column value="{!ticket.companyExtData.Revenue__c}" headerValue="Business Revenue"/> 
+            <apex:column value="{!ticket.companyExtData.Tax_Id__c}" headerValue="Business Tax Id"/> 
+            <apex:column value="{!ticket.companyExtData.Blog_URL__c}" headerValue="Blog URL"/>
+            <!--<apex:column value="{!ticket.ticketData.Client_GN_User__r.User_Website__c}" headerValue="Website URL"/> -->                
+            <apex:column value="{!ticket.companyExtData.Keywords__c}" headerValue="Business Description"/> 
+            <apex:column value="{!ticket.companyExtData.Work_Phone__c}" headerValue="Work Phone"/> 
+            <apex:column value="{!ticket.companyExtData.Business_Address1__c}" headerValue="Business Address1"/> 
+            <apex:column value="{!ticket.companyExtData.Business_Address2__c}" headerValue="Business Address2"/> 
+            <apex:column value="{!ticket.companyExtData.Business_City__c}" headerValue="Business City"/> 
+            <apex:column value="{!ticket.companyExtData.BLN_Business_State__r.Long_Name__c}" headerValue="Business State"/> 
+            <apex:column value="{!ticket.companyExtData.BLN_Business_Country__r.Long_Name__c}" headerValue="Business Country"/>                 
+            <apex:column value="{!ticket.companyExtData.Business_Zipcode__c}" headerValue="Business Zip Code"/>                 
+            <apex:column value="{!ticket.companyExtData.Primary_NAICS_Code__r.Description__c}" headerValue="NAICS Code 1"/>                 
+            <apex:column value="{!ticket.companyExtData.Secondary_NAICS_Code__r.Description__c}" headerValue="NAICS Code 2"/>                 
+            <apex:column value="{!ticket.companyExtData.Business_Zipcode__c}" headerValue="Business Zip Code"/>                                
+            <apex:column headerValue="Business Zip Code">                                            
+                    <apex:repeat value="{!ticket.companyDiversityData}" var="diversity">
+                    {!diversity.Diversity__r.Name},
+                    </apex:repeat></apex:column>
+                                                   
+        </apex:pageBlockTable>
+     </apex:repeat>
+      </apex:pageBlock>  
+</apex:page>

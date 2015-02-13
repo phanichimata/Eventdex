@@ -1,0 +1,627 @@
+<apex:page controller="BLN_SeminarsCon" standardStylesheets="false" showHeader="false">
+ <apex:pageMessages ></apex:pageMessages>
+<style type="text/css">
+
+.custom-date-style {
+    background-color: red !important;
+}
+
+</style> 
+
+<script>
+    function saveFunction(){
+     // alert('Hi');
+      //var seminarhall = document.getElementById('j_id0:j_id2:commoncomponent:showNew:seminarsRoom');
+      // var trackNo = document.getElementById('j_id0:j_id2:commoncomponent:showNew:seminarsTrack');
+       var seminarNa = document.getElementById('j_id0:j_id28:commoncomponent:showNew:seminarName'); 
+        var startDate = document.getElementById('eventsdate').value;
+
+        var endDate = document.getElementById('eventedate').value;
+
+       
+      document.getElementById('j_id0:j_id28:commoncomponent:showNew:evsdate').value = startDate ;
+      document.getElementById('j_id0:j_id28:commoncomponent:showNew:evedate').value = endDate ;
+       
+       
+       if(seminarNa.value == ''){
+           alert('Please Fill Seminar Name');
+           seminarNa.focus();
+           return false;
+       }  
+       if(startDate == '__/__/____  __:__'||startDate== '' ){
+            alert('Please Select Start Time');
+            startDate.focus();
+            return false;
+       }
+       
+       if(endDate == '__/__/____  __:__' || endDate == ''){
+            alert('Please Select End Time');
+            endDate.focus();
+            return false;
+       }
+      if(endDate < startDate)
+      {
+      alert('Start Time should not be greater than end Time ');
+           
+            return false;
+      }
+       
+       
+     /*   if(seminarhall.options[seminarhall.selectedIndex].value == 'none'){
+            alert('Please Select Room');
+            return false;
+        }
+        
+        if(trackNo.options[trackNo.selectedIndex].value == 'none'){
+            alert('Please Select Track');
+            return false;
+        }*/
+      
+        return true;
+    }
+   
+     function displayDescription(vap){
+       var strt= document.getElementById(vap);
+        var strt1= document.getElementById(vap+'tr');
+        var strt2= document.getElementById(vap+'td');
+        
+        
+        
+        if(strt.style.display==''){
+           strt1.style.display='none';
+           
+           strt2.style.display='none';
+          strt.style.display='none';
+        }else{
+          strt.style.display='';
+          strt1.style.display='';
+          strt2.style.display='';
+        }
+     }
+
+</script>
+
+<!------------------------------   DateTime Picker Ends -------------------->
+<style type="text/css">
+input.styled {
+    display: none;
+}
+select.styled {
+    position: relative;
+    width: 190px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 5;
+}
+.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+<!---------------------->
+
+        #report { border-collapse:collapse; width:100%;}
+        #report th{ height: 27px; text-align: left;
+color: #807f7f;
+background: #fafafa;
+background: -moz-linear-gradient(top, #fafafa 0%, #eaeaea 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fafafa), color-stop(100%,#eaeaea));
+background: -webkit-linear-gradient(top, #fafafa 0%,#eaeaea 100%);
+background: -o-linear-gradient(top, #fafafa 0%,#eaeaea 100%);
+background: -ms-linear-gradient(top, #fafafa 0%,#eaeaea 100%);
+background: linear-gradient(top, #fafafa 0%,#eaeaea 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fafafa', endColorstr='#eaeaea',GradientType=0 );
+}
+        #report td { background:#fcfcfc ; color:#000; padding:7px 15px; }
+        #report tr.odd td { background:#fff url(row_bkg.png) repeat-x scroll center left; cursor:pointer; }
+        #report div.arrow { background:transparent url({!URLFOR($Resource.SeminarArrow)}) no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}
+        #report div.up { background-position:0px 0px;}
+<!---------------------->
+</style>
+ 
+
+ <style>
+               .speakerbox{
+                  width:88%; 
+                  height:240px; 
+                  border-radius:3px;
+                  background-color: #FDFDFD; 
+                   border: 1px solid #e3e3e3;
+                   overflow:auto;
+                   border-collapse:collapse;
+                   }
+
+              .speakerboxtabletd{ 
+                  border-bottom: 1px solid #e3e3e3;
+                  padding:5px;
+               }
+               
+               .speakertitle{
+                       font-size: 15px;
+                      text-shadow: 0 1px 1px rgba(0,0,0,.25);
+                      color: #247dba;
+                      text-align: center;
+               }
+            
+               </style>
+<c:myComponent BLN_UtillDisplayLinks="{!myticket}">
+
+ <apex:stylesheet value="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery.datetimepicker.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/css/tables.css')}"/>
+<style>div.fixed, section.fixed{width:1307px;}</style>
+ <apex:outputPanel id="showExiesting" rendered="{!NOT(createNewSeminarBool)}"> 
+<apex:form rendered="{!NOT(createNewSeminarBool)}" id="allAgendas">   
+  
+
+<div class="grid-1" style="margin-bottom:48px;margin-top:0px;" >
+<div class="title-grid-selectevent" style=""></div>
+<div class="content-gird-selectevents" style="">
+
+<!--Add survey questions Button-->
+  <apex:commandButton value="Add Event Schedule" action="{!createNewSeminar}" styleClass="button-a blue" style="cursor:pointer;height:32px;border-radius: 3px;-moz-border-radius: 3px;-webkit-border-radius: 3px; float:right; margin-top:-10px; margin-bottom:3px; margin-right:-1%; width:150px; color:#FFFFFF; margin: 10px 0px;"/><!----reRender="showExiesting, showNewOutPut"  ------>
+
+</div><!--close of content-grid-->
+</div><!--title-grid-->
+
+
+  
+  
+  
+  <div class="grid-1" >  
+   <!--  <div style="text-align:right; margin-bottom:8px;">
+        <label style="font-weight: 100;font-family: 'Cuprum', Arial, sans-serif;font-size: 20px;color: #247dba;text-shadow: 0 1px 1px rgba(0,0,0,.25);">
+        Group By:
+        </label>
+
+      <span style="margin-left:.5%;">
+
+                  <apex:selectList size="1" multiselect="false" value="{!groupByoption}" styleClass="selectlist" style="width:20%;">
+                    <apex:selectOptions value="{!groupByoptions}"></apex:selectOptions>
+                     <apex:actionSupport action="{!onchangeAct}" event="onchange"/>
+                  </apex:selectList>
+                  
+              </span> 
+</div>-->
+    
+    
+    
+       <table class="display" id="report">
+       <thead>
+           <tr>
+              <th width="10%">Action</th>
+              <th style="width:38%;">Programe Name </th>
+              <th style="width:15.5%" >Program Date</th>
+              <th >Start Time</th>
+              <th >End Time</th>
+              <th >Action</th>
+            </tr>
+        </thead> 
+        <style>
+         .item td{
+            background-color:#FFFFFF;
+         }
+        </style>
+        
+      <apex:repeat value="{!seminarInn}" var="sem">
+         <tr class="item" style="display:{!IF(groupByoption=='Name','none','')}">
+                  <td  class="subject" colspan="6" style="background-color:#FFFFFF;color:#247DBA;font-weight:700;font-size:14px;padding:0px;"> 
+                 {!sem.groupName.Name} 
+                    <apex:outputText value=" {0, date, MMMM d','  yyyy }"> 
+                                   <apex:param value="{!sem.dateValue}"/>
+                            </apex:outputText>
+                   {!sem.trackName}
+                
+                </td></tr> 
+      
+          <apex:repeat value="{!sem.agendaList}" var="s">
+               <tr class="item">
+                  <td  class="subject" style="background-color:#FFFFFF;width:8%;"> 
+                      <apex:commandLink title="Edit" action="{!editSeminar}"  >
+                          <apex:image url="{!URLFOR($Resource.Promocodes, 'promocodes/images/edit-1.png')}"   />
+                          <apex:param value="{!s.id}" name="editAgendaId"/>
+                      </apex:commandLink>
+                      &nbsp;&nbsp;
+                      <apex:commandLink title="Delete" action="{!deleteAgenda}" reRender="allAgendas">
+                          <apex:image url="{!URLFOR($Resource.CreateEventsSteps, 'images/removerow.png')}"  style="border:none; height:17px; width:17px;"/>
+                          <apex:param value="{!s.id}" name="deleteAgendaId"/>
+                      </apex:commandLink>
+                  </td>
+                  
+                  <td style="background-color:#FFFFFF;padding:0px;" colspan="4">
+                     <table cellpadding="0" cellspacing="0" style="width:100%;">
+                     <apex:repeat value="{!s.Time_Slots__r}" var="k">
+                        <tr>
+                        <td style="width:47%;background-color:#FFFFFF;border:none;border-right:1px solid #e3e3e3;" > {!s.Name} </td>
+                       
+                        <td  style="background-color:#FFFFFF;border:none;border-right:1px solid #e3e3e3;"> 
+                              <apex:outputText value=" {0, date, MM/dd/yyyy}"> 
+                                   <apex:param value="{!k.Slot_Start_date__c}"/>
+                            </apex:outputText></td>
+                            
+                        <td  style="background-color:#FFFFFF;border:none;border-right:1px solid #e3e3e3;"><apex:outputText value=" {0, date, hh:mm a}"> 
+                                   <apex:param value="{!k.Slot_Start_date__c}"/>
+                            </apex:outputText> 
+                         </td>
+                         
+                          <td  style="background-color:#FFFFFF;border:none;border-right:0px solid #e3e3e3;"> 
+                                <apex:outputText value=" {0, date, hh:mm a}">  
+                                   <apex:param value="{!k.Slot_End_date__c}"/>
+                            </apex:outputText> 
+                         </td>
+                         
+                        
+                        </tr>
+                     </apex:repeat>
+                     </table>
+                     
+                  
+                   
+                   </td>
+                   
+                      <td onclick="displayDescription('{!s.id}')" style="background-color:#FFFFFF;"><div class="arrow" ></div></td>  
+               </tr>
+              
+              
+               <tr   id="{!s.id}tr" style="display:none;"><td colspan="6" id="{!s.id}td" style="width:100%;border:0px solid red;display:none;">
+                 <div  style="width:100%; height:auto;display:none;" id="{!s.id}" >
+                 
+                   <table style="width:100%;" cellpadding="0" cellspacing="0"><tr>
+                    <td colspan="3" style="padding:5px;border:none;">
+                       <div id="expandbox" style="width:100%; height:auto; padding-bottom:5px; ">
+                        <div id="expandleft" style="width:70%; float:left; min-height: 90px; padding-bottom:10px; background-color:#e1dcdc;border: 1px solid #CCC;">
+                        <div id="expandleftcontent" style=" width:99%; height:auto; margin:0px auto; margin-top:5px; ">
+                        <p> {!s.Agenda_Description__c}  </p>
+                        
+                        </div>
+                            <apex:repeat value="{!s.Time_Slots__r}" var="k">
+                              <div style=" width:99%; margin:0px auto; margin-top:10px;">
+                                <p>
+                                <span style="font-weight:bold;">Room Name:</span>
+                                <span style="margin-left:10px;"> {!k.Room__r.NAME} {!k.room__r.Room_Number__c}</span>
+                                </p>
+                             </div>
+                          </apex:repeat>
+                        </div>
+                       
+                        <div id="expandright" style="width:29%; float:right; min-height: 90px; padding-bottom:10px; background-color:#e1dcdc;border: 1px solid #CCC;">
+                        <p style="text-align:center; font-weight:bold; font-size:14px;">Speakers</p>
+                           <apex:variable value="{!1}" var="partNumber"/>
+                            <apex:repeat value="{!agendaParticipants[s.id]}" var="par">
+                                 <p style="text-align:center; margin-top:5px; "> <apex:outputText value="{!partNumber}"></apex:outputText>  &nbsp;
+                                     <apex:outputText value="{!par.GN_User__r.First_Name__c}"></apex:outputText>
+                                      <apex:outputText value="{!par.GN_User__r.Last_Name__c}"></apex:outputText>
+                                 </p>
+                                 <apex:variable value="{!(partNumber+1)}" var="partNumber"/>
+                            </apex:repeat>
+                        
+                        </div>
+                        </div>
+                      </td>
+                 </tr>
+              
+            </table>  </div>  </td>  
+                      
+                </tr>   
+            
+           </apex:repeat> 
+       </apex:repeat>  
+               
+         
+       </table>        
+    </div>
+</apex:form>
+</apex:outputPanel>  
+
+<apex:outputPanel id="showNewOutPut"> 
+                  
+  <script>
+  function displayRoom(){
+  
+     var dy = document.getElementById('holdsRoom');
+     if(dy.style.display=='block'){
+       dy.style.display='none';
+     }else{
+        dy.style.display='block';
+     }
+   }         
+   
+    function displayTrack(){
+    var dy = document.getElementById('holdsTrack');
+     if(dy.style.display=='block'){
+       dy.style.display='none';
+     }else{
+        dy.style.display='block';
+     }
+   }  
+ 
+ 
+ 
+ function searchSel() {
+ 
+          var searchText=document.getElementById('realtxt').value.toLowerCase();
+             if(searchText!=""){
+                searchText.trim();
+             }
+          
+             var targetTable = document.getElementById('dataTable');
+             var rows = targetTable.rows;
+              var headerval = document.getElementsByClassName("speakertitle");
+                        
+             for (var rowIndex = 1; rowIndex < targetTable.rows.length; rowIndex++) {
+                 var fullname = rows[rowIndex].getElementsByTagName("td");
+                 var chkcheck = fullname[0].getElementsByTagName('input')[0].checked;
+                 
+                 if(chkcheck){  
+                      rows[rowIndex].style.display ='';
+                       targetTable.style.display ='';
+                }else{
+                 
+                    fullname = fullname[1].innerHTML.toLowerCase();
+                    
+                    if(fullname.indexOf(searchText)!=-1){
+                      targetTable.style.display ='';
+                       rows[rowIndex].style.display ='';
+                    }else{
+                       rows[rowIndex].style.display ='none';
+                  }
+                
+                
+                }
+            }  
+               
+           }
+ 
+    </script>               
+                  
+                  
+                  
+                  
+<apex:form id="showNew" rendered="{!createNewSeminarBool}">
+  <script> 
+  
+  
+  
+     window.onload=function()       
+    {        
+    
+      var targetTable = document.getElementById('dataTable');
+       var rows = targetTable.rows;
+              var headerval = document.getElementsByClassName("speakertitle");
+         for (var rowIndex = 1; rowIndex < targetTable.rows.length; rowIndex++) {
+                 var fullname = rows[rowIndex].getElementsByTagName("td");
+                 var chkcheck = fullname[0].getElementsByTagName('input')[0].checked;
+                  if(chkcheck){  
+                   rows[rowIndex].style.display ='';
+                   targetTable.style.display ='';
+                }else{
+                    rows[rowIndex].style.display ='none';
+                }
+       }         
+    };
+  
+        function fireValu(){
+           saveRoom();
+        }
+  </script>
+<apex:actionFunction action="saveRoom" name="saveRoom" reRender="showNew"/>
+
+    <style>
+       .createAgenda tr td{
+            padding: 5px 0px;
+        }
+        
+        
+        .ticketselect {
+width: 60%;
+padding: 3px;
+margin-left: 17.5%;
+margin-top: 10px;
+height: 243px;
+background-color: #FDFDFD;
+border: 1px solid #e3e3e3;
+border-radius: 3px;
+}
+        
+     </style> 
+      
+       
+          <table width="50%" class="createAgenda" style="border:0px solid red;margin:0px auto;" border="0">
+           <tr>
+               <td style="width:13%;"> Name:<label id="mandatory">*</label> </td>
+               <td> <apex:inputField value="{!newAgendas.Name}" id="seminarName"/> </td>
+               
+          </tr>
+          <tr>
+              <td> Start Time:<label id="mandatory">*</label> </td>
+               <td> <input type="text" id="eventsdate" placeholder="__/__/____  __:__"/>    
+                    
+                     <div style="display:none" id="strValue"> 
+                        <apex:outputText value="{0,date,MM/dd/yyyy hh:mm a}">
+                            <apex:param value="{!timeslots.Slot_Start_date__c}"/>
+                         </apex:outputText>
+                     </div>
+                         
+                           <script type="text/javascript" src="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery-1.9.1.js')}"></script>
+                            <script type="text/javascript" src="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery.datetimepicker.js')}"></script>
+                   <script>
+                          $('#eventsdate').datetimepicker({
+                                mask:'9999/19/39 29:59',
+                                formatDate: 'Y/m/d',
+                                defaultTime:'5:00 PM',
+                                minDate:'{!YEAR(selectedEvent.Start_Date__c)}/{!MONTH(selectedEvent.Start_Date__c)}/{!DAY(selectedEvent.Start_Date__c)}',
+                                maxDate:'{!YEAR(selectedEvent.End_Date__c)}/{!MONTH(selectedEvent.End_Date__c)}/{!DAY(selectedEvent.End_Date__c)}',
+                                defaultDate:'{!YEAR(selectedEvent.Start_Date__c)}/{!MONTH(selectedEvent.Start_Date__c)}/{!DAY(selectedEvent.Start_Date__c)}'
+                           });
+                            
+                    </script>
+                    
+                    
+               </td>
+              </tr>
+              
+               <tr>           
+               <td> End Time:<label id="mandatory">*</label></td>
+               <td> 
+                       <input type="text" id="eventedate" placeholder="__/__/____  __:__"/>   
+                   <div style="display:none" id="strValueEd"> 
+                        <apex:outputText value="{0,date,MM/dd/yyyy hh:mm a}">
+                            <apex:param value="{!timeslots.Slot_End_date__c}"/>
+                         </apex:outputText>
+                     </div>
+                   
+                      
+                     <script>
+                        $('#eventedate').datetimepicker({
+                            mask:'9999/19/39 29:59',
+                            formatDate: 'Y/m/d',
+                            //defaultTime:'5:00 PM',
+                            minDate:'{!YEAR(selectedEvent.Start_Date__c)}/{!MONTH(selectedEvent.Start_Date__c)}/{!DAY(selectedEvent.Start_Date__c)}',
+                            maxDate:'{!YEAR(selectedEvent.End_Date__c)}/{!MONTH(selectedEvent.End_Date__c)}/{!DAY(selectedEvent.End_Date__c)}',
+                            defaultDate:'{!YEAR(selectedEvent.Start_Date__c)}/{!MONTH(selectedEvent.Start_Date__c)}/{!DAY(selectedEvent.Start_Date__c)}'
+                        });
+                        </script>
+               </td>
+                
+          </tr>
+          
+         <tr>
+             <td style="width:10%;padding-top:17px;" valign="top" > Room:</td>
+               <td style="width:38%;vertical-align: top;"> 
+                <table style="width:90%;" cellpadding="0" cellspacing="0" border="0"><tr>
+                 <td style="width:85%">
+                   <apex:outputPanel id="outPan">
+                    <apex:selectList value="{!timeslots.Room__c}" multiselect="false" size="1" id="seminarsRoom1" styleClass="medium selectlist" style="width:100%;height:30px;box-shadow: #F4F4F4 1px 4px 10px 0px;background-color: #ffffff;color: #727373;border: 1px solid #e3e3e3;">
+                         <apex:selectOptions value="{!roomsSelectOptions}"/>
+                      </apex:selectList> 
+                      </apex:outputPanel>
+                      </td>
+                      
+                  <td style="width:10%;padding-left:5px;" ><span style="color:blue;font-weight:bold;font-size:20px;" onclick="displayRoom();">
+                  <input type="button" class="add button-a blue" value="+" style="font-size:20px;color:#ffffff;padding:3px 6px;border-radius:3px;"/>
+                  
+                  </span></td>
+                   <td>&nbsp;</td>
+                 </tr>
+                 </table>
+                  <apex:actionRegion id="actreg">
+                  <div style="display:none;width:90%;" id="holdsRoom"> 
+                    <table style="width:100%;" cellpadding="0" cellspacing="0" border="0">
+                       <tr><td style="width:40%;"><apex:inputField value="{!newRoom.Name}" html-placeholder="Room Name" style="width:85%;"/> </td>
+                       <td style="width:20%;">
+                       <apex:inputField value="{!newRoom.Room_Number__c}"  html-placeholder="Room No" style="width:75%;"/></td>
+                       <td style="width:18%;padding:5px;">
+                    
+                      <apex:commandLink value="Save" action="{!saveRoom}" styleClass="button-a blue"  style="color:#ffffff;text-decoration:none;line-height:28px;border-radius:3px;" reRender="outPan,actreg"/>  </td>
+                       </tr></table>
+                     </div>
+               </apex:actionRegion>
+                 </td>
+              </tr>
+              
+               <tr>
+               <td  valign="top" style="padding-top:17px;" > Speaker: </td>
+               <td  valign="top">    
+                   <div style="height:auto; overflow:auto;width: 80%;vertical-align:text-top;" id="speakerbox" >
+                   
+                        <table style="width:100%;" cellpadding="0" cellspacing="0" > 
+                          <tr><td colspan="3" >
+                             <input type="text" id="realtxt" onkeyup="searchSel()" style="width:87%" placeholder="Search Attendees"/>
+                          </td></tr>
+                      </table>  
+                        
+                     <table style="width:100%;display:none;" cellpadding="0" cellspacing="0" id="dataTable" >      
+                       
+                        <tr ><td style="width:10%;text-align:center;border-bottom:1px solid #ccc;" class="speakertitle">  
+                              &nbsp;
+                            </td> 
+                            <td style="width:60%;text-align:center;border-bottom:1px solid #ccc;" class="speakertitle">
+                                Name
+                             </td>   
+                            <td style="width:25%;text-align:center;border-bottom:1px solid #ccc;" class="speakertitle">    
+                              Role
+                            </td>
+                          </tr>
+                       
+                       
+                       <apex:repeat value="{!allAttendeesToParti}" var="o"  >
+                       
+                          
+                            <tr><td style="width:10%;border-bottom:1px solid #ccc;">  
+                               <apex:inputCheckbox value="{!o.selectedBool}" />
+                            </td> 
+                           <td style="width:60%;border-bottom:1px solid #ccc;">
+                               {!o.GNUser.Client_GN_User__r.First_Name__c} {!o.GNUser.Client_GN_User__r.Last_Name__c}
+                            
+                             </td>   
+                            <td style="width:25%;border-bottom:1px solid #ccc;">    
+                                <apex:inputField value="{!o.pat.Participant_Role__c}"/>
+                            </td>
+                          </tr>
+                             
+                       </apex:repeat></table>
+                   
+               </div>        
+             </td>
+         </tr>
+              
+              
+          <tr>
+              <td valign="top;"> Note:</td>
+              <td> <apex:inputField value="{!newAgendas.Agenda_Description__c}" style="width:70%;min-height:100px;"/> </td>  
+                      
+             </tr>
+          
+          
+          
+         
+           <tr>
+              <td> &nbsp;</td>
+              <td>  &nbsp; </td>
+          </tr>  
+           
+          
+       </table>     
+        
+        
+        
+        
+        
+        
+        
+     <div style="width:100%;text-align:right;">
+                <apex:commandLink value="Save" action="{!saveAgenda}" onclick="return saveFunction();" style="width:auto;line-height:28px;border-radius:3px; color:#FFFFFF;"   styleclass="button-a blue" />  &nbsp; &nbsp;
+                 <!--  -->
+                   <apex:inputHidden id="evsdate" value="{!eventStartDate}" />
+                   <apex:inputHidden id="evedate" value="{!eventEndDate}" />
+                  <apex:commandLink value="Cancel" action="{!cancelAgenda}" style="color:#FFFFFF;float:right;border-radius:3px;line-height:28px;"   styleclass="button-a dark-blue"  />
+            
+      </div>   
+        
+   <script>
+        var dateTimest = document.getElementById("strValue").innerHTML;
+        if(dateTimest!=""){
+           document.getElementById("eventsdate").value=dateTimest.trim();
+        }
+        
+        var dateTimeEd = document.getElementById("strValueEd").innerHTML;
+        if(dateTimeEd !=""){
+           document.getElementById("eventedate").value=dateTimeEd.trim() ;
+        }
+   </script> 
+   
+   
+
+         
+</apex:form> 
+
+
+
+</apex:outputPanel>
+
+
+
+</c:myComponent>
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/jquery-ui-1.8.16.custom.min.js')}"></script>
+
+
+</apex:page>

@@ -1,0 +1,797 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_SurveyQuestionsReportCon" action="{!hideEventsTab}">
+<!-----------------------------------------------tabs libraries--------------------------------------------------> 
+<script type="text/javascript" src="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabssss.js')}"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabsss.css')}"/>
+
+<!------------------------------------------------------------------------------------------------->
+<!------------------------------datatable libraries--------------------------------------------->
+<script type="text/javascript" src="{!URLFOR($Resource.eventdexdatatable, 'eventdexdatatable/js/jquery.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.eventdexdatatable, 'eventdexdatatable/js/jquery.dataTables.js')}"></script>
+  <apex:stylesheet value="{!URLFOR($Resource.eventdexdatatable, 'eventdexdatatable/css/jquery.dataTables.css')}"/>
+<!-------------------------------------------------------------------------------------------------->
+ <script type="text/javascript" language="javascript" class="init">
+ var $zb = jQuery.noConflict();  
+$zb(document).ready(function() {
+
+    $zb('#example').dataTable( {
+        "pagingType": "full_numbers",
+        
+        /**default orderid in asc sorting**/
+         "order": [[ 0, "asc" ]],
+        /**sorting coloumn disable**/
+        /*"aoColumnDefs": [
+      { 'bSortable': false, 'aTargets': [ 0 ] },
+     
+   ]*/
+        
+    } );
+    
+    })
+    <!---------------------------------->
+     var $jb = jQuery.noConflict();  
+$jb(document).ready(function() {
+        $jb('#examplesub').dataTable( {
+        "pagingType": "full_numbers",
+         "aLengthMenu": [[2, 5, 15,20,25, -1], [2, 5,15,20, 25, "All"]],
+        "iDisplayLength": 2,
+        /**default orderid in asc sorting**/
+         "order": [[ 0, "asc" ]],
+            "bSort": false
+        /**sorting coloumn disable**/
+        /*"aoColumnDefs": [
+      { 'bSortable': false, 'aTargets': [ 0 ] },
+     
+   ]*/
+        
+    } );
+    })
+    <!----------------------------------->
+       var $kb = jQuery.noConflict();  
+$kb(document).ready(function() {
+    
+        $kb('#example2').dataTable( {
+        "pagingType": "full_numbers",
+        
+         "aLengthMenu": [[3, 5, 15,20,25, -1], [3, 5,15,20, 25, "All"]],
+        "iDisplayLength": 3,
+    
+        /**default orderid in asc sorting**/
+         "order": [[ 0, "asc" ]],
+    
+        /**sorting coloumn disable**/
+        /*"aoColumnDefs": [
+      { 'bSortable': false, 'aTargets': [ 0 ] },
+     
+   ]*/
+        
+    } );
+
+    })
+    <!------------------------------------->
+       var $tb = jQuery.noConflict();  
+$tb(document).ready(function() {
+    $tb('#example1').dataTable( {
+        "pagingType": "full_numbers",
+         "aLengthMenu": [[2, 5, 15,20,25, -1], [2, 5,15,20, 25, "All"]],
+        "iDisplayLength": 2,
+        /**default orderid in asc sorting**/
+         /*"order": [[ 0, "asc" ]],*/
+        "bSort": false
+        /**sorting coloumn disable**/
+        /*"aoColumnDefs": [
+      { 'bSortable': false, 'aTargets': [ 0 ] },
+     
+   ]*/
+        
+    } );
+})
+<!------------------------------------------------->
+   var $pb = jQuery.noConflict();  
+$pb(document).ready(function() {
+    $pb('#summaryresponsetbl').dataTable( {
+        "pagingType": "full_numbers",
+         "aLengthMenu": [[4, 5, 15,20,25, -1], [4, 5,15,20, 25, "All"]],
+        "iDisplayLength": 4,
+        
+        /**default orderid in asc sorting**/
+         /*"order": [[ 0, "asc" ]],*/
+
+        /**sorting coloumn disable**/
+        /*"aoColumnDefs": [
+      { 'bSortable': false, 'aTargets': [ 0 ] },
+     
+   ]*/
+        
+    } );
+})
+<!---------------------------------------------->
+<!------------------------------------------------->
+   var $bb = jQuery.noConflict();  
+$bb(document).ready(function() {
+    $bb('#detailresponsetbl').dataTable( {
+        "pagingType": "full_numbers",
+        
+        /**default orderid in asc sorting**/
+         /*"order": [[ 0, "asc" ]],*/
+    
+        /**sorting coloumn disable**/
+        /*"aoColumnDefs": [
+      { 'bSortable': false, 'aTargets': [ 0 ] },
+     
+   ]*/
+        
+    } );
+})
+<!---------------------------------------------->
+
+
+
+    </script>
+ <!---------------------------------------->   
+    
+      <script>
+function showpackage(show,hide)
+{
+document.getElementById(show).style.display="";
+document.getElementById(hide).style.display="none";
+}
+     </script>      
+   <!------------------------------------>
+      <style>
+   
+        
+        #tablemenubar{
+            width:99.7%; height:50px;
+           padding-top:10px;
+         margin-bottom:-60px;
+          border: 1px solid #CCC;
+         background-color: #F4F4F4;
+         padding: 5px 0px;
+        
+        /* box-shadow: 0px 1px 3px 0px #EFEFEF;*/
+    }
+        
+  .bread-nav{width:99.7%;background-color:#dadada;border: 1px solid #CCC;padding: 3px 0px;text-indent: 1%;font-size: 14px;font-weight: 500; font-family:segoe ui;}
+
+#datefilter table{ border-collapse:collapse;}
+
+#datefilter table tr td { padding:5px;}
+#labeltext{font-weight: 100;
+font-family: 'Cuprum', Arial, sans-serif;
+font-size: 15px;
+color: #247dba;
+text-shadow: 0 1px 1px rgba(0,0,0,.25);}
+
+
+#subtablelasttd{ border-right:0px;}
+.childtableheader{display:inline-block; text-indent:1%;}
+#attendeegroupdetails{padding:8px; height:auto; background-color:#F7F7F7;}
+ #attsno{color:#333333; font-weight:700;display:inline-block; padding:3px 0px; margin-right:.5%;}
+#attemailid ,#attmobno, #attname{ display:inline-block;font-weight:700; padding:3px 0px; margin-right:.5%;}
+#attname1,#attmobno1,#attemailid1 , #attname1{ display:inline-block;font-weight:700; padding:3px 0px; margin-right:.5%; font-size:14px; color:#4a4a4a;}
+ #labeltitles{display:inline-block; padding:3px 0px; font-weight:700; color:#247DBA;}
+  #labeltitles1{display:inline-block; padding:3px 0px;  font-size:12px;color:#247DBA;}
+#insidebox table { border-collapse:collapse;}
+#insidebox table tr td{ padding:3px;}   
+#insideheader{ background-color: #c7c7c7; padding:8px 0px; font-size:13px; border-right:1px solid #e3e3e3; text-align:center; float:left; font-weight:700; color:#FFF;} 
+#questlevel-txt{margin-left:1%; font-weight:700; white-space:nowrap;}   
+ #ticketnametd{width:20%; vertical-align:top;text-indent:1%; font-size:13px;border-bottom:2px solid #e3e3e3;}
+ #ticketnameanchortd{width:20%;  text-indent:1%; font-size:13px; vertical-align:top;border-bottom:2px solid #e3e3e3;}
+#tickettitleanchor{color:#247dba;}
+#example .tickettitleanchor{color:#247dba;}
+  .checkboxdivs{ display:inline; width:auto; margin-right:1%;color:#247dba; font-weight:700;}
+    #summaryresponse , #detailresponse{ margin-right:5px;}
+#ticketnamelink{color:#4a4a4a; font-size:17px; font-weight:700;}
+#ticketleveltd{ vertical-align:top; font-style:italic; font-weight:700; width:10%;}
+.display .eventlevel-highlight{ background-color:#F7FBFF;}
+.display .eventlevel-highlight1 tr:nth-child(even){ background-color:#F7FBFF;}
+.display .eventlevel-highlight1 tr:nth-child(odd){ background-color: #EFF7FF;}
+
+
+.display .ticketlevel-highlight{ background-color:#fcfcfc;}
+.display .ticketlevel-highlight1 tr:nth-child(even){ background-color:#fcfcfc;}
+.display .ticketlevel-highlight1 tr:nth-child(odd){ background-color:#f9f9f9;}
+
+<!--#example2 tr:nth-child(even){background-color:#EDEDED;}
+#example2 tr:nth-child(odd){background-color:#E0E0E0;}-->
+
+#subtable tr:nth-child(even){background-color:#fcfcfc;}
+#subtable tr:nth-child(odd){background-color:#f9f9f9;}
+
+.ticketquestanstbl tr:nth-child(even){background-color:#fcfcfc;}
+.ticketquestanstbl tr:nth-child(odd){background-color:#f9f9f9;}
+
+.table-topstatistics{ width:99.7%; background-color:#F9F9F9; border:1px solid #CCC; border-top:0px;border-bottom:0px;}
+
+.table-topstatistics table tr td { padding:3px; border-right:1px solid #cccccc;}
+
+.labeltitles{color: #247dba;font-size: 12px;font-weight: 700;}
+
+/*#example2 tr:nth-child(even){ background-color:#EDEDED;}
+#example2 tr:nth-child(odd){ background-color:#E0E0E0;;}*/
+
+
+.datatables_btn{
+position: relative;
+display: inline-block;
+margin-right: 3px;
+padding: 5px 8px;
+border: 1px solid #999;
+cursor: pointer;
+*cursor: hand;
+font-size:12px;
+color: black !important;
+
+-webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+-ms-border-radius: 2px;
+-o-border-radius: 2px;
+border-radius: 2px;
+
+-webkit-box-shadow: 1px 1px 3px #ccc;
+-moz-box-shadow: 1px 1px 3px #ccc;
+-ms-box-shadow: 1px 1px 3px #ccc;
+-o-box-shadow: 1px 1px 3px #ccc;
+box-shadow: 1px 1px 3px #ccc;
+
+/* Generated by http://www.colorzilla.com/gradient-editor/ */
+background: #ffffff; /* Old browsers */
+background: -webkit-linear-gradient(top, #ffffff 0%,#f3f3f3 89%,#f9f9f9 100%); /* Chrome10+,Safari5.1+ */
+background: -moz-linear-gradient(top, #ffffff 0%,#f3f3f3 89%,#f9f9f9 100%); /* FF3.6+ */
+background: -ms-linear-gradient(top, #ffffff 0%,#f3f3f3 89%,#f9f9f9 100%); /* IE10+ */
+background: -o-linear-gradient(top, #ffffff 0%,#f3f3f3 89%,#f9f9f9 100%); /* Opera 11.10+ */
+background: linear-gradient(top, #ffffff 0%,#f3f3f3 89%,#f9f9f9 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f9f9f9',GradientType=0 ); /* IE6-9 */
+}
+
+.datatables_btn:hover {
+border: 1px solid #666;
+
+text-decoration: none !important;
+
+-webkit-box-shadow: 1px 1px 3px #999;
+-moz-box-shadow: 1px 1px 3px #999;
+-ms-box-shadow: 1px 1px 3px #999;
+-o-box-shadow: 1px 1px 3px #999;
+box-shadow: 1px 1px 3px #999;
+
+background: #f3f3f3; /* Old browsers */
+background: -webkit-linear-gradient(top, #f3f3f3 0%,#e2e2e2 89%,#f4f4f4 100%); /* Chrome10+,Safari5.1+ */
+background: -moz-linear-gradient(top, #f3f3f3 0%,#e2e2e2 89%,#f4f4f4 100%); /* FF3.6+ */
+background: -ms-linear-gradient(top, #f3f3f3 0%,#e2e2e2 89%,#f4f4f4 100%); /* IE10+ */
+background: -o-linear-gradient(top, #f3f3f3 0%,#e2e2e2 89%,#f4f4f4 100%); /* Opera 11.10+ */
+background: linear-gradient(top, #f3f3f3 0%,#e2e2e2 89%,#f4f4f4 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f3f3', endColorstr='#f4f4f4',GradientType=0 ); /* IE6-9 */
+}
+
+</style>
+
+     
+        
+<!---------------------------------------------->
+
+<c:myComponentForTable BLN_UtillDisplayLinks="{!myticket}">
+<apex:stylesheet value="{!URLFOR($Resource.eventdexdatatable, 'eventdexdatatable/css/tables.css')}"/>
+        <apex:form id="myForm" > 
+<!-------------------------------------------------------------------------------------------->
+
+<div class="print_export_cont" style=" text-align:right; margin-bottom:-3px; margin-top:5px; margin-right:1%;">
+<apex:commandLink action="{!exportSurveyQuestions}" target="_blank" styleClass="datatables_btn" style="text-decoration:none;" ><span>Export</span></apex:commandLink>
+<apex:commandLink action="{!printSurveyQuestions}" target="_blank" styleClass="datatables_btn" style="text-decoration:none;" > <span>Print</span> </apex:commandLink>
+</div>
+
+   <!-----------------------------------------start of tabs-------------------------------------------------------->
+    
+   <div id="TabbedPanels1" class="TabbedPanels" style=" width:97.7%; margin-left:1%; margin-top:10px;" >
+                <ul class="TabbedPanelsTabGroup">
+                  <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555; font-weight:300;">Survey By Ticket</li>
+                   <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555;font-weight:300;">Survey By Question</li>
+                  <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555;font-weight:300;">Survey By Attendee</li>
+                 
+                </ul>
+                  
+                  <div class="TabbedPanelsContentGroup">
+                <!--------------------start of ist tab------------------>
+               <!--Start of content of standard Templates-->
+                   <!-----start of Ist tab booth leads campaigns-------->
+                  <div class="TabbedPanelsContent">
+    <!---------------->
+        
+        <div id="surveybyticketcontainer1" style=" width:99%; margin:0px auto; margin-top:10px;">   
+         
+        <!-------------------------------------->
+        <div id="tablemenubar" style="">
+        
+        </div><!--close of tablemenubar-->
+        <apex:outputPanel id="fsttab">
+        <apex:outputPanel rendered="{!NOT(showItemDetails)}" id="ItemListPanel" >
+            <table id="example" class="display" cellspacing="0"  border="0" bordercolor="#F7F7F7" width="100%">
+                <thead>
+                    <tr>
+                        <th>Ticket Name</th>
+                        <th>Tag Name</th>                    
+                    </tr>
+                </thead>
+            
+                <tbody> 
+                    <apex:repeat value="{!itemQuestionsList}" var="item">
+                        <tr>
+                            <td width="60%"> <!--  onclick="showpackage('surveybyticketcontainer2','surveybyticketcontainer1'),document.getElementById('ticketnamelink');" -->
+                                <apex:commandLink value="{!item.item_name__c}" action="{!surveyDataForItem}" styleClass="tickettitleanchor" reRender="fsttab">
+                                <apex:param value="{!item.Id}" name="itemId"/>
+                                </apex:commandLink>
+                            </td>
+                            <td width="40%"> {!item.Item_Type__r.name}  </td>
+                        </tr>
+                    
+                    </apex:repeat> 
+                
+                </tbody>
+            </table>
+         </apex:outputPanel>   
+        
+        
+        <apex:outputPanel rendered="{!showItemDetails}" id="ItemPanel">
+
+           <apex:repeat value="{!itemLevelSurveyList}" var="item">
+            <div class="bread-nav">
+            <span> <apex:commandLink style="color:#247DBA; cursor:pointer; margin-right:.5%; text-decoration:underline;" value="Survey By Ticket" action="{!surveyQuestionsList}" reRender="fsttab"/>
+            <!--<a onclick="showpackage('surveybyticketcontainer1','surveybyticketcontainer2')" style="color:#247DBA; cursor:pointer; margin-right:.5%; text-decoration:underline;" >Survey By Ticket</a> --></span>
+            <span style="font-size:20px; margin-right:.5%;"> ›› </span>
+            <span id="ticketnamelink" style="">{!item.itemData.item_name__c}</span>
+            </div><!--close of bread-nav-->
+        <!-------------------------------------->
+            <div id="tablemenubar" style=" border-top:0px;">
+            
+            </div><!--close of tablemenubar-->
+      <table id="examplesub" class="display" cellspacing="0"  border="0" bordercolor="#F7F7F7" width="100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        
+                    </tr>
+                </thead>
+
+    <tbody> 
+     
+  <!---------------------------------start of data-------------------------------->
+  <apex:repeat value="{!item.ticketsData}" var="gnUserData">
+  <tr>
+      <td width="100%" colspan="2" style="padding:0px;">
+      <!------------attendee details header---------------->
+          <div id="attendeegroupdetails">
+                  <div id="attname1">{!gnUserData.Client_GN_User__r.First_Name__c} {!gnUserData.Client_GN_User__r.Last_Name__c}</div><!--close of attendee name-->
+                  <div id="labeltitles1" >{!gnUserData.Name}</div><!--close of email id-->
+          </div><!--close of attendee details group-->
+       <!------------end attendee details header---------------->
+      <!------------start if inside header---------------->
+         <div id="insideheader" style="width:60%;">Questions</div>
+           <div id="insideheader" style="width:39.8%; border-right:0px;">Answers</div>
+            <div style="clear:both;"></div>
+       <!-------------end of inside headers------------------------------->
+      <!-------------start of inside box---------------------->
+                   <div id="insidebox" style="width:100%; padding-bottom:0px;">
+          <!--------------inside main table-------------------->
+                 <table class="ticketquestanstbl" width="100%" border="0">
+                 <apex:repeat value="{!gnUserData.User_Answers__r}" var="userAnswer">
+                  <tr>
+                    <td>
+                    {!userAnswer.Item_Question__r.Question__r.Question_Text__c} 
+                    </td>
+                    <td style=" boder-right:0px;">{!userAnswer.UAnswer_Text__c}</td>
+                  </tr>                  
+                  </apex:repeat>
+                </table>
+    
+        
+        <!---end of  inside survey quest table table---->
+     
+    <!-------------end of inside main table---------------->
+          <div style="clear:both"></div>
+    
+    <!-------------------------------------------------------------->
+             
+         
+         
+     </div>    <!---close of insidebox-->
+<!-----------------------end of inside box----------------------------------->
+    <!---------------------------------------------------------------------------------------------->
+      </td><!------end of parent td-------->
+</tr><!----end of parent tr--->
+</apex:repeat>
+  <!-----------------------------------end of 3rd record--------------------------------->      
+        
+                </tbody>
+            </table>
+            </apex:repeat>
+            </apex:outputPanel>
+            </apex:outputPanel>
+                
+</div><!---close of surveybyticketcontainer1-->
+     <!------------------------------container2---->
+     <div id="surveybyticketcontainer2" style=" width:99%; display:none; margin:0px auto; margin-top:10px;">   
+         
+</div><!---close of surveybyticketcontainer2-->
+      
+     <!------------------------>
+    </div><!--close tabbedpanelscontent-->
+   
+       <!--------------------end of ist tab------------------>
+   
+    <!---------------------------------  2nd tabs content------------>
+      <div class="TabbedPanelsContent">
+   
+    <!--------->
+         <div id="surveybyquestcontainer1" style=" width:99%; margin:0px auto;margin-top:10px;">   
+        <div id="tablemenubar" style="">
+        
+        </div><!--close of tablemenubar-->
+    <apex:outputPanel id="sectab">
+     <apex:outputPanel id="itemQuestionPanel" rendered="{!NOT(showQuestionDetails)}">
+      <table id="example2" class="display" cellspacing="0"  border="0" bordercolor="#F7F7F7" width="100%">
+                <thead>
+                    <tr>
+                        <th style="">Ticket Name</th>
+                        <!--<th width="10%">Tag Name</th>-->
+                        <th style=" padding:0px; text-align:left;">
+                   
+                        
+                        <!------------->
+                        <div class="childtableheader" style="width:70%;">
+                        Question
+                        </div>
+                        <!--------------->
+                        
+                        <!------------------>
+                        <div class="childtableheader" style="width:30%;">
+                       Answer Type
+                        </div>
+                        <!------------------->
+                       
+                        
+                        <!------------------->
+                          </th>
+                        
+                            
+                        
+                    </tr>
+                </thead>
+
+    <tbody> 
+    <!---------------------------------------------parent table rows------------------------>
+    <apex:repeat value="{!itemQuestionsInnerList}" var="item">
+      <tr class="ticketlevel-highlight">
+      <td id="ticketnameanchortd"  >
+
+          <apex:commandLink rendered="{!if(item.itemData != NULL, TRUE, FALSE)}" value="{!item.itemData.item_name__c}" action="{!surveyDataForQuestion}" styleClass="tickettitleanchor" reRender="sectab">
+              <apex:param value="{!item.itemData.Id}" name="itemId"/>
+          </apex:commandLink><br/> <!--  onclick="showpackage('surveybyquestcontainer2','surveybyquestcontainer1');"  onclick="showpackage('surveybyquestcontainer2','surveybyquestcontainer1');" -->
+        <!-- <a onclick="showpackage('surveybyticketcontainer1','surveybyticketcontainer2')" style="color:#247DBA; cursor:pointer; margin-right:.5%; text-decoration:underline;" >Survey By Ticket</a> -->
+          <apex:commandLink value="({!item.levelType})" action="{!surveyDataForQuestion}" styleClass="ticketleveltxt" reRender="sectab">
+              <apex:param value="{!item.itemData.Id}" name="itemId"/>
+          </apex:commandLink>
+
+      </td>
+<!--------------parent td --------------->
+ <td width="80%" style="padding:0px;">
+ <!------>
+ <table  id="subtable" style=" width:100%; height:100%; border-spacing:0px; border-collapse:collapse;">
+ <!---->
+ <apex:repeat value="{!item.itemQuestionsData}" var="itemQuestion">
+ <tr class="ticketlevel-highlight1">
+ <td width="70%" >{!itemQuestion.Question__r.Question_Text__c}</td>
+ <td width="30%">{!itemQuestion.Question__r.Answer_Type__c}</td>
+
+ </tr>
+</apex:repeat>
+ <!---->
+ </table><!--close of subtable-->
+ </td><!--close of parent td-->
+ <!---------------/end of parent td----------------------->
+</tr>
+     </apex:repeat>  <!-----------------------------end of parent table rows----------------------->
+ 
+            
+                </tbody>
+            </table>
+       </apex:outputPanel>     
+      <apex:outputPanel rendered="{!showQuestionDetails}" id="summaryPanel">      
+            <div style=" margin-top:-15px; font-weight:700;">
+    <span style=" margin-right:1%;">Select Question : 
+    <apex:actionRegion id="actreg">
+        <apex:selectList value="{!selectedQuestion}" multiselect="false" size="1" style="width:240px;">
+            <apex:selectOptions value="{!questionsForItem}"/>
+            <apex:actionSupport event="onchange" action="{!summaryResponseData}" reRender="summaryPanel"/>
+        </apex:selectList>
+        </apex:actionRegion>
+    </span>
+        </div>
+        <!------------>
+  <div style="margin-top:-15px; margin-bottom:5px; text-align:right;">
+  
+  <div class="checkboxdivs"><input id="summaryresponse" type="radio" onclick="showpackage('summaryresponsecontainer','detailresponsecontainer')" checked="checked" name="response" /><label for="summaryresponse">View Summary Response</label></div>
+   <div class="checkboxdivs" style="margin-right:0px;"><input id="detailresponse" type="radio" onclick="showpackage('detailresponsecontainer','summaryresponsecontainer')" name="response" /><label for="detailresponse">View Detail Response</label></div>
+   </div><!--close of radioboxselectionbox---------------->
+   
+   <!----------------------start of summaryresponsecontainer---->
+   <div id="summaryresponsecontainer" style="">
+    <div class="bread-nav">
+        <span> <apex:commandLink style="color:#247DBA; cursor:pointer; margin-right:.5%; text-decoration:underline;" value="Survey By Question" action="{!surveyQuestionsListWithItem}" reRender="sectab"/>
+        <!--<a onclick="showpackage('surveybyquestcontainer1','surveybyquestcontainer2')" style="color:#247DBA; cursor:pointer; margin-right:.5%; text-decoration:underline;" >Survey By Question</a> --></span>
+        <span style="font-size:20px; margin-right:.5%;"> ›› </span>
+        <span id="ticketnamelink" style="">{!selectedItemName}</span>
+        
+       
+        </div><!--close of bread-nav-->
+         <div style="clear:both;"></div>
+         <!----------------------------------------->
+         <div class="table-topstatistics" style="">
+         <!--------------------------------->
+         <table  style=" width:70%; margin:0px auto; font-weight:700;">
+  <tr>
+
+    <td class="labeltitles" width="18.5%" >Response Count :</td>
+    <td width="10%">{!allResponses}</td>
+    <td class="labeltitles" width="15%">Response % :</td>
+    <td width="10%">{!responseGivenPercent}</td>
+    <td class="labeltitles" width="14.5%">Skips Count :</td>
+    <td width="10%">{!notGivenResponses}</td>
+    <td class="labeltitles" width="11%">Skips % :</td>
+    <td>{!responseNotGivenPercent}</td>
+  </tr>
+</table>
+
+         
+         <!--------------------------------->
+         </div><!---table-topstatistics--> 
+        <!-------------------------------------->
+        <div id="tablemenubar" style=" border-top:0px;">
+        
+        </div><!--close of tablemenubar-->
+        <table id="summaryresponsetbl" class="display" cellspacing="0"  border="0" bordercolor="#F7F7F7" width="100%">
+                <thead>
+                    <tr>
+                        <th>Response Type</th>
+                        <th>Response Count</th>
+                        <th>Response Percentage (%)</th>
+                    </tr>
+                </thead>
+
+    <tbody>
+    <apex:repeat value="{!responsesInnerList}" var="summary"> 
+        <tr>
+            <td width="50%">{!summary.answerType}</td>
+            <td width="25%">{!summary.answerCount}</td>
+            <td width="25%">{!summary.answerPercentage}</td>
+        </tr>
+    </apex:repeat>      
+                </tbody>
+            </table>
+         
+              <!-----------------Graph--------------------------->
+         <div class="grid-1 portlet" style=" width:100%; margin:auto; padding-right:0px;">
+          <div class="title-grid portlet-header" style="border-radius:0px; background:#F4F4F4;">{!selectedItemName}</div>
+          <div class="content-gird portlet-content"> 
+<div id="chartContainer" style="height: 250px; width: 100%; margin-top:0px;">
+ <apex:outputPanel rendered="{!IF(itemAnswerType == 'Scale', TRUE, FALSE)}" >
+     
+     <apex:chart height="100%" width="100%" animate="true" legend="true" data="{!responsesInnerList}">
+    <apex:axis type="Gauge" position="left" margin="-10" minimum="0" maximum="100" steps="10"/>
+    <apex:gaugeSeries dataField="answerCount" labelField="answerType" highlight="true" tips="true" donut="25" colorSet="#F49D10, #ddd">
+        <apex:chartLabel display="over"/>
+    </apex:gaugeSeries>
+</apex:chart>
+
+
+                                  
+                </apex:outputPanel> 
+     <apex:outputPanel rendered="{!IF(OR(itemAnswerType == 'Single Selection', itemAnswerType == 'Choose from a list'), TRUE, FALSE)}" >
+                    <apex:chart data="{!responsesInnerList}" width="100%" height="100%" >               
+                        
+                        <apex:pieSeries dataField="answerCount" labelField="answerType" colorSet="#e9b200,#57ab35,#329dbd,#e86026" > 
+                            
+                            <apex:chartTips width="200"/>
+                            <apex:chartLabel display="middle" field="answerCount"/>
+                           
+                        </apex:pieSeries>
+                        
+                            <apex:legend position="right"/>
+                        
+                        
+                    </apex:chart> 
+                                  
+                </apex:outputPanel> 
+                
+    <apex:outputPanel rendered="{!IF(itemAnswerType == 'Checkboxes', TRUE, FALSE)}" >
+        <apex:chart data="{!responsesInnerList}" width="100%" height="100%" resizable="true">
+            <apex:axis type="Category" position="bottom" fields="answerType" title="Answer Type" minimum="0"><apex:chartLabel rotate="90"/></apex:axis>
+            
+            <apex:axis type="Numeric" position="left" fields="answerCount" title="Answer Count" minimum="0" steps="0"/>
+            <apex:barSeries gutter="200" orientation="vertical" axis="bottom" xField="answerType" yField="answerCount" stacked="false" colorSet="#369ead,#c24642,#7f6084,#86b402,#a2d1cf" colorsProgressWithinSeries="true" >
+            <apex:chartLabel display="outside" field="answerCount"/><apex:chartTips height="20" width="120"/></apex:barseries>
+            
+        </apex:chart>
+    </apex:outputPanel> 
+      
+            
+  </div><!--close of chartcontainer-->
+         
+            <div class="clear"></div>
+          </div><!--close of contentgrid-->
+        </div><!--close of grid-->
+        <!-------------------------end of graph-------------------------------->   
+            
+            
+            </div><!--close of summaryresponsecontainer-->
+   <!----------------------end of summarycontainercontainer----->
+   
+   <!---------------------start of detailresponsecontainer---------------->
+    <div id="detailresponsecontainer" style=" display:none;">
+     <apex:outputPanel rendered="{!IF(userAnswersList.size != 0, TRUE, FALSE)}">
+    <apex:variable var="summaryCount" value="{!0}"/>
+    
+    <div class="bread-nav">
+        <span><a onclick="showpackage('surveybyquestcontainer1','surveybyquestcontainer2')" style="color:#247DBA; cursor:pointer; margin-right:.5%; text-decoration:underline;" >Survey By Question</a></span>
+        <span style="font-size:20px; margin-right:.5%;"> ›› </span>
+        <span id="ticketnamelink" style="">{!selectedItemName}</span>
+        
+        </div><!--close of bread-nav-->
+        <!-------------------------------------->
+        <div id="tablemenubar" style=" border-top:0px;">
+         </div><!--close of tablemenubar-->
+        <table id="detailresponsetbl" class="display" cellspacing="0"  border="0" bordercolor="#F7F7F7" width="100%">
+                <thead>
+                    <tr>
+                        <th>Sno</th>
+                        <th>Name</th>
+                        <th>Answer</th>
+                    </tr>
+                </thead>             
+           
+                <tbody> 
+                    <apex:repeat value="{!userAnswersList}" var="answer">
+                        <tr>
+                            <td width="10%"><apex:variable var="summaryCount" value="{!summaryCount+1}"/>{!summaryCount}</td>
+                            <td width="35%">{!answer.User__r.First_Name__c} {!answer.User__r.Last_Name__c}</td>
+                            <td width="">{!answer.UAnswer_Text__c}</td>
+                        </tr>
+                    
+                    </apex:repeat>
+                
+                </tbody>
+                
+            </table>
+            </apex:outputPanel>
+            </div><!--close of detailresponsecontainer-->
+   <!----------------------end of detailresponsecontainer-------------------->
+   </apex:outputPanel></apex:outputPanel>
+</div><!--------------end of surveybyquestcontainer1---> 
+    <!---------start of surveybyquestcontainer2------->
+    <div id="surveybyquestcontainer2" style=" display:none; width:99%;margin:0px auto; margin-top:10px;">  
+    <!---start of radioboxselectionbox-->
+    
+   
+   
+    </div><!--------------end of surveybyquestcontainer2---> 
+    
+    <!------------->
+    </div><!--close of tab2 tabbedpanelscontent-->
+   
+    <!--------------------------------------------------->
+    <!---------------------------------3rd tabs content------------>
+     <div class="TabbedPanelsContent">
+    <!--------->
+            <div style=" width:99%; margin:0px auto; margin-top:10px;">   
+      <div id="tablemenubar" style="">
+        
+        </div><!--close of tablemenubar-->
+        <apex:variable var="attendeeNumber" value="{!0}"/> 
+      <table id="example1" class="display" cellspacing="0"  border="0" bordercolor="#F7F7F7" width="100%">
+                <thead>
+                    <tr>
+                        <th>Attendee Details</th>
+                          <th></th>
+                        <th></th>
+                        <th></th>
+                        
+                    </tr>
+                </thead>
+
+    <tbody> 
+
+    <!----------------------------------------start of first record tr--------------------->
+    <apex:repeat value="{!surveyAttendeeInnerList}" var="attendee">
+     <tr>
+      <td colspan="4" style=" padding:0px;border-bottom:0px;">
+      <!------------attendee details header---------------->
+      <div id="attendeegroupdetails" style="padding:8px;">
+      <div id="attsno"><apex:variable var="attendeeNumber" value="{!attendeeNumber+1}"/>({!attendeeNumber}/ {!surveyAttendeeInnerList.size})</div><!--close of sno-->
+      <div id="labeltitles1" >Attendee Name:</div>
+      <div id="attname1">{!attendee.gnUserData.First_Name__c}{!attendee.gnUserData.Last_Name__c}</div><!--close of attendee name-->
+      <div id="labeltitles1" >Email Id:</div><!--close of email id-->
+      <div id="attemailid1" >{!attendee.gnUserData.Email__c}</div><!--close of email id-->
+      <div id="labeltitles1" >Mobile No:</div><!--close of cell no-->
+       <div id="attmobno1">{!attendee.gnUserData.Phone__c}</div><!--close of email id-->
+      </div><!--close of attendee details group-->
+       <!------------end attendee details header---------------->
+       <div id="insideheader" style="width:10%; background-color:#e3e3e3; border-right:1px solid #f4f4f4; color:#696969;">Level</div>
+       <div id="insideheader" style="width:19.82222%;background-color:#e3e3e3; color:#696969;">Ticket Name</div>
+       <div id="insideheader" style="width:42%;">Questions</div>
+       <div id="insideheader" style="width:27.822%; border-right:0px;">Answers</div>
+       <!--------------------------Layout of ticket and quest and answers------------------------------>
+     <div style="clear:both;"></div>
+      <div id="insidebox" style="width:100%; padding-bottom:0px;">
+      <!--------------inside main table-------------------->
+    <table width="100%" border="0">
+    <apex:repeat value="{!attendee.ticketsData}" var="ticket">
+  <tr class="eventlevel-highlight">
+  <!------------td for ticket level--->
+  <td id="ticketleveltd" >
+  <apex:outputText value="{!IF(ticket.Item__c != NULL, 'Ticket','Event')}"/> 
+   </td><!--close of ticketleveltd-->
+  
+  
+  <!------td for ticket name-------->
+    <td id="ticketnametd" >
+   <span id="ticketnametitle" style="color:#247dba; margin-right:1%;">{!ticket.item__r.item_name__c}</span>
+   <apex:outputText value="({!ticket.Name})" style="font-size:10px;"/>
+ </td>
+    <!------------>
+    <!------td for quest and answers--->
+    <td style=" width:70%;padding:0px; border-right:0px;">
+    <!--inside table for surveyquest and answers--->
+    <table class="eventlevel-highlight1" width="100%" border="0">
+    <apex:repeat value="{!ticket.User_Answers__r}" var="userAnswer">
+ <tr>
+    <td width="60%">
+    {!userAnswer.Item_Question__r.Question__r.Question_Text__c}
+    </td>
+    <td width="40%" style=" boder-right:0px;">{!userAnswer.UAnswer_Text__c}</td>
+  </tr>
+ </apex:repeat>
+</table>
+
+    
+    <!---end of  inside survey quest table table---->
+    </td>
+    <!-------->
+  </tr>
+   </apex:repeat>
+</table>
+<!-------------end of inside main table---------------->
+      <div style="clear:both"></div>
+      
+          
+     
+ </div><!---close of insidebox-->
+<!-----------------------end of inside box----------------------------------->
+      </td>
+</tr>
+</apex:repeat>
+     
+     <!------------------------------------>
+                </tbody>
+            </table>
+<!----------------------end of main table------------------->
+</div>
+    <!---------------->
+     </div><!--close3rd tabbedpanelscontent-->
+    
+    
+    <!---------------------------------------------->
+    
+    </div>
+    </div>
+    <!---------------------->
+       
+
+<!---------------------------------------------------------------------------------------------->
+ </apex:form>
+  </c:myComponentForTable>
+  <!------------------------------------->
+   <script type="text/javascript">
+var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
+</script>
+<!----------------------------->
+</apex:page>

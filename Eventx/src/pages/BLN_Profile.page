@@ -1,0 +1,906 @@
+<apex:page showHeader="false" controller="BLN_Profilecon" standardStylesheets="false" id="pageid">
+    
+  <head><title>Eventdex</title></head>
+
+   <title>Eventdex-Orders</title>
+    <apex:stylesheet value="{!URLFOR($Resource.Promocodes, 'promocodes/css/nwbuttons.css')}"/>
+
+     <apex:stylesheet value="{!URLFOR($Resource.MyTickets, 'css/style.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.createevents,'createevents/css/style-button.css')}"/>
+     
+ <apex:stylesheet value="{!URLFOR($Resource.MyTickets, 'css/chosen.css')}"/>    
+      <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/jquery.min.js')}"></script>   
+     <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/jquery-ui-1.8.16.custom.min.js')}"></script>
+     <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/fancybox.js')}"></script>
+      <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/fullcalendar.min.js')}"></script>     
+      
+ <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/elfinder.min.js')}"></script> 
+   <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/jquery.wysiwyg.js')}"></script>     
+ 
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/tipTip.minified.js')}"></script>  
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/forms.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/chosen.jquery.min.js')}"></script>   
+    <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/fautoresize.jquery.min.js')}"></script>
+    
+ <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/colorpicker.js')}"></script>
+   <script type="text/javascript" src="{!URLFOR($Resource.MyTickets, 'js/functions.js')}"></script>   
+
+    <script type="text/javascript" src="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabssss.js')}"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabsss.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/tables.css')}"/>
+     
+
+      
+ <style>
+ /*.selectlist{
+width:84%;
+height:28px;
+border:1px solid #e3e3e3;
+border-radius:3px;
+color: #575757;
+background-color: #FFF;
+background-image: url({!URLFOR($Resource.MyTickets,'images/myevents.png')});
+outline:none;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+
+}*/
+
+ input.styled {
+    display: none;
+}
+select.styled {
+    position: relative;
+    width: 190px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 5;
+}
+.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+</style>
+
+<style>
+   .login-content1nav {
+          position: relative;
+         
+          right: 0;
+          z-index: 999; background-color:#7f8c8d; opacity:3;
+         
+        }
+ nav .login-trigger1 {
+            border-top: 1px solid #fff;
+            border-bottom: 1px solid #D0D0D0;
+            border-radius: 0px;
+             height: 33px;
+            display:block;
+            cursor:pointer;
+        }
+   
+  .login-triggers1{
+         display: inline-block;
+          *display: inline;
+          *zoom: 1;
+          height: 13px;
+          width:200px;
+          font-family:cuprum;
+          font-size:15px;
+          line-height: 18px;
+          padding: 0 18px;
+          text-decoration: none;
+          color:#000;
+          cursor:pointer;
+          padding-top:8px;
+          padding-bottom:8px;
+        
+          -webkit-border-radius: 0px;
+          -moz-border-radius: 0px;
+          border-radius: 0px;
+          // background-color:#F5f5f5;
+         background: url({!URLFOR($Resource.MyTickets, 'images/ul_playlist_li.png')}) repeat-x center bottom #F5F5F5;
+          border: 0px solid #292f34; 
+       
+        
+       
+       }
+       .login-content1 li div  {
+            color:#FFF;
+            text-decoration:none;
+            font-size:16px;
+            font-family:cuprum;
+                padding:10px;
+                cursor:pointer; 
+                
+            display:block;
+        
+        }
+         .login-content1 li img  {
+            padding-right:2px;
+            padding-top:1px;
+            float:left;
+        }
+        
+        nav li .login-content1 {
+          right: 0;
+          width:auto;  
+          
+        }
+        
+        .login-content1 li:hover {
+            background-color:#247dba;
+        }
+    <!--------------------------->
+   </style>
+<style>
+.button-a.blue {
+background-image: url({!URLFOR($Resource.MyTickets, 'images/button.png')});
+background-position: 0px -60px;
+border: 1px solid #438ac2;
+}
+     
+.selected { background-color: #E0EFF7; } 
+
+
+</style>
+<style>
+#titleheadings {
+
+text-shadow: 0 1px 1px rgba(0,0,0,.25);
+color: #247dba;
+font-family: cuprum;
+
+}
+
+</style>
+<script>
+function showhide(){
+    
+    if (document.getElementById("homeadd").checked==true)
+    {
+        
+        document.getElementById("homeaddd").style.display="";
+        
+        }
+    else if (document.getElementById("homeadd").checked==false)
+    {
+        
+        document.getElementById("homeaddd").style.display="none";
+        
+        }
+        
+        <!------------------------------------------------------------------>
+        
+    if (document.getElementById("billadd").checked==true)
+    {
+        
+        document.getElementById("billaddd").style.display="";
+        
+        }
+    else if (document.getElementById("billadd").checked==false)
+    {
+        
+        document.getElementById("billaddd").style.display="none";
+        
+        }
+    
+    
+    
+    }
+
+</script>
+
+
+<!---------------------------Validation------------------>
+ <script type="text/javascript">
+ function validate()
+{
+
+    var pho = document.getElementById('pageid:myForm:ph1').value;
+var mob = document.getElementById('pageid:myForm:ph2').value;
+
+var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+
+ if(mob.length == 0)
+ {
+     }else{
+          if(mob.match(phoneno))
+         {
+         
+         }
+           else
+         {
+       alert("Enter valid Mobile Number");
+       return false;
+         }
+         }
+         
+ if(pho.length == 0)
+ {
+    
+     }else{        
+if(pho.match(phoneno))
+     {
+       
+     }
+   else
+     {
+       alert("Enter valid Phone Number");
+       return false;
+     }
+
+}
+return( true );
+}
+</script>
+  
+  
+  
+  <!------------------------------------------------------------->
+
+
+
+<!--accordian-->
+    
+  
+   <!----------------------------------------------------->
+  <!------script for ticket menu arrow active------>
+ 
+<!-- -------------------------------------------------------- apex end------------------------------------------ -->
+<apex:form >
+<div id="header">
+       <div id="logo">
+    <h1 style=" padding-top:5px; padding-left:20px; color:#FFF ">
+      <apex:image url="{!$Resource.evendexlogo}"/> 
+    </h1>
+  </div>
+       
+       <!--close of logo--> 
+     </div>
+<!--close of header--->
+<div  id="ribbon"></div>
+<!--close of ribbon-->
+
+<header>
+   <div id="centered-head" class="res">
+    <nav>
+       <ul>
+        <li id="login"> <span id="login-trigger"> <span id="login-triggers"> 
+          <span id="user-panel-check"></span> <span id="user-panel-title ">My Account</span> </span></span>
+           <div id="login-content">
+             <ul>
+                   <li style=" margin-left:0px;"><apex:outputLink value="/apex/BLN_Profile"> <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/setting.png')}"/> <span>Settings</span></apex:outputLink></li>
+                   <li style=" margin-left:0px;"><apex:outputLink value="/apex/bln_Changepassword"> <apex:image url="{!URLFOR($Resource.NewDBEvents, 'images/setting.png')}"/> <span>Change Password</span></apex:outputLink></li>
+                  <!-- <li><a href="upgradeacc.htm"><apex:image url="{!URLFOR($Resource.MyTickets, 'images/upgrade.png')}" width="13px" height="13px" /> <span>Upgrade Account</span></a></li>-->
+                   <li style="width:100px:height:10px;margin-left:0px;padding-left:5px;"><apex:commandLink action="{!$Site.Prefix}/secur/logout.jsp" style="padding-left:0px;"><apex:image value="{!URLFOR($Resource.ScanAttendee_V1, 'AttendeeScan/scanattendee/images/logout.png')}"/><span>{!$Label.site.logout}</span></apex:commandLink></li>
+                 </ul>
+            </div>
+          </li>
+      </ul>
+         </nav>
+          <div class="account-name">
+            <p><span class="welcome">Welcome,</span> <strong>{!$user.FirstName} {!$user.LastName}</strong></p>
+             <div class="account-separator"></div>
+          </div>
+          <div class="account-name"></div>
+            <div id="quickbuttons" style="border:0px solid #F00;" > <span><a title="My Events" style="text-decoration:none" href="/apex/BLN_UserEvents">
+              <apex:image url="{!URLFOR($Resource.MyTickets, 'images/myevents.png')}" width="79" height="45"/> </a></span>
+               <span ><a title="My Tickets" style="text-decoration:none;  margin-left:5%" href="/apex/BLN_Mytickets">
+               <apex:image url="{!URLFOR($Resource.MyTickets, 'images/ticketstab.png')}" width="120" height="44"/> </a></span> </div>
+               <!--close of quickbuttons--> 
+                <!-- Navigation end--> 
+            </div>
+         </header>
+     <div class="clear"></div>
+      <apex:actionFunction name="naicsCodesFunction" reRender="pageid" action="{!sendNaicsCodes}">
+                    <apex:param name="naicsCodes"  value=""/>
+         </apex:actionFunction> 
+       
+</apex:form>
+<!-- -------------------------------------- Header End  ------------------------------------------------------ -->
+
+
+
+
+
+
+
+<script type="text/javascript">
+       
+    function sendNaicsCodeBack(){
+          
+           
+              var selbol = ''; 
+                var SelNaicsVal ='';
+                var x = 0;
+                var j = 0;
+                var surveybool ='';
+
+               var ele = document.getElementById('single-label-example');
+
+               var k=0; 
+               for (x=0;x<ele.length;x++)
+                 {
+                    if (ele[x].selected)
+                    {
+                       k++;
+                       SelNaicsVal= SelNaicsVal+ '-' + ele[x].value.replace("-",'&');
+                    }
+                 }
+
+                                        
+              
+
+               if(k>2){
+                     alert('Maximum of Two Naics Codes Are allowed');
+                     return false;
+                    
+                    }else{
+                     naicsCodesFunction(SelNaicsVal);
+                    }
+         }
+         
+      
+         </script>
+           <script type = "text/javascript">
+            function check(obj){ 
+            var path = obj.value;
+            var filesize= obj.files[0].size;
+            if(filesize > 102400){
+             obj.value = null;
+            window.alert("Image size cannot be greater than 100kb!");
+             return false;
+            }
+            }
+        </script>
+
+
+<section id="middle" style=" border:0px #000000 solid" class="res">
+<apex:form id="myForm">
+
+          
+         
+    <div id="container-main" >
+      <div id="container" style="border: 0px #000000 solid;background-color: #FFF;margin-top: 0px;">
+          <div id="content" style="padding: 0px;margin-bottom: 80px;">
+        <div class="speedbar" style=" border:0px #FF0000 solid">
+          <div class="speedbar-nav">Eventdex ›› Manage Profile</div><!--close of speedbar-nav-->
+
+        </div>
+         <style>
+
+#basicinfo tr td{ padding:5px; font-size:14px;}
+#compinfo tr td{ padding:5px; font-size:14px;}
+#homeaddd tr td{ padding:5px; font-size:14px;}
+#billaddd tr td{ padding:5px; font-size:14px;}
+
+</style>
+
+<!---start of send tabs--------------------------------------------------->
+<div id="TabbedPanels" class="TabbedPanels" style=" margin-top:10px; margin-bottom:20px; width:98%; margin-left:1%;" >
+<ul class="TabbedPanelsTabGroup">
+<li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555; font-weight:300;">Basic Information</li>
+<li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555;font-weight:300;">Company Information</li>
+</ul>
+
+<!--------------------start of ist tab(Basic Information)------------------>
+<div class="TabbedPanelsContentGroup">
+
+<!--Start of content of basic Information-->
+<div class="TabbedPanelsContent">
+
+<!---------------------------------Campaigns List--------------------------------------------->
+<div class="grid-1" style=" width:97%; margin-top:0px; margin-left:.8%" >
+<table id="basicinfo" width="100%" border="0" style="border-collapse:collapse;">
+<tr>
+<td width="20%" style="text-align:right;">Prefix :</td>
+<td width="30%"><apex:inputField value="{!GNUSER.Prefix__c}" style="width:84%;" id="selectlist" styleClass="selectlist"/></td>
+<td width="20%" style="text-align:right;"><h2>Default Company:</h2></td>
+
+<td ><span style="width:84%;" >
+<apex:selectList value="{!Currentcompany}" size="1" styleClass="selectlist" style="width:84%;"  >
+<apex:selectOptions value="{!seloptcurrent}" />
+
+
+
+</apex:selectList>
+
+
+</span></td>
+
+
+</tr>
+<tr>
+<td style="text-align:right;">First Name :</td>
+<td><apex:inputField value="{!GNUSER.First_Name__c}" style="width:77%;"/></td>
+<td width="20%" style="text-align:right;">Mobile Number :</td>
+<td><apex:inputField value="{!GNUSER.Mobile__c}" id="ph2"  style="width:84%;"/></td>
+
+</tr>
+<tr>
+<td style="text-align:right;">Last Name :</td>
+<td><apex:inputField value="{!GNUSER.Last_Name__c}" style="width:77%;"/></td>
+<td width="20%" style="text-align:right;">Phone Number :</td>
+<td><apex:inputField value="{!GNUSER.Phone__c}" id="ph1" style="width:84%;"/></td>
+
+
+
+
+</tr>
+<tr>
+<td style="text-align:right;">Suffix :</td>
+<td><apex:inputField value="{!GNUSER.Suffix__c}" style="width:84%;" styleClass="selectlist"/></td>
+<td style="text-align:right;">Profile Picture :</td>
+<td colspan="1" rowspan="2" style=" text-align:left;">
+<div style="width:30%; height:80px; background-color:#ffffff;">
+<apex:image value="servlet/servlet.ImageServer?id={!GNUSER.User_Pic__c}&oid=00Dc0000003skw2" height="80px" width="100%"/>
+</div>
+<apex:inputFile value="{!UserImage}" fileName="{!UserImageName}" contentType="image" onchange="check(this)" ></apex:inputFile> 
+</td>
+
+</tr>
+<tr>
+<td style="text-align:right;">Email:</td>
+<td><span style="width:84%;" styleClass="selectlist">{!GNUSER.Email__c}</span></td>
+</tr>
+
+<tr>
+<td colspan="4" style="text-align:left;">
+<span style=" margin-left:20%;"><label for="homeadd">Home Address</label></span> <span><input id="homeadd" onClick="showhide()" type="checkbox" style=" margin-left:.5%;"/></span>
+<!--<apex:outputPanel rendered="{!IF(billingadd.size != 0 , TRUE, FALSE)}">
+<span style=" margin-left:2%;"><label for="billadd">Billing Address</label></span> <span><input id="billadd" onClick="showhide()" type="checkbox" style=" margin-left:.5%;"/></span>
+</apex:outputPanel>-->
+
+</td>
+</tr>
+<!-- <tr>
+<td style="text-align:right;">Profile Picture :</td>
+<td><div class="uploader black" style="width:112%;">
+<input type="text" style="width:61%; padding:0px;text-indent:3px;" class="filename" readonly/>
+<input type="button" name="file" class="button_files " value="Browse..."/>
+<input type="file"/>
+</div></td>
+</tr>-->
+
+</table>
+<!----------------------------------------------HOME ADDRESS-------------------------------------------->
+ <table id="homeaddd" width="100%" border="0" style="display:none;border-collapse:collapse;">
+<tr>
+  <td id="titleheadings"><span style="font-size:20px;">Home Address</span></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  </tr>
+<apex:actionRegion >
+<tr>
+<td width="20%" style="text-align:right;">Home Address 1 :</td>
+<td width="30%"><apex:inputField value="{!GNUSER.Address1__c}" style="width:84%;"/></td>
+<td style="text-align:right;">Country :</td>
+<td><apex:selectList value="{!GNUSER.Country__c}" multiselect="false" size="1" styleClass="selectlist" style="width:80%" >
+                                     <apex:selectOptions value="{!countryOptions}"/>
+                                    
+                                    <apex:actionSupport event="onchange" action="{!HomestatesBasedOnCountry}" reRender="HOmestate" >
+                                         <apex:param value="{!GNUSER.Country__c}" assignTo="{!selectedCountry}"/>
+                                     </apex:actionSupport>   
+                                 </apex:selectList> 
+          </td>
+
+
+
+</tr>
+
+<tr>
+<td style="text-align:right;">Home Address 2 :</td>
+<td><apex:inputField value="{!GNUSER.Address2__c}" style="width:84%;"/></td>
+<td width="20%" style="text-align:right;">State :</td>
+<td><apex:outputPanel id="HOmestate">
+<apex:selectList value="{!GNUSER.State__c}" multiselect="false" size="1" styleClass="selectlist" style="width:80%" id="homestatesSelections" >
+          <apex:selectOptions value="{!HomestateOptions}"/>
+          </apex:selectList></apex:outputPanel>
+          </td>
+
+
+
+</tr>
+</apex:actionRegion>
+
+<tr>
+<td style="text-align:right;">City :</td>
+<td><apex:inputField value="{!GNUSER.City__c}" style="width:84%;"/></td>
+
+
+<td width="20%" style="text-align:right;">Zip Code :</td>
+<td><apex:inputField value="{!GNUSER.Zip_Code__c}" id="zp1" style="width:84%;"/></td>
+
+</tr>
+
+
+
+
+</table>
+
+<!------------------------------------------------------------------------------------------------------->
+<!-------------------------------------------Billing Adress----------------------------------------->
+<apex:variable var="bil" value="{!0}" />
+<apex:repeat value="{!billingadd }" var="badd">
+<apex:variable var="bil" value="{!bil+1}"/>
+<table id="billaddd" width="100%" border="0" style="display:none;border-collapse:collapse;">
+<tr>
+  <td id="titleheadings"><span style="font-size:20px;">Billing Address</span></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  </tr>
+
+<tr>
+<td width="20%" style="text-align:right;">Billing Address 1 :</td>
+<td width="30%"><apex:inputField value="{!badd.Street1_Address__c}" style="width:84%;"/></td>
+<td width="20%" style="text-align:right;">Billing Address 2 :</td>
+<td><apex:inputField value="{!badd.Street2_Address__c}" style="width:84%;"/></td>
+</tr>
+<apex:actionRegion >
+<tr>
+<td style="text-align:right;">City :</td>
+<td><apex:inputField value="{!badd.City__c}" style="width:84%;"/></td>
+<td width="20%" style="text-align:right;">State :</td>
+<td><apex:outputPanel id="bilstate">
+<apex:selectList value="{!badd.BLN_State__c}" multiselect="false" size="1" styleClass="selectlist" id="homestatesSelections" >
+          <apex:selectOptions value="{!BillstateOptions}"/>
+          </apex:selectList></apex:outputPanel></td>
+</tr>
+
+
+<tr>
+
+<td style="text-align:right;">Country :</td>
+<td><apex:selectList value="{!badd.BLN_Country__c}" multiselect="false" size="1" styleClass="selectlist" style="width:80%" >
+                                     <apex:selectOptions value="{!countryOptions}"/>
+                                    
+                                    <apex:actionSupport event="onchange" action="{!billstatesBasedOnCountry}" immediate="true">
+                                         <apex:param value="{!bil}" assignTo="{!billingaddId}" name="billid" />
+                                         <apex:param value="{!badd.BLN_Country__c}" assignTo="{!selectedCountry}"/>
+                                     </apex:actionSupport>   
+                                 </apex:selectList> </td>
+<td width="20%" style="text-align:right;">Zip Code :</td>
+<td><apex:inputField value="{!badd.Zip__c}" id="zp2" style="width:84%;"/></td>
+</tr>
+
+</apex:actionRegion>
+<tr>
+<td style="text-align:right;">PO Box :</td>
+<td><input type="text" style="width:84%;"/></td>
+<td width="20%" style="text-align:right;"></td>
+<td></td>
+</tr>
+
+</table>
+</apex:repeat>
+<!----------------------------------------------------------------------------------------------------------->
+</div><!--close of grid-->
+<!------------------------------------------------------------------------------->
+</div><!--close of tabbedpanelscontent-->
+<!--end of content of basic Information tab-->
+<!--Start of content of Company Information-->
+
+<div class="TabbedPanelsContent">
+
+<!---------------------------------Company Information--------------------------------------------->
+<div class="grid-1" style=" width:97%; margin-top:0px; margin-left:.8%" >
+
+
+<apex:outputText > Select Company: </apex:outputText>
+<apex:actionRegion id="actreg">
+<apex:selectList value="{!selectedcompany}" size="1" styleClass="selectlist" style="width:12%;margin-left: .3%;">
+<apex:selectOptions value="{!selopt}" />
+<apex:actionSupport action="{!cpmdetails}" event="onchange" rerender="detail,detail1"/>
+</apex:selectList>
+</apex:actionRegion>
+
+&nbsp;&nbsp;<apex:commandButton action="{!Addcompany}" image="{!URLFOR($Resource.createevents,'createevents/images/addrow.png')}" style="width:15px;height:15px;" title="Add New Company"/>
+
+<script>
+function forselectedcompany(){
+
+compdetails();
+}
+
+
+
+</script>
+
+
+<apex:outputPanel id="detail">
+<apex:outputPanel rendered="{!detailsbool}"  id="detail1">
+ <style>
+
+#basicinfo tr td{ padding:5px; font-size:14px;}
+#compinfo tr td{ padding:5px; font-size:14px;}
+#homeaddd tr td{ padding:5px; font-size:14px;}
+#billaddd tr td{ padding:5px; font-size:14px;}
+
+</style>
+<table id="compinfo" width="100%" border="0" style="border-collapse:collapse;">
+<!--<apex:actionFunction action="{!cpmdetails}" name="compdetails" rerender="detail,detail1"/>-->
+
+
+
+<tr>
+    <td width="20%" style="text-align:right;">Company Name :</td>
+    <td width="30%"><apex:inputField value="{!compdetails.name}" style="width:84%;"/>
+   <!-- <apex:inputText value="{!UdetailsCompanyname}" style="width:84%;" rendered="{!if(contains(Udetails.Companyname,Udetails.FirstName),True,False)}"/>-->
+   
+   </td>
+    <td width="20%" style="text-align:right;">Designation :</td>
+    <td><!--<apex:inputField value="{!GNUSER.Title__c}" style="width:84%;" styleClass="selectlist"/> --> </td>
+</tr>
+<tr>
+    <td style="text-align:right;">Work Phone Number :</td>
+    <td><apex:inputField value="{!comextnew.Work_Phone__c}" onchange="validphone()" style="width:84%;" /></td>
+     <td  width="20%" style="text-align:right;">Business Description : </td>
+    <td ><apex:inputTextarea value="{!compdetails.Description__c}" style="width:84%;"/></td>
+</tr>
+<!--
+<tr>
+    <td  width="20%" style="text-align:right;">Designation :</td>
+    <td ><apex:inputField value="{!GNUSER.Title__c}" style="width:84%;" styleClass="selectlist"/></td>
+    <td width="20%" style="text-align:right;"></td>
+    <td></td>
+</tr>
+<tr>
+    <td style="text-align:right;">Number Of Employees :</td>
+    <td><apex:inputField value="{!comextnew.Number_Of_Employees__c}" style="width:84%;" /></td>
+    <td width="20%" style="text-align:right;">Business Duns Number :</td>
+    <td><apex:inputField value="{!comextnew.Duns_Number__c}" style="width:84%;" /></td>
+</tr>-->
+
+<tr>
+    <td style="text-align:right;">Website Url :</td>
+    <td><apex:inputField value="{!compdetails.Website_URL__c}" style="width:84%;"/></td>
+   
+</tr>
+<apex:actionRegion >
+<tr>
+    <td style="text-align:right;">Company Logo :</td>
+    <td>
+    <div style="width:30%; height:80px; background-color:#ffffff;">
+<apex:image value="servlet/servlet.ImageServer?id={!compdetails.Company_Logo__c}&oid=00Dc0000003skw2" height="80px" width="100%"/>
+</div>
+    <apex:inputFile value="{!companyImage}" fileName="{!companyImageName}" contentType="image" onchange="check(this)" ></apex:inputFile></td>
+    
+</tr>
+</apex:actionRegion>
+<apex:actionRegion >
+<tr>
+    <td width="20%" style="text-align:right;">Work Address 1 :</td>
+    <td width="30%"><apex:inputField value="{!comextnew.Business_Address1__c}" style="width:84%;" /></td>
+    
+    <td width="20%" style="text-align:right;">Country :</td>
+    <td><apex:selectList value="{!comextnew.BLN_Business_Country__c}" multiselect="false" size="1" styleClass="selectlist" style="width:80%" >
+                                     <apex:selectOptions value="{!countryOptions}"/>
+                                    
+                                    <apex:actionSupport event="onchange" action="{!statesBasedOnCountry}"  reRender="region">
+                                         <apex:param value="{!comextnew.BLN_Business_Country__c}" assignTo="{!selectedCountry}"/>
+                                     </apex:actionSupport>   
+                                 </apex:selectList></td>
+    
+    
+</tr>
+
+<tr>
+<td width="20%" style="text-align:right;">Work Address 2 :</td>
+    <td width="30%"><apex:inputField value="{!comextnew.Business_Address2__c}" style="width:84%;" /></td>
+   
+    <td width="20%" style="text-align:right;">State :</td>
+    <td> <apex:outputPanel id="region"><apex:selectList value="{!comextnew.BLN_Business_State__c}" multiselect="false" size="1" styleClass="selectlist" style="width:80%" id="statesSelections" >
+          <apex:selectOptions value="{!stateOptions}"/>
+          </apex:selectList></apex:outputPanel>
+    </td>
+</tr>
+</apex:actionRegion>
+<tr>
+     <td style="text-align:right;">City :</td>
+    <td><apex:inputField value="{!comextnew.Business_City__c}" style="width:84%;" /></td>
+    <td width="20%" style="text-align:right;">Zip Code :</td>
+    <td><apex:inputField onchange="isValidZip()" id="zp3" value="{!comextnew.Business_Zipcode__c}" style="width:84%;"   /></td>
+</tr>
+
+
+
+
+
+
+
+
+
+<tr>
+<!--
+<tr>
+<td>
+<select class="chzn-select medium-select select" style="width:360%; margin-top:-80px;" multiple="">
+                      <option value="1">Space Research and Technology</option>
+                            <option value="2">Regulation, Licensing, and Inspection of Miscellaneous Commercial</option>
+                            <option value="3">Regulation of Agricultural Marketing and Commodities</option>
+                            <option value="4">Regulation and Administration of Communications, Electric, Gas, </option>
+                            <option value="5">Regulation and Administration of Transportation Programs</option>
+                    
+                    </select>
+</td>
+
+</tr>
+  <!--  
+   <td width="20%" style="text-align:right;">Naics Code :</td>
+    <td>
+    <apex:selectList value="{!comext.Primary_NAICS_Code__c}" multiselect="false" size="1" styleClass="selectlist" style="width:80%" >
+    <apex:repeat value="{!NaicsListOfList}" var="na">
+                                     <apex:selectOptions value="{!na}"/>
+                                     </apex:repeat>
+    </apex:selectList>
+    
+    </td>
+    <td width="20%" style="text-align:right;">Naics Code :</td>
+    <td>
+    <apex:selectList value="{!comext.Secondary_NAICS_Code__c}" multiselect="false" size="1" styleClass="selectlist" style="width:80%" >
+                                     <apex:repeat value="{!NaicsListOfList}" var="na">
+                                     <apex:selectOptions value="{!na}"/>
+                                     </apex:repeat>
+    </apex:selectList>
+    </td>
+    -->
+   <!-- <td width="20%" style="text-align:right;" valign="top">Naics Code :</td>
+     <td height="auto" border="1" valign="top">
+     <apex:outputPanel id="naicsPanel">
+     <select multiple="multiple" size="15" data-placeholder="Search NAICS Codes"  class="chzn-select medium-select select" name="SelBranch"  style="width:300px;" tabindex="17" id="single-label-example" onchange="sendNaicsCodeBack();">  
+                                     <option value=""></option>
+     <apex:repeat value="{!listOfnaicscodes}" var="Lists" id="naics1">
+                      <apex:repeat value="{!Lists}" var="list">  
+                                     
+                                <apex:outputText rendered="{!CONTAINS(checkNAICSforEdit, list.Id)}">
+                                <option value="{!list.Id}" selected="selected">{!list.Name} {!list.Description__c}</option>
+                                </apex:outputText>
+                                <apex:outputText rendered="{!NOT(CONTAINS(checkNAICSforEdit, list.Id))}">
+                                <option value="{!list.Id}" >{!list.Name} {!list.Description__c}</option>
+                                </apex:outputText> 
+                
+                          
+                      </apex:repeat>
+                  </apex:repeat>
+    </select>
+    </apex:outputPanel>
+    </td>
+-->
+
+</tr>
+
+</table>
+</apex:outputPanel>
+</apex:outputPanel><script>
+
+
+</script>
+
+</div><!--close of grid-->
+
+
+</div><!--close of tabbedpanelscontent-->
+
+<!--End of content of Company Information-->
+
+</div><!--close of TabbedPanelsContentGroup-->
+</div><!--close of TabbedPanelsTabGroup-->
+<hr/>
+<div style="margin-bottom:50px;float:right; margin-right:2%;">
+<apex:commandButton value="Save" onclick="return(validate());"  action="{!updatedetails}" styleClass="button-a blue" style="color:#FFFFFF;border:none;"   />
+
+&nbsp;&nbsp;
+<apex:commandButton value="Cancel" styleClass="button-a dark-blue" style="color:#FFFFFF;border:none;"  action="{!cancel}"/>
+
+</div>
+</div>                                             
+  <!--Statistic-->
+    <!--Statistic-->
+    
+ 
+       
+          
+  
+    <!---------------------------------------------------------------------->
+        
+    </div>
+         </div>
+          
+     
+     
+     <!----------------ZIP code Validation-----------  -->
+            <script type="text/javascript"> 
+            function isValidZip() {
+            
+               var q =    document.getElementById("pageid:myForm:j_id142").value;
+            
+            zipme=/^\d{5}(-\d{4})?$/;
+           if(q.match(zipme))
+         {
+           return true;  
+         }
+       else
+         {
+           alert("enter valid zip code");
+           return false;
+     }
+            
+          
+            }
+
+        </script>
+        
+        
+    
+     
+  <!--------------------------------------------------->   
+  
+  
+  <!------------------------Phone No Validation------------------------------------->
+   <script type="text/javascript"> 
+  function validphone(){
+var p = document.getElementById('pageid:myForm:j_id103').value;
+
+var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+  if(p.match(phoneno))
+     {
+       return true;  
+     }
+   else
+     {
+       alert("Enter valid Phone Number");
+       return false;
+     }
+}
+</script>
+
+
+
+     
+     
+</apex:form>
+      <script type="text/javascript">
+            $(".chzn-select").chosen({max_selected_options: 2});
+    var config = {
+      '.chzn-select'           : {},
+      '.chzn-select-deselect'  : {allow_single_deselect:true},
+      '.chzn-select-no-single' : {disable_search_threshold:10},
+      '.chzn-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chzn-select-width'     : {width:"95%"},
+
+    }
+    for (var selector in config) {
+      $(selector).chzn(config[selector]);
+        //alert('hiiiiiiiiiiiiiii');
+      $(selector).chzn().change(function() { console.log(1, arguments); });
+    }
+   
+  
+       
+
+    
+  </script> 
+  <!-- -------------------------------------------- Footer Start ---------------------------------------------------- -->  
+     <script type="text/javascript">
+        var TabbedPanels = new Spry.Widget.TabbedPanels("TabbedPanels");
+        
+    </script>
+  <footer style="width: 100%;padding: 0px;">
+<div class="info-footer">
+<div id="left">
+<p>Copyright © 2014 Eventdex.</p>
+</div>
+<div id="right">
+<p>Eventdex</p>
+</div>
+</div>
+</footer>
+
+     </section>
+<!-- #middle-->
+
+</apex:page>

@@ -1,0 +1,122 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_TicketSalesReportCon" contentType="application/vnd.ms-excel#TicketSales.xls"><apex:pageBlock > 
+ 
+<table border="1">
+  <tr>
+    <th>Ticket Name</th>
+    <th>Tag</th>
+    <th>Payment Type</th>
+    <th>Quantity</th>
+    <th>Price</th>
+    <th>Discount</th>
+    <th>Fee</th>
+    <th>Amount</th>
+  </tr>
+  
+  <apex:repeat value="{!TicketsInnerList}" var="ticket">
+
+          <tr>
+            <td style="">{!ticket.ticketData.item_name__c}<apex:outputText rendered="{!IF(ticket.ticketData.item_name__c == NULL, TRUE, FALSE)}" value="Total Sales" style="font-weight:bold;"/></td>
+            <td>{!ticket.ticketData.item_type__r.Name}</td>
+            <td></td>
+            <td>{!ticket.usedTickets}</td>
+            <td><apex:outputText rendered="{!IF(ticket.ticketData.price__c != NULL, TRUE, FALSE)}" value="${!ticket.ticketData.price__c}"/></td>
+            <td>${!ticket.totalDiscount}</td>
+            <td>${!ticket.totalFee}</td>
+            <td><apex:outputText value="${0, number, ###,##0.00}">
+      <apex:param value="{!ticket.totalAmount}"/>
+    </apex:outputText></td>
+            
+          </tr>
+
+    <apex:repeat value="{!ticket.paymentTypeInnerList}" var="payment">
+      <tr >
+        <td></td>
+        <td></td>
+        <td><font size="1">{!payment.paymentType.Name}</font></td>
+        <td><font size="1">{!payment.typeCount}</font></td>
+        <td></td>
+        <td><font size="1">${!payment.typeDiscount}</font></td>
+        <td><font size="1">${!payment.typeFee}</font></td>
+        <td><font size="1"><apex:outputText value="${0, number, ###,##0.00}">
+  <apex:param value="{!payment.typeAmount}"/>
+</apex:outputText></font></td>
+        
+      </tr>
+</apex:repeat>
+      
+      </apex:repeat>
+      
+      
+  <!-- <apex:repeat value="{!TicketsInnerList}" var="ticket">
+    <apex:outputText rendered="{!IF(ticket.usedTickets != 0, TRUE, FALSE)}">  
+  <tr>
+    <td>{!ticket.ticketData.item_name__c}<apex:outputText rendered="{!IF(ticket.ticketData.item_name__c == NULL, TRUE, FALSE)}" value="Total Sales"/> </td>
+    <td>{!ticket.ticketData.item_type__r.Name}</td>
+    <td></td>
+    <td>{!ticket.usedTickets}</td>
+    <td>${!ticket.ticketData.price__c}</td>
+    <td>${!ticket.totalDiscount}</td>
+     <td>${!ticket.totalFeeAmountValue}</td>
+    <td>${!ticket.totalAmount}</td>
+     
+  </tr>
+   </apex:outputText> 
+     <apex:outputText rendered="{!IF(ticket.cashTicketCount != 0, TRUE, FALSE)}">
+   <tr>
+    <td></td>
+    <td></td>
+    <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>Cash</i></td>
+    <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i> {!ticket.cashTicketCount}</i></td>
+    <td></td>
+     <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i> ${!ticket.cashDiscountAmount}</i></td>
+      <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>${!ticket.cashFee}</i></td>
+     <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>${!ticket.cashTotalAmount}</i></td>
+    
+  </tr>
+     </apex:outputText>
+      <apex:outputText rendered="{!IF(ticket.creditCardTicketCount != 0, TRUE, FALSE)}">  
+  <tr>
+    <td></td>
+    <td></td>
+    <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>Credit</i></td>
+    <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>{!ticket.creditCardTicketCount}</i></td>
+    <td></td>
+     <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>${!ticket.creditCardDiscountAmount}</i></td>
+      <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>${!ticket.creditCardTotalAmount}</i></td>
+    <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>${!ticket.creditCardTotalAmount}</i></td>
+    
+  </tr>
+   </apex:outputText>
+  <apex:outputText rendered="{!IF(ticket.checkTicketCount != 0, TRUE, FALSE)}">
+<tr>
+    <td></td>
+    <td></td>
+     <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>Check</i></td>
+    <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>{!ticket.checkTicketCount}</i></td>
+    <td></td>
+    <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>${!ticket.checkDiscountAmount}</i></td>
+      <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>${!ticket.checkFee}</i></td>
+     <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>${!ticket.checkTotalAmount}</i></td>
+    
+  </tr>
+   </apex:outputText>
+      <apex:outputText rendered="{!IF(ticket.extPayTicketCount != 0, TRUE, FALSE)}"> 
+  <tr>
+    <td></td>
+    <td></td>
+     <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>External Pay</i></td>
+     <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>{!ticket.extPayTicketCount}</i></td>
+    <td></td>
+    <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>${!ticket.extPayDiscountAmount}</i></td>
+      <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>${!ticket.extPayFee}</i></td>
+    <td class="tableContent" style="width:14%;font-family: Arial,Helvetica,sans-serif;font-size:10px;"><i>${!ticket.extPayTotalAmount}</i></td>
+    
+  </tr>
+  </apex:outputText>
+
+</apex:repeat>-->
+</table>
+
+ 
+  </apex:pageBlock>
+</apex:page>

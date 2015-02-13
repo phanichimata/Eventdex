@@ -1,0 +1,1276 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" id="thePage" controller="BLN_Attendeelink_SettingsCon">
+<apex:stylesheet value="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/demo.css')}"/>     
+ <script type="text/javascript" src="{!URLFOR($Resource.createevents, 'createevents/js/jquery-1.9.1.js')}"></script> 
+  <script type="text/javascript" src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/jquery.collapse.js')}"></script>
+ <!----------------------------------------Script for zebra accordian---------------------------->
+  <script>
+ var $zb = jQuery.noConflict();  
+$zb(document).ready(function() {
+
+        new jQueryCollapse($zb("#custom-show-hide-example"), {
+            accordion: true,
+          open: function() {
+            this.slideDown(150);
+          },
+          close: function() {
+            this.slideUp(150);
+          }
+        });
+        })
+    </script>
+    <script>
+    var $zb= jQuery.noConflict();
+    $zb(document).ready(function() {
+        new jQueryCollapse($zb("#custom-show-hide-example1"), {
+            accordion: true,
+         open: function() {
+            this.slideDown(150);
+          },
+          close: function() {
+            this.slideUp(150);
+          }
+        });
+        })
+      </script>  
+ <!-------------------------------------------------------------------------->
+ <script>
+    <!---------------------function for vertical  navigation of tickets------------------->    
+               var $j = jQuery.noConflict();
+$j(document).ready(function() {
+    var items = $j('#v-nav>ul>li').each(function() {
+        $j(this).click(function() {
+        //alert("ddd");
+            //remove previous class and add it to clicked tab
+            items.removeClass('current');
+            $j(this).addClass('current');
+        })
+    })
+                })
+  
+  
+  </script>
+    
+  
+              
+      
+           
+            <!------------------Tabsss Script---------------------------->
+            
+                <script>
+                      var $jk = jQuery.noConflict();
+$jk(document).ready(function() {
+                
+                     $jk("#TabbedPanelsTab1").click(function() {
+            //alert("111111111111111111");
+            //remove previous class and add it to clicked tab
+            document.getElementById("tab2").style.display="none";
+            document.getElementById("tab1").style.display="";
+        
+            
+             $jk(this).addClass('TabbedPanelsTabSelected');
+            $jk("#TabbedPanelsTab2").removeClass('TabbedPanelsTabSelected');
+            $jk("#TabbedPanelsTab2").addClass('TabbedPanelsTab');
+            
+
+          
+        })
+        })
+           </script>         
+                    <!---------------------------tabs script for 2nd tab----------------------------------->
+    <script>
+       var $jkk = jQuery.noConflict();
+$jkk(document).ready(function() {
+                
+        $jkk("#TabbedPanelsTab2").click(function() {
+         //alert("2222222222222");
+            //remove previous class and add it to clicked tab
+            document.getElementById("tab1").style.display="none";
+            document.getElementById("tab2").style.display="";
+            $jkk("#TabbedPanelsTab1").removeClass('TabbedPanelsTabSelected');
+             $jkk(this).addClass('TabbedPanelsTabSelected');
+             
+          
+        
+})
+                })
+                </script>
+               <!---------------------------------------------------------------------------->
+    <!-------------------------------------------script for inline editing for labels------------------------------->
+    <script>
+    var $jkkk = jQuery.noConflict();
+$jkk(document).ready(function() {
+
+    function Editar(){
+        var par = $jkkk(this).parent().parent();    //tr
+        var tdNome = par.children("td:nth-child(2)");
+    /*  var tdTelefone = par.children("td:nth-child(2)");
+        var tdEmail = par.children("td:nth-child(3)");*/
+        var tdBotoes = par.children("td:nth-child(1)");
+
+        tdNome.html("<input type='text' id='txtNome' value='"+tdNome.html()+"'/>");
+/*      tdTelefone.html("<input type='text' id='txtTelefone' value='"+tdTelefone.html()+"'/>");
+        tdEmail.html("<input type='text' id='txtEmail' value='"+tdEmail.html()+"'/>");*/
+        tdBotoes.html("<img src='{!URLFOR($Resource.newzebraaccordian, 'nwzebra/disk.png')}' title='Save' class='btnSalvar'/>");
+        
+
+        $jkkk(".btnSalvar").bind("click", Salvar);
+        $jkkk(".btnEditar").bind("click", Editar);
+        $jkkk(".btnExcluir").bind("click", Excluir);
+    };
+
+    function Salvar(){
+        var par = $jkkk(this).parent().parent(); //tr
+        var tdNome = par.children("td:nth-child(2)");
+        /*var tdTelefone = par.children("td:nth-child(2)");
+        var tdEmail = par.children("td:nth-child(3)");*/
+        var tdBotoes = par.children("td:nth-child(1)");
+
+        tdNome.html(tdNome.children("input[type=text]").val());
+    /*  tdTelefone.html(tdTelefone.children("input[type=text]").val());
+        tdEmail.html(tdEmail.children("input[type=text]").val());*/
+        tdBotoes.html("<img src='{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}' title='Edit' class='btnEditar'/>");
+
+        $jkkk(".btnEditar").bind("click", Editar);
+        $jkkk(".btnExcluir").bind("click", Excluir);
+    };
+
+    function Excluir(){
+        var par = $jkkk(this).parent().parent(); //tr
+        par.remove();
+    };
+
+    $jkkk(".btnEditar").bind("click", Editar);
+    $jkkk(".btnExcluir").bind("click", Excluir);
+    $jkkk("#btnAdicionar").bind("click", Adicionar);            
+
+});
+</script>
+
+ <!------------------------------------------------------------------------>
+ 
+  <c:myComponent BLN_UtillDisplayLinks="{!myticket}" id="cmp">
+   
+ <!------------------------------------------------------------------>
+ 
+ <apex:stylesheet value="{!URLFOR($Resource.SpryTabs, 'sprytabs/tabsss.css')}"/>
+  <style type="text/css">
+ <!------------------------->
+#titleheadings{width:100%; margin-bottom:5px; height:30px; font-size:22px;text-shadow: 0 1px 1px rgba(0,0,0,.25); color:#247dba; font-family:cuprum; border-bottom:1px solid #E4E4E4; }
+#attendee-settings-box{width:99%; background-color:#ffffff;margin:0px auto;margin-top:5px; border:1px solid #ddd;}
+#leftpanel-td{width:23%;background: transparent url(registrationsettings/leftdivshadow.png)repeat-y;}
+#tickets-left{ margin-top:5px;}  
+#ticketssettings-right{}
+#ticketsname{ border-collapse:collapse; margin-top:0px;}
+#ticketsname tr{ cursor:pointer;}
+#ticketsname td{ padding:10px;border-bottom:0px solid #E4E4E4;/*  background: url(registrationsettings/onclickarrow.png) no-repeat 100% 50% ;*/ text-indent:3.5%;text-shadow: 0 1px 1px rgba(0,0,0,.25); font-size:15px; font-family: Arial, Helvetica, sans-serif;color:#247dba; text-decoration:underline;}
+#line{width:94%; height:1px; border-bottom:1px solid #E4E4E4;}  
+  </style>
+  
+     
+  <!----------------------------------------------------->
+
+      <style>
+   nav .login-content1 {
+          display: none;
+          position: absolute;
+          top: 35px;
+          right: 0;
+          z-index: 999; background-color:#7f8c8d; opacity:3;
+         
+        }
+ nav .login-trigger1 {
+            border-top: 1px solid #fff;
+            border: 1px solid #D0D0D0;
+            border-radius: 0px;
+             height: 33px;
+            display:block;
+            cursor:pointer;
+        }
+   
+  nav .login-triggers1{
+        display: inline-block;
+          *display: inline;
+          *zoom: 1;
+          height: 13px;
+          width:auto;
+          font-family:cuprum;
+          font-size:15px;
+          line-height: 18px;
+          padding: 0 8px;
+          text-decoration: none;
+          color:#000;
+          
+          padding-top:8px;
+          padding-bottom:12px;
+        /*  padding-left:15px;
+          padding-right:20px;*/
+          -webkit-border-radius: 0px;
+          -moz-border-radius: 0px;
+          border-radius: 0px;
+          background: url(orderimgs/ul_playlist_li.png) repeat-x center bottom #F5F5F5;;
+          /*background:-webkit-linear-gradient(top, #f8faf9 0%,#d1d2d5 100%);*/
+        /*background: url(orderimgs/ul_playlist_li.png) repeat-x center bottom #F5F5F5;*/
+           
+          border: 0px solid #292f34; 
+       
+       }
+       .login-content1 li div  {
+            color:#FFF;
+            text-decoration:none;
+            font-size:16px;
+            font-family:cuprum;
+                padding:10px;
+                cursor:pointer; 
+                
+            display:block;
+        
+        }
+         .login-content1 li img  {
+            padding-right:2px;
+            padding-top:1px;
+            float:left;
+        }
+        
+        nav li .login-content1 {
+          right: 0;
+          width:auto;  
+          
+        }
+        
+        .login-content1 li:hover {
+            background-color:#247dba;
+        }
+    <!--------------------------->
+   </style>
+
+<!----------------start of left nav------------->
+<style>
+#v-nav li
+{
+    outline: 0;
+    text-decoration: none;
+    -webkit-transition-property: background color;
+    -moz-transition-property: background color;
+    -o-transition-property: background color;
+    -ms-transition-property: background color;
+    transition-property: background color;
+    -webkit-transition-duration: 0.12s;
+    -moz-transition-duration: 0.12s;
+    -o-transition-duration: 0.12s;
+    -ms-transition-duration: 0.12s;
+    transition-duration: 0.12s;
+    -webkit-transition-timing-function: ease-out;
+    -moz-transition-timing-function: ease-out;
+    -o-transition-timing-function: ease-out;
+    -ms-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+
+#v-nav
+{
+    height: 100%;
+    margin: auto;
+    color: #333;
+    font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+}
+
+#v-nav >ul
+{
+    float: left;
+    width: 100%;
+    display: block;
+    position: relative;
+    top: 0;
+    border: 0px solid #DDD;
+    border-right-width: 0;
+    margin: auto 0 !important;
+    padding:0;
+}
+
+#v-nav >ul >li
+{
+    word-wrap: break-word;
+word-break: break-all;
+   /* width: 100%;*/
+    list-style-type: none;
+    display: block;
+    text-shadow: 0px 1px 1px #F2F1F0;
+    font-size: 1.11em;
+    position: relative;
+    border-right-width: 0;
+    border-bottom: 1px solid #DDD;
+    margin: auto;
+    padding: 10px 15px !important;  
+    background: whiteSmoke; /* Old browsers */
+   /* background: -moz-linear-gradient(top, #ffffff 0%,#DDDDDD 100%);*/ /* FF3.6+ */
+   /* background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%,#DDDDDD));*/ /* Chrome,Safari4+ */
+   /* background: -webkit-linear-gradient(top, #ffffff 0%, #DDDDDD 100%);*/ /* Chrome10+,Safari5.1+ */
+   /* background: -o-linear-gradient(top, #ffffff 0%, #DDDDDD 100%); *//* Opera 11.10+ */
+    /*background: -ms-linear-gradient(top, #ffffff 0%, #DDDDDD 100%);*/ /* IE10+ */
+  /*  background: linear-gradient(top, #ffffff 0%, #DDDDDD 100%);*/ /* W3C */       
+}
+#v-nav >ul >li:hover{
+    cursor:pointer;
+    }
+
+#v-nav >ul >li.current
+{
+    color: black;
+    border-right: none;
+    z-index: 10;
+    background:rgb(249, 249, 249) !important;
+   /* background: white !important;*/
+    position: relative;
+    moz-box-shadow: inset 0 0 35px 5px #fafbfd;
+    -webkit-box-shadow: inset 0 0 35px 5px #fafbfd;
+    box-shadow: inset 0 0 35px 5px #fafbfd;
+    font-weight:700;
+    
+}
+
+#v-nav >ul >li.first.current
+{
+    border-bottom: 1px solid #DDD;
+}
+
+#v-nav >ul >li.last
+{
+    border-bottom: none;
+}
+
+.chklist{ margin-top:2px;}
+.insidetableft{float:left; width:6%;}
+.insidetabright{width:93%;float:right;}
+.insidetabright p{ width:92%; font-size:13px; cursor:default; word-break:break-word;}
+
+      #businessinformation tr td{ padding:5px; font-size:13px;text-align:center; word-break:break-all;}
+     
+      #addressinformation tr td{ padding:5px; font-size:13px; text-align:center; word-break:break-all;}
+     #highlight{ background-color:#F7F7F7;}
+     .btnEditar{ cursor:pointer;}
+     .btnSalvar{ cursor:pointer;}
+
+</style>
+<style>
+
+
+<!-- Collapsed state for list element--> 
+.expList .collapsed {
+    background-image:url({!URLFOR($Resource.newzebraaccordian, 'nwzebra/collapsed.png')}); 
+    background-repeat: no-repeat;
+    background-position: top right;
+
+}
+<!--Expanded state for list element-->
+<!-- NOTE: This class must be located UNDER the collapsed one -->
+.expList .expanded {
+    background-image:url({!URLFOR($Resource.newzebraaccordian, 'nwzebra/expanded.png')});
+   background-repeat: no-repeat;
+     background-position: top right;
+    }
+   
+   .sublist-pkg{ list-style:none;}
+ 
+</style>
+
+ <!-------------------------radio buttons------------------------------>
+
+<div id="topdiv" style="font-size:18px;text-shadow: 0 1px 1px rgba(0,0,0,.25);color: #247dba;font-family: cuprum; border:0px #000000 solid;margin-top:10px;">
+         <table width="99%" border="0">
+  <tr>
+    <td id="titleheadings"  style=" float:none; text-indent:1%; width:23%; font-size:18px; border-bottom:0px;  color:#000;">Business Expo:</td>
+    <td width="2%" style="text-align:center;"><input type="radio" id="allattendee"  name="1"/></td>
+    <td width="22%" style="font-size:16px;" >Collect info from All Attendees</td>
+    <td width="2%" style="text-align:center;"> 
+    <input type="radio" id="mainattendee" checked="checked"  name="1"/></td>
+    <td width="17%" style="font-size:16px;" >Collect info from Buyer</td>
+    <td ><span id="donot" style="display:none;font-size:16px;"><input type="radio" id="mainattendee"   name="1"/>&nbsp;&nbsp;Do not collect Attendee info</span></td>
+   <!-- <td style=""><span id="donot" style="display:none;"></span></td>-->
+   <td>
+    <div style="height:26px; border-bottom:0px solid #E4E4E4;">
+          <nav id="" style="float:right; margin-top:-8px;">
+                      <ul style="float:left; margin-top:0px; margin-left: 4px;">
+                        <li id="login1"> <span class="login-trigger1"> <span class="login-triggers1"> <span id="user-panel-check" style="background-image:url({!URLFOR($Resource.MyTickets, 'images/checkBlack.png')})"></span> <span id="user-panel-title" style="text-shadow:none;">Additional Settings</span> </span> </span>
+                          <div class="login-content1" style="width:100%;">
+                            <ul style="line-height:13px; float:none;">
+                             <!-- <li style="float:none"><div><input type="checkbox"  onClick="selectall()" id="sall"/> <span><label for="sall">Select All</label></span></div></li>-->
+                              
+                              <li style="float:none"><div><input type="checkbox" onClick="Addressinfo()" id="addinfo1"/> <span> <label for="addinfo1">Address Info</label></span></div></li>
+                              <li style="float:none"><div><input type="checkbox" onClick="ccrdetails()" id="ccrdet"/>  <span><label for="ccrdet">CCR Detail Feature</label></span></div></li>
+                              <li style="float:none"><div><input type="checkbox" onClick="Workinform()" id="winfo1"/> <span><label for="winfo1">Work Info</label></span></div></li>
+                              <li style="float:none; margin-bottom:3px;"><div><input type="checkbox" onClick="naicsevent()" id="naics1"/> <span><label for="naics1">NAICS Code Info</label></span></div></li>
+                              <!--<li style="float:none; margin-bottom:3px;"><div><input type="checkbox" onClick="diversity()" id="dtinfo"/> <span><label for="dtinfo">Diversity Type Info</label></span></div></li>-->
+                            </ul>
+                          </div>
+                        </li>
+                      </ul>
+                    </nav>
+                    </div>
+   </td>
+  </tr>
+</table>
+
+  </div><!--close of topdiv-->
+<!------------------------------------------------------------------>
+<!-------------------------------------tabssssssssss----------------------------->
+    <div id="TabbedPanels" class="TabbedPanels" style=" margin-top:10px; margin-bottom:20px; width:98%; margin-left:1%;">
+                <ul class="TabbedPanelsTabGroup">
+                  <li id="TabbedPanelsTab1" class="TabbedPanelsTab TabbedPanelsTabSelected"   style="outline:none; focus:none;color: #555; font-weight:300;">Current Ticket Settings</li>
+                  <li id="TabbedPanelsTab2" class="TabbedPanelsTab"  style="outline:none; focus:none;color: #555;font-weight:300;">Default Ticket Settings</li>
+                   <!--<li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555;font-weight:300;">Home Address</li>
+                    <li class="TabbedPanelsTab" tabindex="0" style="outline:none; focus:none;color: #555;font-weight:300;">Billing Address</li>-->
+                </ul>
+                
+                <!--------------------start of ist tab(Basic Information)------------------>
+             
+                <div class="TabbedPanelsContentGroup">
+                
+                  <!--Start of first tab-->
+                  <div id="tab1" class="TabbedPanelsContent1" style="padding-top:5px; display:block;">    
+        <!--Statistic-->
+        
+      
+       <div id="attendee-settings-box" style=" padding-bottom:10px;"><!--start of attendee-settings-box-->
+       <!---left div container-->
+       <div style="width:25%; float:left;">
+       
+      <div style="width:100%; background-color:#f2f2f2; font-size:17px; color:#3C3C3C; border-bottom:1px solid #EBEBEB ;font-family:'Cuprum', Arial, sans-serif; padding:8px 0px 8px 0px; text-indent:5%;">Tickets</div>
+   
+    <div style="width:100%; background-color:#FDFEFE; font-size:17px; color:#5227CF; border-bottom:1px solid #EBEBEB ;font-family:'Cuprum', Arial, sans-serif; padding:8px 0px 8px 0px; text-indent:6%;">
+      <input type="checkbox" style=" margin-right:2%;" onClick="toggle(this)"/><span>Select All</span>
+      </div>
+     
+      <div id="v-nav" style="width:100%; float:left;">
+        <ul class="expList">
+    <li  class="first current">
+    <div class="insidetableft"><input class="chklist" name="ticketcheck" type="checkbox"/></div>
+    <div class="insidetabright">
+    <p>Admission</p>
+      <ul class="sublist-pkg" style="color:#247dba;">
+                        <li>
+                    
+                            
+                         <input class="chklist"  type="checkbox"/><span style="margin-left:1%;">Booth</span>
+                            
+                        </li>
+                        <li>
+                         <input class="chklist"  type="checkbox"/><span style="margin-left:1%;">Kiosk</span>
+                        </li>
+                        
+                    </ul>
+    
+    </div>
+    
+    <div  style="clear:both;"></div>
+    </li>
+   
+    <li> <div class="insidetableft"><input class="chklist" name="ticketcheck" type="checkbox"/></div>
+    <div class="insidetabright"><p>Early Bird</p></div>
+    <div  style="clear:both;"></div>
+    </li>
+   
+   
+   
+   
+     <li> <div class="insidetableft"><input class="chklist" name="ticketcheck" type="checkbox"/></div>
+    <div class="insidetabright">
+    <p>Early Bird Platinum Sponsor half Page Ad</p>
+       <!------------------package item------------>
+    <ul class="sublist-pkg" style="color:#247dba;">
+                        <li>
+                         <input class="chklist"  type="checkbox"/><span style="margin-left:1%;">  Lead Retrieval</span>
+                            
+                        </li>
+                        <li>
+                          <input class="chklist"  type="checkbox"/><span style="margin-left:1%;"> Match Leads</span>
+                        </li>
+                        
+                        <li>
+                        <input class="chklist"  type="checkbox"/><span style="margin-left:1%;"> Gala</span>
+                        </li>
+                        
+                         <li>
+                     <input class="chklist"  type="checkbox"/><span style="margin-left:1%;"> Conference</span>
+                        </li>
+                        
+                    </ul>
+                    
+                    <!------------------------------>
+
+                    
+    </div>
+    <div  style="clear:both;"></div>
+    </li>
+    
+    
+    
+    <li> <div class="insidetableft"><input class="chklist" name="ticketcheck" type="checkbox"/></div>
+    <div class="insidetabright"><p>Corporate Full Page Ad</p>
+</div>
+    <div  style="clear:both;"></div>
+    </li>
+    
+      <li> <div class="insidetableft"><input class="chklist" name="ticketcheck" type="checkbox"/></div>
+    <div class="insidetabright"><p>Early Bird Platinum Sponsor Full Page Ad</p>
+</div>
+    <div  style="clear:both;"></div>
+    </li>
+ </ul>
+      
+      </div><!---close of v-nav-->
+      
+      </div>
+      <!--end of left div container-->
+      <div class="nav-content-right" style="float:right; width:74.5%;">
+     
+          <div id="ticketssettings-right" style="" >
+         
+    <div id="ticketssettings-right" style="" >
+         
+      <div id="custom-show-hide-example">
+      <!---------------------------------------->
+        <h3 class="open acc-title" style="color:#3C3C3C;">Basic Information</h3>
+        <div>
+         <table id="businessinformation" width="100%"  style=" border:3px solid #F7F7F7;  border-collapse:collapse;">
+ <tr>
+  <td width="15%">Edit Labels</td>
+    <td width="32%">&nbsp;</td>
+   
+    <td>Include Fields</td>
+    <td >Require Fields</td>
+   <!--  <td>Buyer Only</td>
+      <td>Each Ticket Holder</td>-->
+  </tr>
+  <tr id="highlight">
+      <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar" /></td>
+    <td style="text-align:left;">Prefix</td>
+     <td style="text-align:center;"><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+   
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">First Name</td>
+    <td><input type="checkbox" checked="checked" style="outline:none;"  /></td>
+   <td><input type="checkbox" checked="checked"  style="outline:none;"  /></td>
+  </tr>
+  <tr id="highlight">
+     <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Last Name</td>
+ <td><input type="checkbox" checked="checked" style="outline:none;"  /></td>
+   <td><input type="checkbox" checked="checked"  style="outline:none;"  /></td>
+   
+  </tr>
+  <tr>
+   <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Suffix</td>
+     <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  
+  </tr>
+  <tr id="highlight">
+   <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Email Id</td>
+     <td><input type="checkbox" checked="checked"  style="outline:none;"  /></td>
+   <td><input type="checkbox" checked="checked"  style="outline:none;"  /></td>
+ 
+  </tr>
+    <tr>
+    <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Confirmation Email Id</td>
+      <td><input type="checkbox" checked="checked"  style="outline:none;"  /></td>
+   <td><input type="checkbox" checked="checked" style="outline:none;"  /></td>
+ 
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Company Name</td>
+     <td><input id="compname" type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+   </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Designation</td>
+     <td><input id="desig" type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  
+  </tr>
+  <tr id="highlight" >
+     <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Mobile Number</td>
+   <td><input id="mph" type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  
+  </tr>
+  <tr >
+   <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Work Phone Number</td>
+    <td><input id="wph"  type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Home Phone Number</td>
+     <td><input id="hph" type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+
+  </tr>
+  <tr >
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Age</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+ 
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Gender</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+
+  </tr>
+  
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">DOB</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+ 
+  </tr>
+  
+  <tr id="highlight" >
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;"> Picture </td>
+     <td><input type="checkbox" style="outline:none;"/> </td>
+   <td><input type="checkbox" style="outline:none;"/> </td>
+  </tr>
+
+ </table>
+        </div>
+        <!------------------------------>
+        <!---------------------------------->
+       
+        <h3 id="addinfo" class="acc-title" style="color:#3C3C3C; display:none;" >Address Information</h3>
+        <div>
+        
+         <table id="addressinformation" width="100%"  style="border:3px solid #F7F7F7;  border-collapse:collapse;">
+ <tr>
+  <td width="15%">Edit Labels</td>
+    <td>&nbsp;</td>
+    
+    <td>Include Fields</td>
+    <td>Require Fields</td>
+      
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Work Address</td>
+    <td><input type="checkbox" id="wadd" checked="checked" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+      
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td  style="text-align:left;">Billing Address</td>
+     <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+      
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Home Address</td>
+     <td><input type="checkbox" id="hadd" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  
+  </tr>
+
+  </table>
+        </div>
+       
+        <!-------------------------------->
+        <!----------------------------------------->
+        <h3 id="ccr" class="acc-title" style="color:#3C3C3C;display:none;">CCR Details Feature</h3>
+        <div>
+        <table id="businessinformation" width="100%" border="0" style=" border-collapse:collapse;">
+ <tr>
+   <td width="15%">Edit Labels</td>
+    <td width="50%;">&nbsp;</td>
+    <td>Include Fields</td>
+ 
+  
+  </tr>
+  <tr>
+   <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td>Do you want to enable CCR Details Fetch Feature ?</td>
+   
+    <td><input type="checkbox" style="outline:none;"  /></td>
+    </tr>
+  
+  </table>  
+      </div>
+     <!----------------------------------------->
+      <!----------------------------------------->
+        <h3 id="winfo" class="acc-title" style="color:#3C3C3C; display:none;">Work Information</h3>
+        <div>
+       <table id="businessinformation" width="100%" border="0" style="border:3px solid #F7F7F7; border-collapse:collapse;">
+ <tr>
+ <td width="15%">Edit Labels</td>
+    <td>&nbsp;</td>
+    <td>Include Fields</td>
+    <td>Require Fields</td>
+    
+  </tr>
+  <tr id="highlight">
+   <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Primary Business Category</td>
+     <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+    
+  </tr>
+  <tr>
+   <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Secondary Business Category</td>
+      <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+ 
+  </tr>
+  <tr id="highlight">
+   <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">No. Of Employees</td>
+    
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+    
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Business Established Date</td>
+      <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+    
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Business Revenue</td>
+      <td><input type="checkbox" style="outline:none;" / ></td>
+   <td><input type="checkbox" style="outline:none;" / ></td>
+   
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Business Tax ID</td>
+     <td><input type="checkbox" style="outline:none;" / ></td>
+   <td><input type="checkbox" style="outline:none;" / ></td>
+   
+  </tr>
+  <tr id="highlight">
+   <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Business Duns Number</td>
+     <td><input type="checkbox" style="outline:none;" / ></td>
+   <td><input type="checkbox" style="outline:none;" / ></td>
+   
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">WebSite URL</td>
+      <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+   
+  </tr>
+  <tr  id="highlight">
+    <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Blog URL</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Business Description</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  
+  </tr>
+ 
+</table>
+      </div>
+     <!----------------------------------------->
+      <!----------------------------------------->
+        <h3 id="naics" class="acc-title" style="color:#3C3C3C; display:none;">Naics Code Information</h3>
+        <div>
+         <table id="businessinformation" width="100%" border="0" style=" border-collapse:collapse;">
+  <tr>
+   <td width="15%">Edit Labels</td>
+    <td>&nbsp;</td>
+    <td>Include Fields</td>
+    <td>Require Fields</td>
+   
+  </tr>
+  <tr>
+    <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td>NAICS Codes</td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+     
+  </tr>
+ 
+</table>
+      </div>
+     <!----------------------------------------->
+     
+    
+ 
+     
+     
+        </div> <!---close of custom-show-hide-example-->
+        
+        <!--------------------->
+         </div><!---------- close of ticketssettings-right-->
+    
+    
+        
+        
+       
+        
+         
+         </div><!--close of attendee-settings-right--> 
+      
+      </div><!---close of nav-content-right right nav-->
+       <div style="clear:both;"></div>
+
+</div><!--close of attendee-settings-box-->
+     
+            </div><!--close offirsttab-->
+              <!--------------start of onsiteregistration------------------------------>
+                   <!--Start of 2nd tab-->
+                  
+                   <div id="tab2" class="TabbedPanelsContent2" style="display:none; padding-top:8px;" >
+                     <div id="attendee-settings-box" style=" border:none; padding-bottom:10px;border:1px solid #dddddd;"><!--start of attendee-settings-box-->
+ <div style="padding:5px;"><label id="mandatory">*</label><span style="color:#247dba; font-size:13px; font-weight:700;">Any changes to default settings will affect only future tickets.</span></div>
+ <div id="custom-show-hide-example1" style="" >
+      <!---------------------------------------->
+        <h3 class="open acc-title" style="color:#3C3C3C;">Basic Information</h3>
+        <div>
+         <table id="businessinformation" width="100%"  style=" border:3px solid #F7F7F7;  border-collapse:collapse;">
+ <tr>
+     <td  width="15%">Edit Labels</td>
+     <td width="32%">&nbsp;</td>
+    <td>Include Fields</td>
+    <td >Require Fields</td>
+   <!--  <td>Buyer Only</td>
+      <td>Each Ticket Holder</td>-->
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Prefix</td>
+    <td style="text-align:center;"><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+   
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">First Name</td>
+    <td><input type="checkbox" checked="checked" style="outline:none;"  /></td>
+   <td><input type="checkbox" checked="checked" style="outline:none;"  /></td>
+   
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Last Name</td>
+   <td><input type="checkbox" checked="checked" style="outline:none;"  /></td>
+   <td><input type="checkbox" checked="checked" style="outline:none;"  /></td>
+    
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Suffix</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Email Id</td>
+     <td><input type="checkbox" checked="checked" style="outline:none;"  /></td>
+   <td><input type="checkbox" checked="checked" style="outline:none;"  /></td>
+ 
+  </tr>
+    <tr >
+    <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Confirmation Email Id</td>
+  <td><input type="checkbox" checked="checked" style="outline:none;"  /></td>
+   <td><input type="checkbox" checked="checked" style="outline:none;"  /></td>
+ 
+  </tr>
+  <tr id="highlight">
+   <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Company Name</td>
+     <td><input id="compname" type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+   </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Designation</td>
+  <td><input id="desig" type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  
+  </tr>
+  <tr id="highlight" >
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Mobile Number</td>
+  <td><input id="mph" type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  
+  </tr>
+  <tr >
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Work Phone Number</td>
+    <td><input id="wph"  type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Home Phone Number</td>
+  <td><input id="hph" type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+
+  </tr>
+  <tr >
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Age</td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+ 
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Gender</td>
+ <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+
+  </tr>
+  <tr >
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">DOB</td>
+  <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+ 
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Picture</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  </tr>
+</table>
+        </div>
+        <!------------------------------>
+        <!---------------------------------->
+        <h3 class="acc-title" style="color:#3C3C3C;">Address Information</h3>
+        <div>
+        
+         <table id="addressinformation" width="100%"  style="border:3px solid #F7F7F7;  border-collapse:collapse;">
+ <tr>
+   <td width="15%">Edit Labels</td>
+    <td>&nbsp;</td>
+   
+    <td>Include Fields</td>
+    <td>Require Fields</td>
+      
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Work Address</td>
+     <td><input type="checkbox" id="wadd" checked="checked" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+      
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td  style="text-align:left;">Billing Address</td>
+     <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+      
+  </tr>
+  <tr id="highlight">
+    <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Home Address</td>
+    <td><input type="checkbox" id="hadd" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  
+  </tr>
+
+  </table>
+        </div>
+        <!-------------------------------->
+        <!----------------------------------------->
+        <h3 class="acc-title" style="color:#3C3C3C;">CCR Details Feature</h3>
+        <div>
+        <table id="businessinformation" width="100%" border="0" style=" border-collapse:collapse;">
+ <tr>
+   <td width="15%">Edit Labels</td>
+    <td width="50%;">&nbsp;</td>
+    <td>Include Fields</td>
+ 
+  
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td>Do you want to enable CCR Details Fetch Feature ?</td>
+     <td><input type="checkbox" style="outline:none;"  /></td>
+    </tr>
+  
+  </table>  
+      </div>
+     <!----------------------------------------->
+      <!----------------------------------------->
+        <h3 class="acc-title" style="color:#3C3C3C;">Work Information</h3>
+        <div>
+       <table id="businessinformation" width="100%" border="0" style="border:3px solid #F7F7F7; border-collapse:collapse;">
+<tr>
+<td width="15%">Edit Labels</td>
+    <td>&nbsp;</td>
+     <td>Include Fields</td>
+    <td>Require Fields</td>
+    
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Primary Business Category</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+    
+  </tr>
+  <tr>
+    <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Secondary Business Category</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+ 
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">No. Of Employees</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+    
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Business Established Date</td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+    
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Business Revenue</td>
+     <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+   
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Business Tax ID</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+   
+  </tr>
+  <tr id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Business Duns Number</td>
+     <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+   
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">WebSite URL</td>
+      <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+   
+  </tr>
+  <tr  id="highlight">
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Blog URL</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  
+  </tr>
+  <tr>
+  <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td style="text-align:left;">Business Description</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+   <td><input type="checkbox" style="outline:none;"  /></td>
+  
+  </tr>
+ 
+</table>
+      </div>
+     <!----------------------------------------->
+      <!----------------------------------------->
+        <h3 class="acc-title" style="color:#3C3C3C;">Naics Code Information</h3>
+        <div>
+         <table id="businessinformation" width="100%" border="0" style=" border-collapse:collapse;">
+  <tr>
+   <td width="15%">Edit Labels</td>
+    <td>&nbsp;</td>
+    <td>Include Fields</td>
+    <td>Require Fields</td>
+   
+  </tr>
+  <tr>
+    <td><img src="{!URLFOR($Resource.newzebraaccordian, 'nwzebra/edit-1.png')}" title="Edit"  width="20" height="20" class="btnEditar"/></td>
+    <td>NAICS Codes</td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+    <td><input type="checkbox" style="outline:none;"  /></td>
+     
+  </tr>
+ 
+</table>
+      </div>
+     <!----------------------------------------->
+     
+    
+ 
+     
+     
+        </div> <!---close of custom-show-hide-example-->
+           
+              
+         </div><!--close of attendee-settings-box-->
+                  </div><!--close of tabbedpanelscontentgroup-->
+<!--------------start of onsiteregistration------------------------------>
+</div><!--close of tabbedpanels-->
+</div><!--close of tabbedpanels-->
+          <!--------------------------------------------------------------------------------->
+
+    <div class="clear"></div>
+    <div class="grid-1" style="border:0px solid #4f91cd; margin-top:8px; padding-bottom:30px; ">
+        <div class="content-gird"  style="background-color:#EFEFEF; padding:0px; border:none;  width:100%; ">
+          <div style="  height:32px;  margin-top:10px;float:right;">
+            <button class="button-a blue" style="height:32px; "  onClick="">Save</button>
+            &nbsp;&nbsp;
+            <button class="button-a dark-blue" style=" height:32px; "  >Cancel</button>
+          </div>
+        </div>
+      </div>
+        
+ <!---------------------------script for select all checkbox----------------------------------------->
+<script>
+    function toggle(source) {
+  checkboxes = document.getElementsByName('ticketcheck');
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    checkboxes[i].checked = source.checked;
+    
+  }
+}
+    </script>
+    
+<!--------------------------------------------------------------------------->  
+<!-----------------------------script for checkbox of attendee settings nav------------------->
+ <script>
+        var flagexp=0;
+     
+            <!---address info checkevent------>
+            var flagexp1=0;
+            function Addressinfo(){
+                if (flagexp1==0){
+                flagexp1=1;
+                document.getElementById("addinfo1").checked=true;
+                document.getElementById("addinfo").style.display="";
+                }
+                else if (flagexp1==1){
+                    flagexp1=0;
+                    document.getElementById("addinfo1").checked=false;
+                    document.getElementById("addinfo").style.display="none";
+                }}
+                <!---CCR Details info checkevent------>
+                var flagexp2=0;
+            function ccrdetails(){
+                if (flagexp2==0){
+                flagexp2=1;
+                document.getElementById("ccrdet").checked=true;
+                document.getElementById("ccr").style.display="";
+                }
+                else if (flagexp2==1){
+                    flagexp2=0;
+                    document.getElementById("ccrdet").checked=false;
+                    document.getElementById("ccr").style.display="none";
+                }
+                }
+        <!---CCR Details info checkevent------>
+                var flagexp3=0;
+            function Workinform(){
+                if (flagexp3==0){
+                flagexp3=1;
+                document.getElementById("winfo1").checked=true;
+                document.getElementById("winfo").style.display="";
+                }
+                else if (flagexp3==1){
+                    flagexp3=0;
+                    document.getElementById("winfo1").checked=false;
+                    document.getElementById("winfo").style.display="none";
+                }
+                }
+                
+                <!---Naics Details info checkevent------>
+                var flagexp4=0;
+            function naicsevent(){
+                if (flagexp4==0){
+                flagexp4=1;
+                document.getElementById("naics1").checked=true;
+                document.getElementById("naics").style.display="";
+                }
+                else if (flagexp4==1){
+                    flagexp4=0;
+                    document.getElementById("naics1").checked=false;
+                    document.getElementById("naics").style.display="none";
+                }
+                }
+        
+        
+        </script> 
+<!------------------------------script for package items tickets expand collapse--->
+  <script>
+
+
+function prepareList() {
+    var items = $('#v-nav>ul>li')
+   $('.expList').find('li div:nth-child(2):has(ul)')
+    .click( function(event) {
+        /*alert("dddd");*/
+        if (this == event.target) {
+            $(this).toggleClass('expanded');
+            $(this).children('ul').toggle('medium');
+            
+            $(this).parent.parent.parent.parent.addClass('current');
+            items.removeClass('current');
+        }
+      
+    })
+    .addClass('collapsed')
+    .children('ul').hide();
+
+   
+};
+
+
+
+$(document).ready( function() {
+    prepareList()
+});
+
+
+
+</script>
+
+            
+   <!----------------------------------------------------------------> 
+                <!------------------------->
+  </c:myComponent>
+  
+ 
+</apex:page>

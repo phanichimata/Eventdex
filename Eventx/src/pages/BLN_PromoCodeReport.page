@@ -1,0 +1,268 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="BLN_PromoCodeReportCon" action="{!hideEventsTab}">
+     
+           
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.Reports, 'Reports/nwdatatable/js/jquery.dataTables.js')}"></script>
+
+        
+ <apex:stylesheet value="{!URLFOR($Resource.nwdatatable, 'nwdatatable/css/jquery.dataTables.css')}"/> 
+  
+    <script type="text/javascript" language="javascript" class="init">
+    var $j = jQuery.noConflict();
+$j(document).ready(function() {
+    var table = $j('#example').DataTable({
+        "columnDefs": [
+            { "visible": false, "targets": 2 }
+        ],
+        "order": [[ 2, 'asc' ]],
+        "displayLength": 10,
+        "drawCallback": function ( settings ) {
+            var api = this.api();
+            var rows = api.rows( {page:'current'} ).nodes();
+            var last=null;
+
+            api.column(2, {page:'current'} ).data().each( function ( group, i ) {
+                if ( last !== group ) {
+                    $j(rows).eq( i ).before(
+                        '<tr class="group"><td colspan="5">'+group+'</td></tr>'
+                    );
+
+                    last = group;
+                }
+            } );
+        }
+    } );
+ } );
+
+
+
+    </script>
+    
+     <apex:stylesheet value="{!URLFOR($Resource.createevents,'createevents/css/jquery.datetimepicker.css')}"/>
+ 
+<c:myComponent BLN_UtillDisplayLinks="{!myticket}" id="compId">            
+        <apex:form > 
+
+<style type="text/css">
+input.styled {
+    display: none;
+}
+select.styled {
+    position: relative;
+    width: 190px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 5;
+}
+.disabled {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+</style>
+
+
+
+
+<section id="middle" style="width:96.8%; border:0px #000000 solid" class="res">
+  <div>
+    <div style="border:0px #000000 solid">
+      <div>
+              
+        <style>
+        #tablemenubar{
+            width:99.8%; height:50px;
+             background-color:#ccc; 
+            padding-top:10px;
+             margin-bottom:-60px;
+             background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8faf9), color-stop(100%,#d1d2d5));
+background: -moz-linear-gradient(center top , #F8FAF9 0%, #D1D2D5 100%) repeat scroll 0% 0% transparent;
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8faf9', endColorstr='#d1d2d5',GradientType=0 );
+border: 1px solid #CCC;
+            
+            }
+        
+        </style>
+        <style>
+
+#datefilter table{ border-collapse:collapse;}
+
+#datefilter table tr td { padding:5px;}
+#labeltext{font-weight: 100;
+font-family: 'Cuprum', Arial, sans-serif;
+font-size: 15px;
+color: #247dba;
+text-shadow: 0 1px 1px rgba(0,0,0,.25);}
+</style>
+   
+    <div id="datefilter" style="width:60%; float:left;margin-top: 10px;margin-bottom: -5px;">
+    
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="15%" id="labeltext">From Date:</td>
+    <td width="15%"><c:noDateLink ><apex:inputField value="{!EventDates.Start_Date__c}" style="width:150px;" styleClass="eve"/></c:noDateLink></td>
+    <td width="15%" id="labeltext" >To Date:</td>
+    <td width="15%" id="labeltext"><c:noDateLink ><apex:inputField value="{!EventDates.End_Date__c}" style="width:150px;" styleClass="eve"/></c:noDateLink> </td>
+    <td width="15%" style="padding-left:0px;"><apex:commandButton value="Go" action="{!promoCodes}"  styleClass="button-a blue"/></td>
+    <!--<td width="15%" id="labeltext">Search</td>
+    <td width="15%">
+    <apex:inputText value="{!SearchString}" style="width:150px;">
+    <apex:actionSupport event="onkeyup" action="{!promoCodes}"/>
+    </apex:inputText>
+    </td>-->
+    <td align="right" width="15%">   
+    <apex:commandButton action="{!exportPromotions}" image="{!URLFOR($Resource.Export)}" style="width:25px;height:25px;" />
+         
+    </td>
+     <td align="right" width="15%">
+     <apex:commandLink action="{!printPromotions}" target="_blank">
+                 <apex:commandButton action="{!printPromotions}" image="{!URLFOR($Resource.Print)}" style="width:25px;height:25px;" />
+             </apex:commandLink>
+
+
+    </td>
+  </tr>
+</table>
+
+    
+    </div>
+     <div style="clear:both;"></div>   
+        
+        <div style=" width:99%; margin:0px auto; margin-top:10px;">   
+      <div id="tablemenubar" style="">
+        
+          <!--actions_icon--->
+            
+            <!--end of actions_icon-->
+        
+        
+        
+        
+        </div><!--close of tablemenubar-->
+      <table id="example" class="display" cellspacing="0"  border="0" bordercolor="#F7F7F7" width="100%">
+                  <thead>
+                    <tr>
+                        <th>Ticket Name</th>
+                        <th>Tag</th>
+                        <th>Quantity Used</th>
+                        <th>Discount Amount</th>
+                        <th>Total Discounted Amount</th>
+                    
+                    </tr>
+                </thead>               
+                
+
+    <tbody>
+    
+                     <apex:repeat value="{!promoCodeInnerList}" var="promocode">
+                     
+                   
+                    <tr>
+                    <td colspan="5"><span style="color:#247dba;"><b>Promotion Name:</b></span><span style="color:#000; margin-left:.2%;font-weight:700;">{!promocode.promotionData.Name}</span>
+                        <span style="color:#247dba; margin-left:1%;"><b>Promotion Code:</b></span><span style="color:#000; margin-left:.2%;font-weight:700;">{!promocode.promotionData.Promo_Code__c}</span>
+                        <span style="color:#247dba; margin-left:1%;"><b>Promocode Type:</b></span><span style="color:#000; margin-left:.2%;font-weight:700;">{!promocode.promotionData.Promotion_Type__c}</span>
+                        <span style="color:#247dba; margin-left:1%;"><b>Discount:</b></span><span style="color:#000; margin-left:.2%;font-weight:700;">{!promocode.promotionData.Discount_Value__c}</span>
+                        <span style="color:#247dba; margin-left:1%;"><b>Used/Available:</b></span><span style="color:#000; font-weight:700; margin-left:.2%;">{!promocode.promotionData.T_Used_Count__c}</span>
+                        </td>
+                    </tr>
+                    
+                    <apex:repeat value="{!promocode.itemPromotionList}" var="itemPromotion">
+                     <tr>  
+                        
+                        <td>
+                            {!itemPromotion.itemPromotionData.Buy_Item__r.item_name__c} {!itemPromotion.itemPromotionData.Free_Item__r.item_name__c}
+                            &nbsp;<span style="color:#FF4500;"><apex:outputLabel value="(Free Item)" rendered="{!(promocode.promotionData.Promotion_Type__c == "Buy Something Get Something" && itemPromotion.itemPromotionData.Buy_Item_Quantity__c == Null)}" /></span>
+                        </td>
+                        <td>{!itemPromotion.itemPromotionData.Buy_Item__r.item_type__r.Name} {!itemPromotion.itemPromotionData.Free_Item__r.item_type__r.Name}</td>
+                       
+                        <td>
+                            {!itemPromotion.itemPromotionData.Buy_Item_Quantity__c}
+                            <apex:outputLabel value="{!itemPromotion.itemPromotionData.Free_Item_Quantity__c}" rendered="{!promocode.promotionData.Promotion_Type__c == "Buy Something Get Something"}"/>
+                        </td> <!--Modified by Thirupathi -->
+                        <td><apex:outputText rendered="{!IF(itemPromotion.itemPromotionData.Item_Discount_Type__c == 'Amount', TRUE, FALSE)}" value="$"/> {!itemPromotion.itemPromotionData.Item_Discount_Value__c}<apex:outputText rendered="{!IF(itemPromotion.itemPromotionData.Item_Discount_Type__c == 'Percent', TRUE, FALSE)}" value="%"/></td>
+                        <td>
+                            <apex:outputText value="{0,number,$ ###,##0.00}">
+                                <apex:param value="{!itemPromotion.discountedPrice}"/>
+                            </apex:outputText>
+                        </td>
+                        
+                   </tr>
+               </apex:repeat>
+            </apex:repeat>
+
+        </tbody>
+    </table>
+</div>
+       
+       
+         
+        
+      </div>
+      <!-- #content--> 
+    </div>
+    <!-- #container-->    
+  
+  </div>
+  <!-- #sideLeft --> 
+  <!-- #container main-->
+  
+  
+</section>
+          <!--  From : <apex:inputField value="{!EventDates.Start_Date__c}" style="width:150px;"/> 
+            To :<apex:inputField value="{!EventDates.End_Date__c}" style="width:150px;"/> 
+            <apex:commandButton value="Go" action="{!promoCodes}"/>
+            Search :
+            <apex:inputText value="{!SearchString}" style="width:150px;">
+            <apex:actionSupport event="onkeyup" action="{!promoCodes}"/>
+            </apex:inputText>
+            <apex:commandButton value="Export" action="{!exportPromotions}"/>
+            <apex:commandButton value="Print" action="{!printPromotions}"/>
+            <apex:pageBlock >   
+            <table>
+                <tr>
+                    <th>Ticket Name</th>
+                    <th>Tag Name </th>
+                    <th>Quantity Used</th>  
+                    <th>Discount Amount</th> 
+                    <th>Total Discounted Amount</th> 
+                </tr>
+                
+                <apex:repeat value="{!promoCodeInnerList}" var="promocode">
+                <tr>
+                    <td colspan="5">
+                        PromoCode Name: {!promocode.promotionData.Name} PromoCode: {!promocode.promotionData.Promo_Code__c} PromoCode Type: {!promocode.promotionData.Promotion_Type__c}  Discount: {!promocode.promotionData.Discount_Value__c} Used: {!promocode.promotionData.T_Used_Count__c} 
+                    </td>
+                    
+                </tr>
+                <apex:repeat value="{!promocode.itemPromotionList}" var="itemPromotion">
+                <tr>
+                    <td>{!itemPromotion.itemPromotionData.Buy_Item__r.item_name__c}</td>
+                    <td>{!itemPromotion.itemPromotionData.Buy_Item__r.item_type__r.Name}</td>
+                    <td>{!itemPromotion.itemPromotionData.Buy_Item_Quantity__c}</td>
+                    <td>{!itemPromotion.itemPromotionData.Item_Discount_Value__c}</td>
+                    <td>{!itemPromotion.discountedPrice}</td>
+                </tr>
+                </apex:repeat>
+                </apex:repeat>
+            </table>         
+
+
+
+                    
+                                
+            </apex:pageBlock>  -->
+        </apex:form>    
+    </c:myComponent>
+    
+ <script type="text/javascript" src="{!URLFOR($Resource.createevents, 'createevents/js/jquery-1.9.1.js')}"></script> 
+ <script type="text/javascript" src="{!URLFOR($Resource.datetimepicker, 'datetimepicker/jquery.datetimepicker.js')}"></script> 
+<script type="text/javascript">
+var $k = jQuery.noConflict();
+$k('.eve').datetimepicker({
+timepicker:false,
+format:'m/d/y',
+formatDate: 'm/d/y',    
+
+});
+
+</script>
+</apex:page>
